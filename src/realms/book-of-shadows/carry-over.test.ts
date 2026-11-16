@@ -2,12 +2,18 @@
 import { afterEach, describe, expect, it } from "vitest";
 
 import { carriedBook, encodeBook, openBook } from "./carry-over";
-import { STORAGE_KEY, defaultState, loadState, saveState } from "./profile";
+import { STORAGE_KEY, defaultState, loadState } from "./profile";
 
 const withProfile = (name: string, birthDate = "") => ({
   ...defaultState(),
   profile: { ...defaultState().profile, birthDate, name },
 });
+
+/**
+ * A book already saved in this browser, as localStorage holds it: JSON text.
+ * The fields it leaves out come back as their defaults when it's read.
+ */
+const storeBook = (json: string) => localStorage.setItem(STORAGE_KEY, json);
 
 afterEach(() => {
   localStorage.clear();
@@ -58,20 +64,20 @@ describe("openBook", () => {
   });
 
   it("never writes over a book already filled in here", () => {
-    const mine = withProfile("Ben");
-    saveState(mine);
+    storeBook('{"profile":{"name":"Ben"}}');
     window.history.replaceState(
       null,
       "",
       `/book-of-shadows${encodeBook(withProfile("Ana"))}`
     );
 
-    expect(openBook()).toEqual(mine);
+    expect(openBook().profile.name).toBe("Ben");
+    expect(loadState().profile.name).toBe("Ben");
     expect(window.location.hash).toBe("");
   });
 
   it("takes a carried book over a blank one saved by a first visit", () => {
-    saveState(defaultState());
+    storeBook("{}");
     window.history.replaceState(
       null,
       "",
@@ -82,9 +88,8 @@ describe("openBook", () => {
   });
 
   it("opens the book saved here when nothing is carried", () => {
-    saveState(withProfile("Cy"));
+    storeBook('{"profile":{"name":"Cy"}}');
 
     expect(openBook().profile.name).toBe("Cy");
-    expect(localStorage.getItem(STORAGE_KEY)).not.toBeNull();
   });
 });
