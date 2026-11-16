@@ -1,34 +1,87 @@
-# template
+# Realms
 
-Start every new irmahs-labs repo from here, so each one has the same rules, hooks, lint and CI from its first commit.
+Worlds to step into, at [realms.irmahs.dev](https://realms.irmahs.dev). The hub at `/` has one card per realm, and each realm has its pages at `/<realm>/…`.
 
-## What every repo gets
+## Book of Shadows
 
-|  |  |
+The witch's realm, at `/book-of-shadows`, moved here from [Mini Games](https://minigames.irmahs.dev) with two of its games. Its header leads to its other pages and back to every realm.
+
+**The Book** (`/book-of-shadows`). A witch's profile, worked out in the browser from [Astronomy Engine](https://github.com/cosinekitty/astronomy)'s ephemeris. Nine pages, yours first:
+
+- **Profile**:
+  - **Today**: the Moon's phase and sign, the next sabbat, the lunar year (Year of the Fire Horse, 丙午) and the next lunar festival, and the sky: where the Sun and the Moon are, which planets are retrograde and until when, the next retrograde to start and the next eclipse.
+  - **Card of the day**: one tarot card, pulled once a day; the day turns at midnight Paris time, wherever you are.
+  - **Your details**, in a row across the page: name, birth date, time and place. Type a town and pick it from the list: the built-in places come up at once, and any other town on the Earth is looked up as you type ([Open-Meteo](https://open-meteo.com/en/docs/geocoding-api)'s free geocoding, no key), which fills in its coordinates and time zone. Only the town's name is sent; the coordinates can still be typed in by hand.
+  - **The witch card** drawn from them: your Sun, Moon and rising signs, your craft (Candle, Green, Storm or Sea Witch, from the element your chart leans on), your life path, your Lunar zodiac animal, the moon you were born under, the sabbat season of your birthday, and your elements.
+  - **Your soulmate**: a second person's details and their own witch card, and how you match on the next three pages.
+- **Birth chart**: the chart as a wheel and a table, every planet's sign, degree and whole-sign house, and what your Sun, Moon and rising say. Without a birth time there is no rising sign or houses, and the card says when the Moon changed signs that day. With someone else on the profile: your charts side by side (synastry), their Suns' elements and the aspects between your Suns, Moons, Venuses, Marses and Mercuries, as a score and its reasons.
+- **Numerology**: Pythagorean life path, expression, soul urge, personality, birthday and maturity numbers, master numbers kept, and your personal year. With someone else: how your life paths and your names' numbers get on (the 1-5-7, 2-4-8 and 3-6-9 families).
+- **Lunar Zodiac**: Shēngxiào (生肖), the Chinese zodiac. Your animal and element, kept simple to your calendar year (with a note when tradition, which turns the year at the Lunar New Year or in Cambodia at Khmer New Year, says otherwise), your inner animal from your birth hour, your best matches and your clash; this year's animal, and when the Lunar New Year (worked out from the new moons and the solar terms, on Beijing time) and Khmer New Year fall; all twelve with their Earthly Branches, Khmer names and years; and the ten Heavenly Stems (天干) with their elements, images and years, this year's, your year's and your day master (the stem of the day you were born) picked out. With someone else: your animals (trines, secret friends, clashes) and your elements together.
+- **Moon**: tonight's moon (its phase, how much is lit, its sign, its Buddhist lunar date, and the next full and new moons) and a month of moons, with the exact phases on their days and each full moon's traditional name (Harvest, Hunter's, Blue…), in your own time zone. The month is also the Buddhist lunar calendar as Cambodia keeps it (Chhankitek, from [`@thyrith/momentkh`](https://github.com/ThyrithSor/momentkh)): each day's lunar date, the holy days (Thngai Sel), and the festivals (the Lunar New Year, Meak Bochea, Khmer New Year, Visak Bochea, Royal Ploughing, Pchum Ben and Bon Om Touk) on their days.
+- **Sabbats**: the Wheel of the Year, turned to today, and the eight sabbats of any year with their dates, what each is, how to keep it, its colours and symbols. The solstices and equinoxes are the days they fall on where you are; the fire festivals keep their traditional days, with the day the Sun is really halfway alongside. A switch turns the wheel round for the southern hemisphere.
+- **Sky**: where every planet is today and which are retrograde, then a year's retrogrades, from the day each planet stations to the day it turns direct, and its eclipses.
+- **Tarot**: all 78 cards of a Rider–Waite–Smith deck, each read upright and reversed. **Draw a card** at the top, or choose one a step at a time (major or minor arcana; for a minor card the suit; the card; then upright or reversed), and read it. A guide explains how to read them: the arcana, the suits and their elements, the numbers, the court cards.
+- **Magic 8 Ball**: ask a yes-or-no question and shake. On a phone, shake the phone itself (an iPhone asks once for motion access); anywhere, flick the ball with a finger or the mouse, or press **Shake the ball**. The ball is drawn in 3D: drag it to turn it and look at it from any side. Shaken, it tumbles, rolls its window up to you, and the die floats up with one of the classic twenty answers.
+
+**Potion Brewing** (`/book-of-shadows/potion-brewing`). A potion-mixing game, once Mini Games' Booster Potion, first from [Wellness Witch](https://github.com/irmahs/WellnessWitch). Its 115 potions are real wellness shots, teas and tonics, each cut down to its two to four core ingredients and linked to the recipe it comes from: ginger and turmeric shots, beet and green shots, switchel, fire cider and oxymels, jamu, golden milk, masala chai, guk po (pu-erh with chrysanthemum), kadha, sorrel, yuja-cha, jujube and goji teas, agua frescas and more. Every ingredient is in at least two potions. Put any two to four ingredients in the cauldron and brew. A few come more than one way, and you pick which in the cauldron: ginger fresh or dried (a ginger shot takes fresh, a ginger tea dried), turmeric fresh or powder, cinnamon as a stick or powder, mint fresh or dried, wheatgrass fresh or powder. Every ingredient has a one-line tip on what it is known for ("Ginger: eases nausea, with anti-inflammatory compounds"), shown when you hover it and under it in the cauldron. The teas go by their colour as China names them: white, green, red (what English calls black tea) and black (dark, aged tea such as pu-erh), and each tip names two that are easy to buy. The right mix makes a potion, with a fact or a caution about it, like cooking elderberries. Anything else is a Mystery Potion, with a hint: the form to change when only that is wrong, or else how many of the ingredients are in the closest potion nobody has found yet, its name, and the kinds of ingredient it still needs ("2 of these 4 are in Ember's Embrace. It still needs a fruit and a spice.").
+
+There is one grimoire, the recipe book, shared by everyone. Brewing takes an irmahs.dev account: the first person to brew a potion puts their name and the date on its page ("First brewed by Irma H. on 28 Oct 2026, and 3 more", which opens the list of everyone who brewed it), under it the latest brew by anyone ("Last brewed by Ben C. on 29 Oct 2026", or "Last brewed by no one"), and anyone can read the grimoire, signed in or not. Its corner shows the last brew by anyone ("Last brew: Ben C., Ember's Embrace, 5 min ago"), and it refreshes every 30 seconds. A page lists its ingredients shelf by shelf, alphabetically on each. Pages nobody has found yet show only the kinds of ingredient they take. The server brews, so the recipes never reach the browser, and it takes at most 30 brews a minute from anyone.
+
+Potion Brewing can also be played solo: **My own grimoire** keeps a grimoire of your own on your irmahs.dev account, on every device. Its pages unlock only when you brew them, its hints point at the potions you have still to find, each page shows the day you found it, and **Start over** empties it. Solo brews never go in the shared grimoire.
+
+**Spell Creator** (`/book-of-shadows/spell-creator`). Write two rhyming lines and cast them as a spell: the better the rhyme, the more powerful the spell. It hears words through the [CMU Pronouncing Dictionary](https://github.com/words/cmu-pronouncing-dictionary), so it is in English only.
+
+### Coming over from Mini Games
+
+A browser keeps each site's `localStorage` apart, so a Book of Shadows saved on minigames.irmahs.dev can't be read here. Mini Games' old page sends it over instead, in the address's fragment (`/book-of-shadows#book=…`, which never reaches a server): Realms keeps it when its own book in that browser is still blank, never writes over one already filled in, and takes the fragment off the address. The format is `encodeBook` in `src/realms/book-of-shadows/carry-over.ts`.
+
+The potion books, on the server, are copied once by `scripts/import-potions.sh` (see Deploy).
+
+## Where things are kept
+
+The Book of Shadows (both people's birth details and the card of the day included) keeps everything in the browser's `localStorage`, until the visitor deletes it or clears their site data. Potion Brewing's recipe books live on the server.
+
+## Develop
+
+```sh
+npm install
+npm run dev       # http://localhost:5173
+npm test
+npm run build     # the site in dist/, the server in dist-server/
+```
+
+Brewing needs the server, its database and the account service as well (Node 22+ and Docker):
+
+```sh
+cp .env.example .env
+npm run db:up     # Postgres on localhost:5436, migrations applied
+npm run dev:api   # the server on :3002; Vite forwards /api to it
+```
+
+and [irmahs-labs/auth](https://github.com/irmahs-labs/auth) running on `localhost:3001` (its README says how), so there is someone to sign in as. `TEST_DATABASE_URL=postgres://realms@localhost:5436/realms npm test` also runs the recipe books' database tests, which are skipped otherwise. The local database has no password: it only answers this machine.
+
+The server (`server/`) is [Hono](https://hono.dev/) on Node. It serves the built site, `/api/me`, `/api/potions` (the shared recipe book), `/api/potions/brewers`, `/api/potions/brew`, `/api/potions/solo` and `/api/potions/solo/brew` (each player's own book). It learns who is brewing from the shared irmahs.dev sign-in cookie, by asking the account service, and takes brews only from the site itself. The books go in its own Postgres database (`db/migrations/`, applied by [dbmate](https://github.com/amacneil/dbmate)). Potion Brewing's recipes, `src/realms/book-of-shadows/potion-brewing/recipes.ts`, are read only by the server, which brews.
+
+## Deploy
+
+Merging to `main` deploys. The workflow SSHes to the irmahs.dev server and resets `/srv/realms` to `main`; there, with `compose.prod.yaml`, Postgres starts, pending migrations run, and the site is rebuilt and started. It joins the shared `proxy` network as `realms`, where it also reaches the account service as `auth:3001`. Caddy in [irmahs-labs/proxy](https://github.com/irmahs-labs/proxy) serves it at realms.irmahs.dev.
+
+Secrets (Settings → Secrets and variables → Actions):
+
+| Secret | What |
 | --- | --- |
-| `CLAUDE.md` | The shared rules for Claude: branch names, pull requests Irma merges, the checks before pushing |
-| `.claude/` | Hooks: dependencies installed in cloud sessions, and Ultracite plus a typecheck on every file Claude edits |
-| `oxlint.config.ts`, `oxfmt.config.ts` | Ultracite (oxlint + oxfmt), blocking in CI from day one |
-| `.github/workflows/ci.yml` | Lint and format, Type-check, Tests, Build, Docker build from [irmahs-labs/workflows](https://github.com/irmahs-labs/workflows), then the `checks` job the branch rules require |
-| `.github/workflows/codeql.yml` | CodeQL code scanning from irmahs-labs/workflows: a security analysis of the code and the workflows, with findings in the Security tab |
-| `.github/dependabot.yml` | Monthly pull requests that update npm packages and GitHub Actions, minor and patch updates grouped |
-| `.github/workflows/deploy.yml` | On merge to `main`: SSH to the server, pull, `docker compose up --build --wait` |
-| `ruleset.json` | The branch rules every repo has on `main` |
-| `src/`, `Dockerfile`, `compose.yaml` | A placeholder Node server so CI has something to check. Replace it with the app |
+| `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS`, `DEPLOY_HOST` | Organization level, shared with the other repos |
+| `REALMS_POSTGRES_PASSWORD` | The database's password (the recipe books), `openssl rand -base64 32`. Read only when the database is first created |
 
-## Making a new repo
+### First setup (one time)
 
-1. **New repository → Repository template: `irmahs-labs/template`.** Make it public unless it must be private: on GitHub's free plan a private repo gets no branch rules, no organisation secrets and no code scanning (delete `.github/workflows/codeql.yml` in a private one).
-2. **Branch rules:** Settings → Rules → Rulesets → New ruleset → **Import a ruleset** → this repo's `ruleset.json` → Create.
-3. **Dependabot security fixes:** Settings → Code security → enable **Dependabot alerts** and **Dependabot security updates**, unless the organisation already turns them on for new repositories.
-4. **Claude:** if the Claude GitHub app has access to selected repositories only, add the new one (organisation settings → Installed GitHub Apps → Claude → Configure).
-5. **The app:** ask Claude to build it in place of `src/`, keeping the scripts `check`, `typecheck`, `test`, `build` and `start`, adding the Ultracite presets it needs in `oxlint.config.ts` (`react`, `next`), and filling in CLAUDE.md's last sections.
-6. **Deploying** (skip until there is something to deploy):
-   - In `compose.yaml`, rename the `app` alias to the repo's name.
-   - In irmahs-labs/proxy, add the Caddyfile block for `<name>.irmahs.dev` (its README shows how), and in Cloudflare the proxied `A` and `AAAA` records.
-   - On the server, as admin: `sudo mkdir /srv/<name> && sudo chown deploy:deploy /srv/<name>`.
-   - Secrets `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS` and `DEPLOY_HOST` come from the organisation for public repos; a private repo needs them as its own secrets.
+1. Cloudflare: proxied `A` and `AAAA` records for `realms` pointing at the server.
+2. On the server, as the admin user: `sudo mkdir /srv/realms && sudo chown deploy:deploy /srv/realms`.
+3. Add the `REALMS_POSTGRES_PASSWORD` secret above.
+4. Merge here; the deploy clones the repo into `/srv/realms` and starts the database and the site.
+5. Merge the `realms.irmahs.dev` block in irmahs-labs/proxy's `caddy/Caddyfile`.
+6. Once, as `deploy`: `sh /srv/realms/scripts/import-potions.sh`, which copies Booster Potion's books from Mini Games' database. It refuses to run twice.
 
-## Keeping every repo in step
+## License
 
-Change shared things here first (CLAUDE.md's shared sections, `.claude/`, the lint config, `ruleset.json`), or in irmahs-labs/workflows for CI. Then ask Claude to _sync the repos with irmahs-labs/template_: it opens one pull request per repo. A change to the shared CI workflow reaches every repo on its next run, with no pull requests.
+MIT

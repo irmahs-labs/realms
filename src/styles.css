@@ -1,0 +1,3193 @@
+/* Cute Matcha's app look, in Light Matcha and Dark Matcha.
+   Colours are role tokens named by job (tokens.json in the design system),
+   so one rule is right in both themes; <html data-theme> picks the set.
+   Fredoka sets titles and Nunito Sans everything else; panels are flat with
+   2px outlines, and only the one action to press next is yellow (pop) and
+   carries the hard shadow. */
+:root {
+  --ground: #f3f1c8;
+  --panel: #f7f8de;
+  --header: #f7f8de;
+  --raised: #fffdf0;
+  --raised-hover: #e8e1bd;
+  --text: #2f3b34;
+  --text-muted: #335a26;
+  --outline: #2f3b34;
+  --accent: #d4dd9c;
+  --accent-soft: #afc584;
+  --on-accent: #2f3b34;
+  /* The one accent: a pastel butter yellow, for the call to action only */
+  --pop: #ffd968;
+  --pop-hover: #f5c94a;
+  --on-pop: #2f3b34;
+  --strong: #3b4a42;
+  --on-strong: #fff3cf;
+  --selected: #afc584;
+  --on-selected: #2f3b34;
+  --grid: #4e6152;
+  --pattern-dot: #afc584;
+  --pattern-line: #f3f1c800;
+  --focus: #4a7fc0;
+  --danger: #f0675c;
+  /* Hard shadows are the same near-black in both themes. */
+  --shadow-hard: 3px 3px 0 #0f1411;
+  --shadow-soft: 2px 2px 0 #0f1411;
+  color-scheme: light;
+
+  /* Fixed: they belong to drawings, not to the interface. */
+  --cream: #fff3cf;
+  --ink: #2f3b34;
+  --white: #ffffff;
+  /* Super Tic-Tac-Toe's players, from the original game; dark text on both. */
+  --pink: #ffb8ee;
+  --purple: #d4b8ff;
+  /* The sticky board's notes, paper in both themes, with ink on them. */
+  --note-lemon: #fff1a6;
+  --note-matcha: #d4dd9c;
+  --note-strawberry: #ffc6d3;
+  --note-taro: #dccbff;
+  --note-blue: #c9dcff;
+  --note-white: #ffffff;
+  /* The Magic 8 Ball: its black shell, its blue liquid and its die. */
+  --ball: #141a17;
+  --ball-liquid: #1b2a57;
+  --ball-die: #3657b0;
+  /* The strip of tape a note hangs by, see-through over the paper. */
+  --note-tape: #fffdf0b3;
+  /* A quiz result's pie, biggest slice first: a validated categorical order,
+     stepped for each theme, and a neutral grey for the folded rest. */
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #008300;
+  --series-7: #6250d6;
+  --series-8: #e34948;
+  --series-other: #a8a69c;
+
+  --stroke-base: 1.5px;
+  --stroke-panel: 2px;
+  --line: var(--stroke-panel) solid var(--outline);
+  /* Concentric corners: a 20px panel padded 12px holds 8px fields */
+  --radius-panel: 20px;
+  --radius-field: 8px;
+  --space-group: 24px;
+  --radius-pill: 999px;
+
+  /* Fredoka sets titles and panel names, Nunito Sans everything else. */
+  --display: "Fredoka", "Nunito Sans", system-ui, sans-serif;
+  --body: "Nunito Sans", "Fredoka", system-ui, sans-serif;
+}
+:root[data-theme="dark"] {
+  /* Dark Matcha: a mid-tone matcha page, cards a step lighter, and the header,
+     buttons and fields a darker well. Outlines and shadows stay near-black. */
+  --ground: #405045;
+  --panel: #4b5c51;
+  --header: #2f3d34;
+  --raised: #2f3d34;
+  --raised-hover: #3a4a3f;
+  --text: #f3f1c8;
+  --text-muted: #dbe8a6;
+  --outline: #0f1411;
+  --accent: #c9d68f;
+  --accent-soft: #9eb27a;
+  --on-accent: #0f1411;
+  --pop: #ffe08a;
+  --pop-hover: #ffd666;
+  --on-pop: #0f1411;
+  --strong: #1c2420;
+  --on-strong: #f3f1c8;
+  --selected: #c9d68f;
+  --on-selected: #0f1411;
+  --grid: #2f3b34;
+  --pattern-dot: #b8d97000;
+  --pattern-line: #4a5b4f;
+  --focus: #c2d8f5;
+  --danger: #f6a49d;
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
+  --series-other: #8c8b83;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/* Cute Matcha's Ground: dots in Light Matcha, grid lines in Dark Matcha.
+   Each pattern token is transparent in the other theme. */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--ground);
+  background-image:
+    radial-gradient(var(--pattern-dot) 1.2px, transparent 1.4px),
+    linear-gradient(var(--pattern-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--pattern-line) 1px, transparent 1px);
+  background-size:
+    22px 22px,
+    28px 28px,
+    28px 28px;
+  font-family: var(--body);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+a {
+  color: var(--text);
+}
+a:hover {
+  color: var(--text-muted);
+}
+
+.display {
+  font-family: var(--display);
+  font-weight: 600;
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.kicker,
+.field-label {
+  margin: 0;
+  font: 700 13px/1.3 var(--body);
+  color: var(--text-muted);
+}
+.hint {
+  margin: 0;
+  min-height: 1.4em;
+  font: 400 12.5px/1.4 var(--body);
+  color: var(--text-muted);
+}
+/* Read by screen readers, not seen. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── header ── */
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px 16px;
+  padding: 14px 28px;
+  background: var(--header);
+  border-bottom: var(--line);
+}
+.app-header__home {
+  flex: 1 1 0;
+  min-width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text);
+  text-decoration: none;
+}
+.app-header__home:hover {
+  color: var(--text);
+}
+.app-header__home svg {
+  flex: none;
+}
+.app-header__name {
+  display: block;
+  margin: 0;
+  font: 600 24px/1.1 var(--display);
+  text-wrap: balance;
+}
+.app-header__by {
+  display: block;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.app-header__actions {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.app-header__end {
+  flex: 1 1 0;
+  min-width: max-content;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Cute Matcha's AccountButton, as a 40px header pill: a panel piece lying
+   on the desk, with Google's mark or the person's picture in a white
+   circle. On phones only the circle shows; its text stays for screen
+   readers. */
+.account {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px 0 4px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-pill);
+  background: var(--panel);
+  box-shadow: var(--shadow-soft);
+  color: var(--text);
+  font: 600 14px/1.2 var(--body);
+  text-decoration: none;
+}
+.account:hover {
+  color: var(--text);
+  background: var(--raised-hover);
+}
+.account__icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--ink);
+  font-weight: 700;
+}
+.account__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── page ── */
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 28px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.page__title {
+  margin: 0;
+  font-size: 40px;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+.page__sub {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+/* A panel's name, set like a filename on a strong pill across its top edge. */
+.panel {
+  position: relative;
+  background: var(--panel);
+  border: var(--line);
+  border-radius: var(--radius-panel);
+}
+.legend {
+  position: absolute;
+  top: -12px;
+  left: 16px;
+  padding: 3px 12px 1px;
+  border-radius: var(--radius-pill);
+  background: var(--strong);
+  color: var(--on-strong);
+  font: 600 12px/1.4 var(--display);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+/* ── buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 16px;
+  border: var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--raised);
+  color: var(--text);
+  font: 700 14px/1.2 var(--body);
+  text-decoration: none;
+  transition:
+    transform 0.12s,
+    box-shadow 0.12s,
+    background 0.12s;
+}
+.btn:not(:disabled):hover {
+  background: var(--panel);
+  color: var(--text);
+}
+/* Only the one action to press next is yellow, 48px tall, on the hard
+   shadow it sinks into when pressed. */
+.btn--primary {
+  min-height: 48px;
+  background: var(--pop);
+  color: var(--on-pop);
+  box-shadow: var(--shadow-hard);
+  transition:
+    background 0.15s,
+    transform 0.08s,
+    box-shadow 0.08s;
+}
+.btn--primary:not(:disabled):hover {
+  background: var(--pop-hover);
+  color: var(--on-pop);
+}
+.btn--primary:not(:disabled):active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #0f1411;
+}
+.btn--quiet {
+  background: transparent;
+}
+/* The small pills at a header's end. */
+.btn--pill {
+  min-height: 40px;
+  padding: 4px 14px;
+}
+/* The header's language pill: EN and FR, the page's language pressed. */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 40px;
+  margin: 0;
+  padding: 3px;
+  border: 2px solid var(--outline);
+  border-radius: 999px;
+  background: var(--raised);
+}
+.lang-toggle__option {
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font: 700 13px/1 var(--body);
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+.lang-toggle__option:hover {
+  background: var(--panel);
+}
+.lang-toggle__option[aria-pressed="true"] {
+  border-color: var(--outline);
+  background: var(--selected);
+  color: var(--on-selected);
+}
+.btn--spin {
+  min-height: 56px;
+  min-width: 220px;
+  padding: 0 32px;
+  font-size: 18px;
+}
+.icon-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+}
+.icon-btn:not(:disabled):hover {
+  background: var(--raised);
+  color: var(--text);
+}
+
+/* ── hub: one card per realm ── */
+.realm-list {
+  margin: 0;
+  padding: 16px 0 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 36px 28px;
+}
+/* An app tile: raised, lifting into raised-hover. */
+.realm-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100%;
+  padding: 16px 12px 12px;
+  background: var(--panel);
+  border: var(--line);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-soft);
+  color: var(--text);
+  text-decoration: none;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
+}
+.realm-card:hover,
+.realm-card:focus-visible {
+  color: var(--text);
+  background: var(--raised-hover);
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 #0f1411;
+}
+/* The name with an arrow at the end of its row: the whole card is the link */
+.realm-card__name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 8px 0 0;
+  font-size: 28px;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+.realm-card__name svg {
+  flex: none;
+}
+.realm-card__blurb {
+  margin: 0;
+  flex: 1;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+/* The realm's other pages, named as chips at the foot of its card. */
+.realm-card__pages {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 0;
+}
+.realm-card__inside {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.realm-card__page {
+  padding: 2px 10px;
+  border: 1.5px solid var(--outline);
+  border-radius: 999px;
+  background: var(--raised);
+  font-size: 13px;
+  font-weight: 700;
+}
+/* Cute Matcha's Footer: where to find more apps, on a small paper pill. */
+.site-foot {
+  width: fit-content;
+  margin: 8px auto 32px;
+  padding: 6px 14px;
+  border: var(--line);
+  border-radius: 999px;
+  background-color: var(--panel);
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.site-foot a {
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+}
+.site-foot a:hover {
+  text-decoration: underline;
+}
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 12px 12px;
+}
+
+/* ── wheel of fortune ── */
+/* Cute Matcha's Segmented: joined options, the chosen one strong. */
+.picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-self: flex-start;
+  border: var(--line);
+  border-radius: var(--radius-field);
+  overflow: hidden;
+  background: var(--raised);
+}
+.picker__option {
+  min-height: 44px;
+  white-space: nowrap;
+  padding: 0 20px;
+  border: 0;
+  border-right: var(--line);
+  background: var(--raised);
+  font: 700 14px/1.2 var(--body);
+}
+.picker__option:last-child {
+  border-right: 0;
+}
+.picker__option[aria-pressed="true"] {
+  background: var(--selected);
+  color: var(--on-selected);
+}
+.picker__option:not(:disabled, [aria-pressed="true"]):hover {
+  background: var(--panel);
+}
+.picker__option:focus-visible {
+  outline-offset: -5px;
+}
+.picker__add {
+  color: var(--text-muted);
+}
+
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 28px;
+}
+/* In a .layout row: the main panel takes the room, the side one a column,
+   and the two stack when there is no room for both. */
+.panel--wide {
+  flex: 999 1 520px;
+}
+.panel--narrow {
+  flex: 1 1 320px;
+}
+.panel--wheel {
+  flex: 999 1 520px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 12px 12px;
+}
+.panel--slices {
+  flex: 1 1 340px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 12px 12px;
+}
+
+.wheel {
+  position: relative;
+  width: min(460px, 100%);
+  aspect-ratio: 1 / 1;
+}
+.wheel__pointer {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  z-index: 3;
+  transform: translateX(-50%);
+}
+.wheel__rim {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: var(--ground);
+  border: var(--line);
+  box-shadow: 4px 4px 0 #0f1411;
+}
+.wheel__disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid var(--outline);
+  overflow: hidden;
+}
+/* The face turns inside the still, round disc, which clips its corners. */
+.wheel__face {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 4.5s cubic-bezier(0.12, 0.72, 0.08, 1);
+}
+.wheel__label {
+  fill: var(--on-accent);
+  font-family: var(--body);
+  font-weight: 900;
+}
+.wheel__label--empty {
+  fill: var(--text-muted);
+}
+.wheel__hub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: 72px;
+  height: 72px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--raised);
+  border: 3px solid var(--outline);
+  box-shadow: var(--shadow-hard);
+  color: var(--text-muted);
+}
+
+.slices__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.slices__head,
+.slices__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.slices__count {
+  font-size: 28px;
+  font-weight: 900;
+}
+.slices__count span {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+.slices {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.slice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.slice__dot {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: var(--line);
+}
+.slice__num {
+  min-width: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.field {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+  font-size: 15px;
+}
+.field::placeholder {
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+/* iOS Safari sizes date and time fields to their contents, and centres
+   their value, unless their native look is taken off. */
+.field[type="date"],
+.field[type="time"] {
+  display: block;
+  min-width: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  text-align: left;
+}
+.field::-webkit-date-and-time-value {
+  text-align: left;
+}
+.slice__input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Cute Matcha's Switch: raised when off, strong when on. */
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: 700 14px/1.2 var(--body);
+}
+.switch__track {
+  position: relative;
+  width: 50px;
+  height: 28px;
+  border: var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--raised);
+  transition: background 0.15s;
+}
+.switch__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--text);
+  transition: transform 0.15s;
+}
+.switch[aria-checked="true"] .switch__track {
+  background: var(--selected);
+}
+.switch[aria-checked="true"] .switch__thumb {
+  transform: translateX(22px);
+  background: var(--on-selected);
+}
+
+/* The dialog itself stays the browser's (centred, on top); only its UA box
+   is cleared, and the panel inside draws the look. */
+.result {
+  width: min(440px, calc(100% - 32px));
+  padding: 16px 0 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  overflow: visible;
+}
+.result__panel {
+  padding: 16px 12px 12px;
+}
+.result::backdrop {
+  background: rgb(15 20 17 / 0.7);
+}
+.result__winner {
+  margin: 6px 0 22px;
+  font-size: 40px;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+.result__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ── super tic-tac-toe ── */
+.panel--system {
+  flex: 999 1 520px;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  padding: 16px 12px 12px;
+}
+.panel--log {
+  flex: 1 1 300px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 12px 12px;
+}
+.system {
+  width: min(620px, 100%);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+/* A planet: a small board, lit up in accent while the next move may go on it. */
+.planet {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border: var(--line);
+  border-radius: var(--radius-field);
+  background: var(--panel);
+  transition: opacity 0.15s;
+}
+.planet--open {
+  background: var(--accent-soft);
+}
+.planet--waiting {
+  opacity: 0.55;
+}
+.planet--pink {
+  background: var(--pink);
+}
+.planet--purple {
+  background: var(--purple);
+}
+.planet__name {
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 700 12px/1.2 var(--body);
+  color: var(--text);
+}
+.planet--open .planet__name,
+.planet--pink .planet__name,
+.planet--purple .planet__name {
+  color: var(--on-accent);
+}
+.planet__cells {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+}
+.cell {
+  aspect-ratio: 1 / 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: 6px;
+  background: var(--raised);
+  font-size: clamp(12px, 2.8vw, 20px);
+  line-height: 1;
+}
+.cell:not(:disabled):hover {
+  background: var(--raised-hover);
+}
+/* The planet shows whether it is in play; a square never fades on its own. */
+.cell:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.cell--pink {
+  background: var(--pink);
+}
+.cell--purple {
+  background: var(--purple);
+}
+.cell--last {
+  box-shadow: inset 0 0 0 2px var(--outline);
+}
+.cell__planet {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+/* A conquered planet's flag over its squares: the winner's mark, large. */
+.planet__flag {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  font-size: clamp(36px, 9vw, 72px);
+  pointer-events: none;
+}
+.planet--pink .planet__flag {
+  background: color-mix(in srgb, var(--pink) 80%, transparent);
+}
+.planet--purple .planet__flag {
+  background: color-mix(in srgb, var(--purple) 80%, transparent);
+}
+/* Filled with nobody holding three in a row: a white flag on the plain panel. */
+.planet--drawn .planet__flag {
+  background: color-mix(in srgb, var(--panel) 80%, transparent);
+}
+
+.turn {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.15;
+}
+.turn__note {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.score {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.score__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  border: var(--line);
+  border-radius: var(--radius-field);
+  color: var(--on-accent);
+  font-weight: 700;
+}
+.score--pink {
+  background: var(--pink);
+}
+.score--purple {
+  background: var(--purple);
+}
+.score__row dd {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+}
+.score__row dd span {
+  font-size: 14px;
+  font-weight: 400;
+}
+.how-to {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.result__note {
+  margin: -12px 0 22px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+/* ── online play and the leaderboard ── */
+.panel--notice {
+  align-self: flex-start;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 12px 12px;
+}
+.panel--board {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 12px 12px;
+}
+.board {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+.board th,
+.board td {
+  padding: 8px 10px;
+  border-bottom: var(--stroke-base) solid var(--outline);
+  text-align: left;
+}
+.board thead th {
+  font: 700 12px/1.3 var(--body);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.board tbody th {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.board abbr {
+  text-decoration: none;
+}
+.board__rank,
+.board__points,
+.board__record {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.board__points {
+  font-weight: 900;
+}
+.board__record {
+  color: var(--text-muted);
+}
+.board__you {
+  background: var(--accent-soft);
+  color: var(--on-accent);
+}
+.board__you .board__record {
+  color: var(--on-accent);
+}
+/* You, below the top: set apart from it by a heavier rule. */
+.board__below tr:first-child > * {
+  border-top: var(--line);
+}
+
+/* ── potion brewing ── */
+.panel--pantry {
+  flex: 999 1 520px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 12px 12px;
+}
+.shelf {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.shelf > legend {
+  padding: 0;
+  margin-bottom: 8px;
+}
+.shelf__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+/* An ingredient: a small pill, filled in selected while it is in the cauldron. */
+.chip {
+  min-height: 40px;
+  padding: 0 14px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-pill);
+  background: var(--raised);
+  font: 700 14px/1.2 var(--body);
+}
+.chip:hover {
+  background: var(--raised-hover);
+}
+/* An ingredient's tip: a small dark label above it, on hover or keyboard focus. */
+.chip-wrap {
+  position: relative;
+  display: inline-flex;
+}
+.tip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  z-index: 2;
+  display: none;
+  width: max-content;
+  max-width: 220px;
+  padding: 6px 10px;
+  border-radius: var(--radius-field);
+  background: var(--strong);
+  color: var(--on-strong);
+  font: 600 13px/1.35 var(--body);
+  text-align: center;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.chip-wrap:hover .tip,
+.chip:focus-visible + .tip {
+  display: block;
+}
+.chip[aria-pressed="true"] {
+  background: var(--selected);
+  color: var(--on-selected);
+  box-shadow: var(--shadow-soft);
+}
+.cauldron {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cauldron__slot {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: var(--line);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.cauldron__tip {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+/* Fresh, dried or powder: a small segmented choice under the ingredient. */
+.forms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0 0;
+  padding: 0;
+  border: 0;
+}
+.forms__option {
+  min-height: 32px;
+  padding: 0 10px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-pill);
+  background: var(--panel);
+  font: 700 12px/1.2 var(--body);
+}
+.forms__option[aria-pressed="true"] {
+  background: var(--selected);
+  color: var(--on-selected);
+}
+.cauldron__slot--empty {
+  border-style: dashed;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+/* The book scrolls in its own frame, so a hundred pages never make the
+   page itself endless. */
+.book {
+  max-height: min(70vh, 640px);
+  margin: 0;
+  padding: 4px 6px 4px 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  align-items: start;
+  gap: 12px;
+}
+/* A page of the recipe book: dashed and muted until its potion is found. */
+.recipe-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: var(--stroke-base) dashed var(--outline);
+  border-radius: var(--radius-field);
+  color: var(--text-muted);
+}
+.recipe-card--found {
+  border-style: solid;
+  background: var(--accent-soft);
+  color: var(--on-accent);
+}
+.recipe-card__name {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.recipe-card__recipe {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.recipe-card__note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.recipe-card__by {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+/* The byline opens the list of everyone who brewed it. */
+.recipe-card__by--open {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+.brewers {
+  margin: 0;
+  padding-left: 22px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.brewers span {
+  opacity: 0.75;
+}
+/* The last brew by anyone, on a pill in the book's top right corner. */
+.book__latest {
+  position: absolute;
+  top: -12px;
+  right: 16px;
+  max-width: calc(100% - 160px);
+  margin: 0;
+  padding: 2px 12px;
+  overflow: hidden;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 12px/1.4 var(--body);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* A page the player has brewed too: the outline turns to the hard one. */
+.recipe-card--yours {
+  border-width: var(--stroke-panel);
+  box-shadow: var(--shadow-soft);
+}
+.recipe-card__source {
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--on-accent);
+}
+
+/* ── book of shadows ── */
+/* Six pages: on a narrow screen the tabs scroll sideways instead of wrapping. */
+.picker--scroll {
+  flex-wrap: nowrap;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.panel--book {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 12px 12px;
+}
+.book__title {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.15;
+}
+.glyph {
+  font-family:
+    "Segoe UI Symbol", "Noto Sans Symbols", "Apple Symbols", var(--body);
+}
+.badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 10px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 12px/1.4 var(--body);
+  vertical-align: middle;
+}
+.badge--retro {
+  background: var(--strong);
+  color: var(--on-strong);
+}
+/* A narrow panel's table: a planet's name stays on one line. */
+.board--compact tbody th {
+  white-space: nowrap;
+}
+.board--compact .badge {
+  margin-left: 6px;
+}
+.month-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+.month-nav .icon-btn {
+  font: 700 26px/1 var(--display);
+}
+.month-nav .btn {
+  margin-left: auto;
+}
+/* A month's name sits in a box as wide as the longest ("September 2026",
+   "septembre 2026"), so the arrows either side stay put from month to month. */
+.month-nav__title--month {
+  flex: none;
+  width: 7.6em;
+  text-align: center;
+}
+.moon-glyph {
+  flex: none;
+}
+
+/* Birth details: one field after the other, never side by side, so the
+   date and time pickers (wider on iOS Safari) never push past the panel. */
+/* The fields side by side, as many to a row as fit; one per row on a phone. */
+.details__fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  align-items: start;
+  gap: 12px;
+}
+.details__more {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.details__more summary {
+  cursor: pointer;
+}
+.details__more[open] summary {
+  margin-bottom: 12px;
+}
+.details__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* The witch card */
+.witch-card__about {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.lights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.light {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--accent-soft);
+  color: var(--on-accent);
+}
+.light__label {
+  font: 700 12px/1.3 var(--body);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+.light__sign {
+  font-size: 20px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 12px 20px;
+}
+.facts--wide {
+  grid-template-columns: 1fr;
+}
+.facts dt {
+  font: 700 13px/1.3 var(--body);
+  color: var(--text-muted);
+}
+.facts dd {
+  margin: 2px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 6px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.facts__big {
+  font-size: 22px;
+}
+.facts__aside {
+  color: var(--text-muted);
+}
+.elements {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.element {
+  display: grid;
+  grid-template-columns: 56px 1fr 40px;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+/* A bar filled to a share: an element's, a match's score. */
+.meter {
+  flex: 1;
+  height: 14px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-pill);
+  background: var(--raised);
+  overflow: hidden;
+}
+.meter__fill {
+  display: block;
+  height: 100%;
+  background: var(--selected);
+}
+.element__count {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* The Moon tonight, and a month of moons */
+.tonight {
+  align-items: center;
+  text-align: center;
+}
+.tonight .facts {
+  align-self: stretch;
+  text-align: left;
+}
+.tonight__stats {
+  margin: -6px 0 0;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.tonight__lore {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.moon-cal {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+.moon-cal__weekday {
+  text-align: center;
+  font: 700 12px/1.3 var(--body);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.moon-cal__day {
+  min-height: 74px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 2px;
+  border: var(--stroke-base) solid transparent;
+  border-radius: var(--radius-field);
+  background: var(--raised);
+  text-align: center;
+}
+.moon-cal__day--exact {
+  border-color: var(--outline);
+  background: var(--accent-soft);
+  color: var(--on-accent);
+}
+.moon-cal__day--today {
+  border: var(--line);
+  box-shadow: var(--shadow-soft);
+}
+.moon-cal__num {
+  font-size: 13px;
+  font-weight: 700;
+}
+.moon-cal__phase {
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.moon-cal__lunar {
+  margin-top: auto;
+  font-size: 11px;
+  line-height: 1.2;
+  color: var(--text-muted);
+}
+.moon-cal__day--exact .moon-cal__lunar {
+  color: inherit;
+}
+.moon-cal__holy {
+  font-weight: 800;
+  color: var(--strong);
+}
+.moon-cal__festival {
+  font-size: 15px;
+  line-height: 1;
+}
+.lunar-months {
+  margin: 0;
+  font-size: 14px;
+}
+.phase-list,
+.eclipses {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+}
+.phase-list li,
+.eclipses li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* The Wheel of the Year */
+.year-wheel {
+  width: min(100%, 320px);
+  align-self: center;
+}
+.year-wheel__name {
+  fill: var(--text);
+  font: 600 12px var(--display);
+}
+.year-wheel__date {
+  fill: var(--text-muted);
+  font: 700 9.5px var(--body);
+}
+.sabbats {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 12px;
+}
+.sabbat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.sabbat p {
+  margin: 0;
+}
+.sabbat--next {
+  border-width: var(--stroke-panel);
+  background: var(--accent-soft);
+  color: var(--on-accent);
+  box-shadow: var(--shadow-soft);
+}
+.sabbat__when {
+  font-weight: 700;
+}
+.sabbat__name {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.15;
+}
+.sabbat__say {
+  font: 400 14px var(--body);
+}
+.sabbat__also {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* The sky: retrogrades and eclipses */
+.retrogrades {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 12px;
+}
+.retrograde {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+}
+.retrograde--now {
+  border-width: var(--stroke-panel);
+  background: var(--accent-soft);
+  color: var(--on-accent);
+  box-shadow: var(--shadow-soft);
+}
+.retrograde__name {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.retrograde__dates {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+.retrograde__lore {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* The birth chart */
+.chart-wheel {
+  width: min(100%, 440px);
+  align-self: center;
+}
+.chart-wheel__sign {
+  fill: var(--text);
+  font-size: 19px;
+}
+.chart-wheel__planet {
+  fill: var(--text);
+  font-size: 17px;
+  font-weight: 700;
+}
+.chart-wheel__house {
+  fill: var(--text-muted);
+  font: 700 11px var(--body);
+}
+.chart-wheel__angle {
+  fill: var(--text);
+  font: 700 11px var(--body);
+}
+.tally {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* Numerology */
+.numbers {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 12px;
+}
+.number-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+}
+.number-card p {
+  margin: 0;
+}
+.number-card--master {
+  border-width: var(--stroke-panel);
+  background: var(--accent-soft);
+  color: var(--on-accent);
+}
+.number-card__value {
+  font-size: 44px;
+  line-height: 1;
+}
+.number-card__title {
+  margin: 0;
+  font-size: 18px;
+}
+.number-card__keywords {
+  font-size: 13px;
+  font-weight: 700;
+}
+.number-card__about {
+  font-size: 14px;
+  line-height: 1.45;
+}
+.number-card__from {
+  margin-top: auto;
+  padding-top: 6px;
+  font-size: 12.5px;
+  opacity: 0.8;
+}
+.personal-year p {
+  margin: 0;
+}
+.personal-year p + p {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15px;
+}
+
+/* Tarot */
+.tarot-face {
+  flex: none;
+}
+.tarot-face__label {
+  fill: var(--text);
+  font: 600 9px var(--display);
+}
+.tarot-face__name {
+  fill: var(--text);
+  font: 600 5.5px var(--display);
+}
+.tarot-reading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px;
+}
+.tarot-reading__text {
+  flex: 1 1 300px;
+  min-width: 0;
+  gap: 12px;
+}
+/* The reading for the way up the card is: lit, like a chosen option. */
+.tarot-side {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: var(--line);
+  border-radius: var(--radius-field);
+  background: var(--accent-soft);
+  color: var(--on-accent);
+  font-size: 15px;
+  line-height: 1.45;
+}
+.tarot-side p {
+  margin: 0;
+}
+.tarot-side__keywords {
+  font-weight: 700;
+}
+/* Choosing a card, a step at a time. */
+.tarot-step {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tarot-step .picker {
+  align-self: stretch;
+}
+.tarot-step .picker__option {
+  flex: 1;
+  padding: 0 12px;
+}
+.tarot-step__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tarot-step__grid .chip {
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+.chip__numeral {
+  font-family: var(--display);
+  opacity: 0.7;
+}
+.tarot-reading__way {
+  margin: -4px 0 0;
+  font: 700 18px/1.2 var(--display);
+}
+
+/* The birthplace search: the towns that match, under the field. */
+.birthplace__options {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  max-height: 260px;
+  overflow-y: auto;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+}
+.birthplace__options li + li {
+  border-top: var(--stroke-base) dashed var(--outline);
+}
+.birthplace__option {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 10px;
+  padding: 10px 12px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+}
+.birthplace__option:hover,
+.birthplace__option:focus-visible {
+  background: var(--selected);
+  color: var(--on-selected);
+}
+.birthplace__zone {
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+/* Today, on the profile */
+.today__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: 12px;
+}
+.today__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.today__item p {
+  margin: 0;
+}
+.today__item--sky {
+  grid-column: 1 / -1;
+}
+.today__icon {
+  flex: none;
+  width: 54px;
+  text-align: center;
+  font-size: 34px;
+  line-height: 54px;
+}
+.today__big {
+  font-size: 20px;
+  line-height: 1.2;
+}
+.today__lore {
+  color: var(--text-muted);
+}
+.today__list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.daily {
+  align-items: center;
+  text-align: center;
+}
+.daily .book__title {
+  align-self: flex-start;
+}
+.daily__reading {
+  align-items: center;
+  gap: 6px;
+}
+.daily__reading p {
+  margin: 0;
+}
+
+/* Compatibility */
+.match__meter {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.match__score {
+  font-size: 40px;
+  line-height: 1;
+}
+.match__verdict {
+  margin: 0;
+  font: 600 18px/1.3 var(--display);
+}
+.match__reasons {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 8px;
+}
+.match__reason {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.match__reason--good {
+  background: var(--accent-soft);
+  color: var(--on-accent);
+}
+.match__reason--hard {
+  border-style: dashed;
+}
+.match__tone {
+  flex: none;
+  width: 1.2em;
+  font-weight: 900;
+  text-align: center;
+}
+.match__summary {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.match__row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 110px 1fr 56px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+  text-align: left;
+}
+.match__row:hover {
+  background: var(--panel);
+}
+.match__label {
+  font-weight: 700;
+}
+.match__row-score {
+  font-size: 20px;
+  text-align: right;
+}
+.match--empty {
+  align-items: flex-start;
+}
+
+/* The Lunar zodiac */
+.lunar-you__head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.lunar-you__emoji {
+  font-size: 64px;
+  line-height: 1;
+}
+.lunar-year p {
+  margin: 0;
+}
+.stems-panel p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.stems {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 8px;
+}
+.stem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+}
+.stem--marked {
+  border-width: var(--stroke-panel);
+  background: var(--accent-soft);
+  color: var(--on-accent);
+  box-shadow: var(--shadow-soft);
+}
+.stem__hanzi {
+  flex: none;
+  width: 40px;
+  font-size: 32px;
+  line-height: 1;
+  text-align: center;
+}
+.stem__name {
+  margin: 0;
+  font: 700 14px var(--body);
+}
+.stems-panel .stem__years {
+  font-size: 12.5px;
+  opacity: 0.8;
+}
+.stem__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.animals {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+  gap: 10px;
+}
+.animal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 12px 14px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+}
+.animal p {
+  margin: 0;
+}
+.animal--yours {
+  border-width: var(--stroke-panel);
+  background: var(--accent-soft);
+  color: var(--on-accent);
+  box-shadow: var(--shadow-soft);
+}
+.animal__emoji {
+  font-size: 32px;
+  line-height: 1.1;
+}
+.animal__name {
+  margin: 0;
+  font-size: 18px;
+}
+.animal__hanzi {
+  font-weight: 400;
+  opacity: 0.7;
+}
+.animal__keywords {
+  font-size: 13px;
+}
+.animal__years {
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+.animal .badge {
+  margin: 4px 0 0;
+}
+
+/* Tarot, top to bottom: draw, choose, read */
+.tarot-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+.tarot-top .hint {
+  min-height: 0;
+}
+.tarot-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 18px 24px;
+}
+.tarot-step {
+  flex: 0 1 auto;
+}
+.tarot-step--wide {
+  flex: 1 1 340px;
+}
+
+/* The Magic 8 Ball */
+.eight-ball {
+  align-items: stretch;
+}
+/* The ball takes the drag itself: swiping it never scrolls the page. */
+.eight-ball__stage {
+  align-self: center;
+  width: min(100%, 340px);
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.eight-ball__stage:active {
+  cursor: grabbing;
+}
+.eight-ball__ball {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* The 8 and the answer are set on a disc 200 across, then scaled onto the ball. */
+.eight-ball__eight {
+  font: 700 125px var(--display);
+}
+.eight-ball__answer {
+  font: 800 15px var(--body);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.eight-ball__die {
+  transition: opacity 0.6s ease-in;
+}
+.eight-ball__caption {
+  min-height: 1.3em;
+  margin: 0;
+  text-align: center;
+  font-size: 26px;
+  line-height: 1.2;
+}
+.eight-ball__caption--waiting {
+  font-size: 18px;
+  color: var(--text-muted);
+}
+.eight-ball__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.eight-ball .hint {
+  text-align: center;
+}
+
+/* ── sticky board (hub) ── */
+.panel--stickies {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 12px 12px;
+}
+.stickies__head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stickies__title {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.1;
+}
+.stickies__sign-in {
+  align-self: flex-start;
+}
+/* A note's paper: fixed colours, like a drawing, with ink on top. */
+.sticky--lemon {
+  background: var(--note-lemon);
+}
+.sticky--matcha {
+  background: var(--note-matcha);
+}
+.sticky--strawberry {
+  background: var(--note-strawberry);
+}
+.sticky--taro {
+  background: var(--note-taro);
+}
+.sticky--blue {
+  background: var(--note-blue);
+}
+.sticky--white {
+  background: var(--note-white);
+}
+/* Writing a note: two lines of paper, and one row under it. */
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 640px;
+}
+.composer__body {
+  min-height: 0;
+  padding: 8px 12px;
+  color: var(--ink);
+  font: 400 16px/1.45 var(--body);
+  resize: none;
+}
+.composer__body::placeholder {
+  color: var(--ink);
+  opacity: 0.6;
+}
+.composer__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+/* The count and notes left take the room between the colours and the button. */
+.composer__count {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.composer__count--over {
+  color: var(--danger);
+  font-weight: 700;
+}
+.swatches {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.swatches legend {
+  float: left;
+  margin-right: 4px;
+}
+.swatch {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: 50%;
+}
+/* The chosen colour: a selected ring around the swatch. */
+.swatch[aria-pressed="true"] {
+  box-shadow:
+    0 0 0 3px var(--panel),
+    0 0 0 5px var(--selected);
+}
+/* The corkboard: a well the notes are pinned to, scrolling in its own
+   frame so a busy day never makes the hub endless. */
+.corkboard-frame {
+  max-height: min(70vh, 640px);
+  padding: 18px 14px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+}
+.corkboard {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* On a wide screen the notes hang in the margins either side of the hub's
+   column, on a layer as wide as the page that lets clicks through to it. */
+.hub {
+  position: relative;
+}
+/* A little below the header, so the top notes' tape clears it. */
+.hub__sides {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+.corkboard--sides .sticky {
+  pointer-events: auto;
+}
+/* A note sits where it was dropped; NOTE_WIDTH in src/board/layout.ts. */
+.sticky {
+  position: absolute;
+  width: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 140px;
+  padding: 16px 14px 10px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: 4px;
+  box-shadow: var(--shadow-soft);
+  color: var(--ink);
+  cursor: grab;
+  user-select: none;
+}
+.sticky--held {
+  cursor: grabbing;
+  transform: scale(1.03);
+  box-shadow: var(--shadow-hard);
+}
+/* The tape at the top: what a finger drags by, and what the arrow keys
+   move. */
+.sticky__tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 64px;
+  height: 20px;
+  padding: 0;
+  translate: -50% 0;
+  border: 1px solid var(--outline);
+  border-radius: 2px;
+  background: var(--note-tape);
+  cursor: grab;
+  touch-action: none;
+}
+.sticky--tilt-0 {
+  transform: rotate(-1.5deg);
+}
+.sticky--tilt-1 {
+  transform: rotate(1deg);
+}
+.sticky--tilt-2 {
+  transform: rotate(-0.5deg);
+}
+.sticky__body {
+  flex: 1;
+  margin: 0;
+  font: 400 15px/1.45 var(--body);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.sticky__time {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.75;
+}
+.sticky__votes {
+  display: flex;
+  gap: 6px;
+}
+.sticky__vote {
+  padding: 2px 9px;
+  border: var(--stroke-base) solid var(--ink);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink);
+  font: 700 12px/1.4 var(--body);
+}
+.sticky__vote[aria-pressed="true"] {
+  background: var(--selected);
+  color: var(--on-selected);
+}
+.sticky__vote:disabled {
+  cursor: default;
+  opacity: 0.75;
+}
+.sticky__remove {
+  align-self: flex-start;
+  padding: 2px 10px;
+  border: var(--stroke-base) solid var(--ink);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink);
+  font: 700 12px/1.4 var(--body);
+}
+.sticky__remove:hover {
+  background: var(--white);
+}
+
+/* ── quizzes ── */
+.quiz {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 760px;
+  padding: 16px 12px 12px;
+}
+.quiz--result {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px 40px;
+  max-width: none;
+}
+.quiz__verdict {
+  flex: 1 1 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.quiz__title {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.1;
+}
+.quiz__title:focus {
+  outline: none;
+}
+.quiz__prompt {
+  font-size: 28px;
+}
+.quiz__about {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.quiz__head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.quiz__progress {
+  display: block;
+  height: 10px;
+  border: var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--raised);
+  overflow: hidden;
+}
+.quiz__progress span {
+  display: block;
+  height: 100%;
+  background: var(--selected);
+  transition: width 0.2s;
+}
+.quiz__answers {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.quiz__answer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 16px 10px 10px;
+  border: var(--line);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+  font: 600 15px/1.35 var(--body);
+  text-align: left;
+  transition:
+    transform 0.12s,
+    box-shadow 0.12s,
+    background 0.12s;
+}
+/* Only a mouse hovers: on a touch screen the tapped answer would stay lit on
+   the next question. */
+@media (hover: hover) {
+  .quiz__answer:hover {
+    background: var(--raised-hover);
+    transform: translate(-1px, -1px);
+    box-shadow: var(--shadow-soft);
+  }
+}
+.quiz__letter {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: var(--line);
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 600 14px/1 var(--display);
+}
+.quiz__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.quiz-card__result {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.quiz-card__result strong {
+  color: var(--text);
+}
+
+/* The result's pie and its legend, which is also its table. */
+.pie {
+  flex: 1 1 360px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px 28px;
+  margin: 0;
+}
+.pie__chart {
+  flex: none;
+  width: min(220px, 100%);
+  height: auto;
+}
+.pie__slice {
+  stroke: var(--outline);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+  transition: opacity 0.12s;
+}
+.pie__slice[data-dim="true"],
+.pie__item[data-dim="true"] {
+  opacity: 0.35;
+}
+.pie__legend {
+  flex: 1 1 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pie__legend ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pie__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  line-height: 1.35;
+  transition: opacity 0.12s;
+}
+.pie__swatch {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: 4px;
+}
+.pie__name {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+}
+.pie__folded {
+  font-weight: 400;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+.pie__share {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .app-header {
+    padding: 12px 16px;
+  }
+  .app-header__name {
+    font-size: 20px;
+  }
+  .account {
+    width: 44px;
+    min-height: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+  .account__text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .app-header__home,
+  .app-header__end {
+    flex-basis: 100%;
+    justify-content: flex-start;
+    min-width: 0;
+  }
+  .page {
+    padding: 24px 16px 40px;
+    gap: 28px;
+  }
+  .page__title {
+    font-size: 32px;
+  }
+  .picker {
+    align-self: stretch;
+  }
+  .picker__option {
+    flex: 1;
+    padding: 0 10px;
+  }
+  .panel--wheel {
+    padding: 40px 16px 20px;
+  }
+  .btn--spin {
+    min-width: 0;
+    width: 100%;
+  }
+  .panel--system {
+    padding: 32px 10px 12px;
+  }
+  .system {
+    gap: 6px;
+  }
+  .planet {
+    gap: 4px;
+    padding: 4px;
+  }
+  .planet__name {
+    font-size: 10px;
+  }
+  .planet__cells {
+    gap: 2px;
+  }
+  .cell {
+    border-radius: 4px;
+  }
+  .panel--board {
+    padding: 28px 12px 16px;
+  }
+  .panel--pantry,
+  .panel--stickies,
+  .panel--book {
+    padding: 28px 16px 18px;
+  }
+  /* Too narrow for the corner: the last brew sits in full above the title. */
+  .book__latest {
+    position: static;
+    align-self: flex-start;
+    max-width: none;
+    white-space: normal;
+  }
+  .board th,
+  .board td {
+    padding: 8px 6px;
+  }
+  .picker--scroll .picker__option {
+    flex: none;
+  }
+  .lights {
+    grid-template-columns: 1fr;
+  }
+  .moon-cal {
+    gap: 3px;
+  }
+  .moon-cal__day {
+    min-height: 58px;
+    padding: 4px 0;
+  }
+  /* No room to write the phase: it stays for screen readers only. */
+  .moon-cal__phase {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel__face {
+    transition-duration: 1.2s;
+  }
+  .btn,
+  .realm-card,
+  .planet,
+  .switch__track,
+  .switch__thumb,
+  .eight-ball__die,
+  .quiz__answer,
+  .quiz__progress span,
+  .pie__slice,
+  .pie__item {
+    transition: none;
+  }
+}
+
+/* ── spell creator ── */
+.spell-main {
+  flex: 999 1 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  min-width: 0;
+}
+.spell-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 12px 12px;
+}
+.spell-form {
+  gap: 10px;
+}
+.spell-form__text {
+  min-height: 132px;
+  padding: 10px 12px;
+  font: 400 16px/1.5 var(--body);
+  color: var(--text);
+  resize: vertical;
+}
+/* A tier's letter: the four that work are accent, S the strongest of all,
+   a weak spell raised, and a failed one danger. */
+.spell-tier {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border: var(--line);
+  border-radius: var(--radius-panel);
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 40px/1 var(--display);
+}
+.spell-tier--small {
+  width: 32px;
+  height: 32px;
+  border-width: var(--stroke-base);
+  border-radius: var(--radius-field);
+  font-size: 17px;
+}
+.spell-tier--s {
+  background: var(--strong);
+  color: var(--on-strong);
+}
+.spell-tier--d,
+.spell-tier--e {
+  background: var(--raised);
+  color: var(--text);
+}
+.spell-tier--f {
+  background: var(--danger);
+  color: var(--ink);
+}
+.spell-result {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.spell-result__name {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.1;
+}
+.spell-result__effect {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.spell-power {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.spell-power__value {
+  min-width: 3.5em;
+  text-align: right;
+  font: 700 14px/1 var(--body);
+  font-variant-numeric: tabular-nums;
+}
+.spell-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14.5px;
+}
+.spell-check {
+  display: flex;
+  gap: 8px;
+}
+.spell-check__mark {
+  flex: none;
+  width: 1.2em;
+  font-weight: 700;
+}
+.spell-check--miss {
+  color: var(--text-muted);
+}
+.spell-couplets {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.spell-couplet {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+}
+.spell-couplet__verse {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 12px;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.spell-couplet__count {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.spell-tiers {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.spell-tiers__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.spell-tiers__try {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font: 700 13px/1.4 var(--body);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.spell-tiers__try:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* ── calendar ── */
+.cal-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 12px 12px;
+}
+.cal-kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cal-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.chip.cal-kind[aria-pressed="true"] {
+  background: var(--selected);
+  color: var(--on-selected);
+}
+/* A day's festivals, as their marks. */
+.cal-marks {
+  margin-top: auto;
+  font-size: 14px;
+  line-height: 1.2;
+  word-break: break-all;
+}
+.cal-marks small {
+  margin-left: 1px;
+  font-size: 10.5px;
+  font-weight: 700;
+}
+.occasions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.occasion {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+}
+.occasion__emoji {
+  flex: none;
+  font-size: 26px;
+  line-height: 1.2;
+}
+.occasion__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.occasion__when {
+  margin: 0;
+  font: 700 12.5px/1.3 var(--body);
+  color: var(--text-muted);
+}
+.occasion__name {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.2;
+}
+.occasion__script {
+  font-family: var(--body);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.occasion__about {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+.occasion__local {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+.occasion__countries {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+.occasion__countries summary {
+  cursor: pointer;
+}
+.occasion__add {
+  margin-top: 4px;
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 13.5px;
+}
+
+/* The account pill while the session is asked for: a skeleton of its exact
+   size, so nothing moves when the answer comes. */
+.account--loading {
+  pointer-events: none;
+}
+.account--loading .account__icon {
+  background: var(--raised-hover);
+}
+.account__bar {
+  width: 56px;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--raised-hover);
+  animation: account-pulse 1.2s ease-in-out infinite;
+}
+@keyframes account-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+@media (max-width: 600px) {
+  .account__bar {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .account__bar {
+    animation: none;
+  }
+  .btn--primary:not(:disabled):active {
+    transform: none;
+  }
+}
+
+/* ── the arena ── */
+.arena-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 12px 12px;
+}
+.arena-districts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.arena-district {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: var(--stroke-base) solid var(--outline);
+  border-radius: var(--radius-field);
+  background: var(--raised);
+}
+.arena-district__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.arena-district__name {
+  margin: 0;
+  font-size: 17px;
+}
+.arena-district__add {
+  align-self: flex-start;
+}
+.arena-place {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.arena-place .field {
+  flex: 1;
+  min-width: 0;
+}
+.arena-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.arena-muted {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13.5px;
+}
+.arena-switch {
+  justify-content: space-between;
+  text-align: left;
+}
+.arena-count {
+  margin: 0;
+  font-weight: 700;
+}
+.arena-phase__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+.arena-phase__title {
+  margin: 0;
+  font-size: 30px;
+}
+.arena-phase__title:focus,
+.arena-end__name:focus {
+  outline: none;
+}
+.arena-events {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.arena-event {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-field);
+  background: var(--raised);
+  font-size: 15.5px;
+  line-height: 1.45;
+}
+.arena-event__mark {
+  flex: none;
+  width: 1.3em;
+  text-align: center;
+  color: var(--text-muted);
+}
+.arena-event--deadly {
+  border: var(--stroke-base) solid var(--outline);
+}
+.arena-fallen {
+  margin: 0;
+  font-size: 14.5px;
+}
+.arena-roster {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.arena-roster ul {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.arena-roster__district {
+  font: 700 13px/1.3 var(--body);
+  color: var(--text-muted);
+}
+.arena-roster__one {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.arena-roster__one--fallen .arena-roster__name {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+.arena-end__name {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.15;
+}
+.arena-placings {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding-left: 1.6em;
+  font-size: 15px;
+}

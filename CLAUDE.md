@@ -15,7 +15,7 @@ Always name the branch after the feature or fix it contains, never a random or g
 
 - Format: `<type>/<feature-name>` in lowercase kebab-case
 - Types: `feat`, `fix`, `chore`, `docs`, `refactor`
-- Examples: `feat/contact-form`, `fix/dark-mode-contrast`, `docs/claude-md`
+- Examples: `feat/court-of-draconi`, `fix/moon-phase-label`, `docs/claude-md`
 - If the session assigns a generic branch (for example `claude/<random-words>`), create a feature-named branch instead and push there
 
 ## Pull requests
@@ -27,18 +27,48 @@ Always name the branch after the feature or fix it contains, never a random or g
 ## Checks before pushing
 
 ```sh
-npm run check      # Ultracite (oxlint + oxfmt); CI fails on it
-npm run typecheck
-npm test           # vitest
-npm run build
+npm run check     # Ultracite (oxlint + oxfmt); CI fails on it
+npm run typecheck # tsc -b
+npm test          # vitest
+npm run build     # the site in dist/, the server in dist-server/
 ```
+
+`server/potions.test.ts` runs only with `TEST_DATABASE_URL` set (after `npm run db:up`, `postgres://realms@localhost:5436/realms`); the Database workflow runs it in CI.
 
 The PostToolUse hook in `.claude/hooks/ultracite.sh` runs Ultracite and the typecheck on every file you edit.
 
 ## What this is
 
-What the app is, where it runs (`<name>.irmahs.dev`), and what it is built with.
+Realms, at realms.irmahs.dev: worlds to step into, a Vite + React site served by a small Node server. It was made on 2026-11-16 from Mini Games (irmahs-labs/minigames), which the Book of Shadows, Booster Potion (now Potion Brewing) and Spell Creator came from. Anything a page remembers for one visitor is in their `localStorage`, read through a zod schema (`src/lib/storage.ts`, keys starting `realms:`) so a damaged or old value falls back to the defaults instead of breaking the page.
+
+Each realm is an entry in `REALMS` (`src/realms.ts`) with its pages, the first at `/<realm>` and the others at `/<realm>/<page>`, and its code in `src/realms/<realm>/`. The hub (`src/hub.tsx`) has one card per realm, naming the pages inside it; `src/app.tsx` routes each address to its page (`findPage`), which loads only when opened. Every realm page's header holds `RealmNav` (`src/components/realm-nav.tsx`): back a step (to every realm from the realm's first page, to the realm from its others), then the realm's other pages.
+
+To add a realm: a folder under `src/realms/<slug>/` whose pages each default-export a screen taking `PageProps`, with their words in English and French; an entry in `REALMS` with its 40-grid icon in `src/components/app-icons.tsx`; and its rules in plain functions with Vitest tests, apart from the React code.
+
+**Book of Shadows** (`src/realms/book-of-shadows/`): the Book itself at `/book-of-shadows`, Potion Brewing (`potion-brewing/`) at `/book-of-shadows/potion-brewing`, and Spell Creator (`spell-creator/`) at `/book-of-shadows/spell-creator`.
+
+- A book saved on Mini Games comes over once in the address's fragment, `#book=<base64url JSON>` (`carry-over.ts`, `encodeBook`), sent by Mini Games' old page; `openBook` keeps it only when this browser's book here is still blank, and always takes the fragment off. Never put a book in a query string or send it to the server.
+- Potion Brewing brews on the server (`POST /api/potions/brew`, signed in, own `Origin` only, 30 a minute): `potion-brewing/recipes.ts` and `brewing.ts` are server-only, so the page never carries the answers. Never import them from the page's React code; `npm run build` must leave no recipe name in `dist/assets`. Who brewed what is `server/potions.ts`: the shared book in `potion_brewing_brews`, each player's own solo book in `potion_brewing_solo_brews` (`/api/potions/solo`). `scripts/import-potions.sh` copied Booster Potion's rows over from Mini Games once.
+- Spell Creator is in English only, because its spells rhyme in English: its own words are English, marked `lang="en"`, and in French a note says so; its name and the header's ways back are still in both. It hears words through the CMU Pronouncing Dictionary (the `cmu-pronouncing-dictionary` package), which `vite.config.ts` packs at build time into the `virtual:pronunciations` module (`pronunciations.ts`); only Spell Creator loads it (`dictionary.ts`). The tiers are `spell.ts`, the rhymes `rhyme.ts`.
+
+The server (`server/`, Hono on Node) serves the built site and `/api`. Who someone is comes only from the shared irmahs.dev sign-in cookie, asked of the account service (irmahs-labs/auth) by `server/session.ts`; never from anything the browser sends. Anything that writes refuses any `Origin` but the site's own, since the cookie is shared by every `*.irmahs.dev` page.
+
+The schema is the dbmate migrations in `db/migrations/`. Every table is named after its page's slug in snake_case (`potion_brewing_brews`), so the database says whose each table is. Never edit a migration that is already merged: add a new one with `npm run db:new -- <name>`, with a matching `-- migrate:down`.
+
+## Languages
+
+The site reads in English or French. The choice is `src/lib/language.ts`: kept in localStorage and in a `lang` cookie on `irmahs.dev` that every irmahs.dev app reads and writes, so one pick carries across the apps; the header's EN/FR pill (`src/components/language-toggle.tsx`) switches it. Every string a visitor sees has both versions, in a `COPY = { en, fr }` object beside the component that shows it (`useCopy(COPY)`), and a realm's and page's `name` and `blurb` in `REALMS` are `{ en, fr }`. The server's refusals stay English sentences and `src/lib/server-words.ts` gives each its French. Potion Brewing's notes are `noteFr` beside `note` in the server-only recipes; its ingredients and clues are read back in French from `pantry-fr.ts`. The Book of Shadows' data stays in English, and `french.ts` (one file per topic in `french/`) gives each line its French through `say`; its own words use `tr(english, french)`.
+
+## Names
+
+The name people see is `APP_NAME` in `src/lib/brand.ts`. The image, the network alias, the database and the server folder are all `realms` (`/srv/realms`).
 
 ## Design
 
-Apps use Cute Matcha's app look (the _Apps_ section of Irma's Cute Matcha design system), in both of its themes, with colours from its role tokens. Say here which parts of the app follow it and how.
+The site is styled in Cute Matcha's app look (the _Apps_ section of Irma's Cute Matcha design system), in Light Matcha and Dark Matcha (a mid-tone matcha page, cards a step lighter, and the header, buttons and fields a darker well, with near-black outlines and shadows in both themes). Colours are the system's role tokens, named by job (`ground`, `panel`, `header`, `raised`, `text`, `text-muted`, `accent`, `pop`, `strong`, `selected`, …), at the top of `src/styles.css`: Light Matcha on `:root`, Dark Matcha on `:root[data-theme="dark"]`. Pick a token by what the thing is, never a hex: the primary button is `pop`, the yellow accent kept for the one call to action on a screen (48px tall, sinking into its hard shadow when pressed), a chosen option or a switch that is on is `selected`, legends are `strong`. The inline script in `index.html` sets `data-theme` before the first paint, from the visitor's saved choice or else the device's setting, and `src/lib/theme.ts` keeps it (the header's sun/moon toggle saves a choice).
+
+Every page opens with the **Header** (`src/components/header.tsx`): its 40px app icon (`src/components/app-icons.tsx`, in fixed Light Matcha colours with a `text` rim), its name in Fredoka with "by Irma HS" under it, the page's own buttons in the middle, then the theme toggle and the **account pill** (`src/components/account-button.tsx`): "sign in" with Google's mark, or the person's picture and first name, linking to the IrmaHS Labs account page. It asks `auth.irmahs.dev` who is signed in from the browser (`src/lib/session.ts`); on localhost the service doesn't answer, so the pill shows "sign in". Fredoka sets titles and panel names, Nunito Sans everything else. Panels are flat, with a 2px outline and a filename on a `strong` pill (`.legend`), always with an extension that exists (`.exe`, `.log`, `.csv`, `.txt`, `.epub`, …); only the one action to press next (`.btn--primary`) carries the hard shadow. Every page closes with the **Footer** (`src/components/footer.tsx`, rendered by `App`): "more apps at irmahs.dev", the one thing the Header doesn't say. Corners are concentric: panels and realm cards are `--radius-panel` (20px) with 16px of padding on top and 12px elsewhere, and what sits inside takes `--radius-field` (8px). A realm card is the link itself, with an arrow at the end of its name and no "play" label. Screen icons (`src/lib/icon.tsx`) are a 24 grid at 2px. The favicon is the Realms portal (`RealmsIcon`), `public/favicon.svg`.
+
+## Deploy
+
+Merging to `main` runs `.github/workflows/deploy.yml`, which SSHes to the server as `deploy`, resets `/srv/realms` to `main`, and with `compose.prod.yaml` starts Postgres, runs pending migrations and rebuilds the site's container. It needs the `REALMS_POSTGRES_PASSWORD` secret. The shared Caddy in `irmahs-labs/proxy` routes `realms.irmahs.dev` to it. `compose.yaml` is for local development only: a database and dbmate (on port 5436).
