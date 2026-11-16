@@ -33,7 +33,7 @@ npm test          # vitest
 npm run build     # the site in dist/, the server in dist-server/
 ```
 
-`server/potions.test.ts` runs only with `TEST_DATABASE_URL` set (after `npm run db:up`, `postgres://realms@localhost:5436/realms`); the Database workflow runs it in CI.
+`server/potions.test.ts` and `server/draconoids.test.ts` run only with `TEST_DATABASE_URL` set (after `npm run db:up`, `postgres://realms@localhost:5436/realms`); the Database workflow runs them in CI.
 
 The PostToolUse hook in `.claude/hooks/ultracite.sh` runs Ultracite and the typecheck on every file you edit.
 
@@ -51,9 +51,17 @@ To add a realm: a folder under `src/realms/<slug>/` whose pages each default-exp
 - Potion Brewing brews on the server (`POST /api/potions/brew`, signed in, own `Origin` only, 30 a minute): `potion-brewing/recipes.ts` and `brewing.ts` are server-only, so the page never carries the answers. Never import them from the page's React code; `npm run build` must leave no recipe name in `dist/assets`. Who brewed what is `server/potions.ts`: the shared book in `potion_brewing_brews`, each player's own solo book in `potion_brewing_solo_brews` (`/api/potions/solo`). `scripts/import-potions.sh` copied Booster Potion's rows over from Mini Games once.
 - Spell Creator is in English only, because its spells rhyme in English: its own words are English, marked `lang="en"`, and in French a note says so; its name and the header's ways back are still in both. It hears words through the CMU Pronouncing Dictionary (the `cmu-pronouncing-dictionary` package), which `vite.config.ts` packs at build time into the `virtual:pronunciations` module (`pronunciations.ts`); only Spell Creator loads it (`dictionary.ts`). The tiers are `spell.ts`, the rhymes `rhyme.ts`.
 
+**Court of Draconia** (`src/realms/court-of-draconia/`), the dragon realm, from Irma's Elemental Magic System: the Court itself at `/court-of-draconia` (the visitor's draconoid, the six Court members, how the magic works), the draconoid maker at `/court-of-draconia/draconoid`, the hall of everyone's draconoids at `/court-of-draconia/hall`, and the sixteen duo ultimates at `/court-of-draconia/ultimates`.
+
+- A draconoid is half human, half dragon: a name, an element (earth, water, fire, air), a light or dark affinity, a basic magic role (wayfarer, guardian, artificer, seer, illusionist, summoner) and a tier (bronze, silver, gold, multichrome). `rules.ts` holds the choices and the rules both sides apply; `magic.ts` everything the world says, in English and French (each element's base form and three mirrored light and dark powers, the roles and their skills, the ultimates, the Court). French role names fit anyone, whatever their gender (Nomade, Sentinelle, Alchimiste, Oracle, Illusionniste, Mage d'invocation).
+- Each account has one draconoid, saved on the server in `court_of_draconia_draconoids` (`server/draconoids.ts`) so the hall can show it to everyone, under its maker's short name ("Irma H."), never their account. Saving is signed in, own `Origin` only, 20 a minute (`PUT /api/court-of-draconia/me`). Every draconoid starts at bronze and the page can never set a tier: rising comes later. Names are 1 to 30 letters with spaces, hyphens or apostrophes between them (`isValidName`), so a name can't carry a link or digits.
+- Only admins take someone's draconoid down (`DELETE /api/court-of-draconia/draconoids/:id`): `askAdminAccess` in `server/session.ts` asks the account service's `GET /api/access/alma-housila`, reusing Alma Housila's `APP_ACCESS` list, as Mini Games does; never decide who is an admin in this repo.
+- A duo ultimate takes one light and one dark draconoid, by the light one's element and then the dark one's (`duoOf`): order matters, and two of one affinity unleash nothing.
+- Emblems (`emblem.tsx`) follow the system's colour rules: the element fills most of it, the affinity colours its glyph, the tier is only the trim (multichrome shimmers). They are artwork, the same in both themes. The Court's seals are at multichrome. Keep the world original: no names, places or characters from existing franchises.
+
 The server (`server/`, Hono on Node) serves the built site and `/api`. Who someone is comes only from the shared irmahs.dev sign-in cookie, asked of the account service (irmahs-labs/auth) by `server/session.ts`; never from anything the browser sends. Anything that writes refuses any `Origin` but the site's own, since the cookie is shared by every `*.irmahs.dev` page.
 
-The schema is the dbmate migrations in `db/migrations/`. Every table is named after its page's slug in snake_case (`potion_brewing_brews`), so the database says whose each table is. Never edit a migration that is already merged: add a new one with `npm run db:new -- <name>`, with a matching `-- migrate:down`.
+The schema is the dbmate migrations in `db/migrations/`. Every table is named after its page's or realm's slug in snake_case (`potion_brewing_brews`, `court_of_draconia_draconoids`), so the database says whose each table is. Never edit a migration that is already merged: add a new one with `npm run db:new -- <name>`, with a matching `-- migrate:down`.
 
 ## Languages
 

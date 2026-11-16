@@ -3,6 +3,13 @@ import { serveStatic } from "@hono/node-server/serve-static";
 
 import { createApp } from "./app";
 import { connect } from "./db";
+import {
+  readHall,
+  readMine,
+  removeDraconoid,
+  removeMine,
+  saveDraconoid,
+} from "./draconoids";
 import { env } from "./env";
 import {
   readBrewers,
@@ -13,7 +20,7 @@ import {
   recordSoloBrew,
   resetSolo,
 } from "./potions";
-import { askAccountService } from "./session";
+import { askAccountService, askAdminAccess } from "./session";
 
 const pool = connect(env.databaseUrl);
 
@@ -28,6 +35,14 @@ const { app } = createApp({
     recordSoloBrew: (userId, potion) => recordSoloBrew(pool, userId, potion),
     resetSolo: (userId) => resetSolo(pool, userId),
   },
+  draconoids: {
+    readHall: (limit) => readHall(pool, limit),
+    readMine: (userId) => readMine(pool, userId),
+    remove: (id) => removeDraconoid(pool, id),
+    removeMine: (userId) => removeMine(pool, userId),
+    save: (account, fields) => saveDraconoid(pool, account, fields),
+  },
+  isAdmin: askAdminAccess(env.authUrl),
   whoIs: askAccountService(env.authUrl),
 });
 

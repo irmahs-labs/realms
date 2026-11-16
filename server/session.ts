@@ -55,7 +55,42 @@ export const askAccountService =
   };
 
 /**
- * A name as the shared recipe book shows it: the first name and the
+ * The app whose list in the account service's APP_ACCESS secret makes
+ * someone a Realms admin. It reuses Alma Housila's list, Irma's own, as
+ * Mini Games does, so the secret needs no entry of its own.
+ */
+export const ADMIN_APP = "alma-housila";
+
+export type IsAdmin = (cookie: string | undefined) => Promise<boolean>;
+
+/**
+ * Whether the visitor is a Realms admin, asked of the account service the
+ * way Caddy asks before opening a private app (`GET /api/access/:app`). Only
+ * a 204 says yes, given when their Google-verified email is listed for
+ * ADMIN_APP; signed out it redirects to sign in, which is not followed, and
+ * anyone not listed gets a 403. When it cannot be asked, nobody is an admin.
+ */
+export const askAdminAccess =
+  (authUrl: string): IsAdmin =>
+  async (cookie) => {
+    if (!cookie) {
+      return false;
+    }
+
+    try {
+      const response = await fetch(`${authUrl}/api/access/${ADMIN_APP}`, {
+        headers: { cookie },
+        redirect: "manual",
+      });
+
+      return response.status === 204;
+    } catch {
+      return false;
+    }
+  };
+
+/**
+ * A name as the recipe book and the hall show it: the first name and the
  * initial of every name after it, "Irma Houversing" → "Irma H.", and with
  * two last names "Irma HS.". Nobody's full name or photo is shown to
  * strangers.

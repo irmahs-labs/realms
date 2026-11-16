@@ -6,7 +6,9 @@ import { serve } from "@hono/node-server";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import type { Brewers } from "../src/realms/book-of-shadows/potion-brewing/brewing";
+import type { Hall, HallEntry } from "../src/realms/court-of-draconia/api";
 import { createApp } from "./app";
+import type { DraconoidFields } from "./draconoids";
 import type { WhoIs } from "./session";
 
 const ORIGIN = "http://localhost:5173";
@@ -111,7 +113,57 @@ const potions = {
   },
 };
 
-const { app } = createApp({ appOrigin: ORIGIN, potions, whoIs });
+/** Stands in for court_of_draconia_draconoids: each account's draconoid, by account id. */
+const hallLog = new Map<string, HallEntry>();
+let nextDraconoid = 1;
+
+const draconoids = {
+  readHall: (limit: number) =>
+    Promise.resolve([...hallLog.values()].toReversed().slice(0, limit)),
+  readMine: (userId: string) => Promise.resolve(hallLog.get(userId) ?? null),
+  remove: (id: string) => {
+    const found = [...hallLog].find(([, entry]) => entry.id === id);
+
+    if (found) {
+      hallLog.delete(found[0]);
+    }
+
+    return Promise.resolve(Boolean(found));
+  },
+  removeMine: (userId: string) => {
+    hallLog.delete(userId);
+
+    return Promise.resolve();
+  },
+  save: (account: { id: string; name: string }, fields: DraconoidFields) => {
+    const before = hallLog.get(account.id);
+
+    const entry: HallEntry = {
+      at: before?.at ?? "2026-11-17T09:00:00.000Z",
+      id: before?.id ?? String(nextDraconoid),
+      owner: account.name,
+      tier: before?.tier ?? "bronze",
+      ...fields,
+    };
+
+    if (!before) {
+      nextDraconoid += 1;
+    }
+
+    hallLog.set(account.id, entry);
+
+    return Promise.resolve(entry);
+  },
+};
+
+const { app } = createApp({
+  appOrigin: ORIGIN,
+  draconoids,
+  // Ana is on Alma Housila's list in the account service's APP_ACCESS.
+  isAdmin: (cookie) => Promise.resolve(cookie === "session=ana"),
+  potions,
+  whoIs,
+});
 
 const server = serve({ fetch: app.fetch, port: 0 });
 
@@ -372,5 +424,125 @@ describe("/api/potions/solo", () => {
     expect(
       pages.every((page: { state: string }) => page.state === "locked")
     ).toBe(true);
+  });
+});
+
+/** A draconoid as a page might send it, sense or not. */
+interface SentDraconoid {
+  affinity: string;
+  element: string;
+  name: string;
+  role: string;
+  tier?: string;
+}
+
+const KAELA: SentDraconoid = {
+  affinity: "dark",
+  element: "fire",
+  name: "  Kaela   Ember ",
+  role: "seer",
+};
+
+const saveAs = (cookie: string, sent: SentDraconoid, origin = ORIGIN) =>
+  fetch(`http://${base}/api/court-of-draconia/me`, {
+    body: JSON.stringify(sent),
+    headers: { "content-type": "application/json", cookie, origin },
+    method: "PUT",
+  });
+
+const hallAs = (cookie = ""): Promise<Hall> =>
+  bodyOf(
+    fetch(`http://${base}/api/court-of-draconia/hall`, {
+      headers: cookie ? { cookie } : {},
+    })
+  );
+
+const mineOf = async (cookie: string): Promise<HallEntry | null> => {
+  const { mine } = await hallAs(cookie);
+
+  return mine;
+};
+
+const takeDown = (cookie: string, id: string, origin = ORIGIN) =>
+  fetch(`http://${base}/api/court-of-draconia/draconoids/${id}`, {
+    headers: { cookie, origin },
+    method: "DELETE",
+  });
+
+describe("/api/court-of-draconia", () => {
+  it("makes a draconoid at bronze, its name tidied, and shows it in the hall", async () => {
+    const saved = await bodyOf(saveAs("session=ben", KAELA));
+
+    expect(saved).toMatchObject({
+      affinity: "dark",
+      element: "fire",
+      name: "Kaela Ember",
+      owner: "Ben",
+      role: "seer",
+      tier: "bronze",
+    });
+
+    const seen = await hallAs();
+    expect(seen.mine).toBeNull();
+    expect(seen.admin).toBe(false);
+    expect(seen.draconoids.map((d) => d.name)).toContain("Kaela Ember");
+    expect(JSON.stringify(seen)).not.toContain(BEN.id);
+
+    const mine = await mineOf("session=ben");
+    expect(mine?.name).toBe("Kaela Ember");
+  });
+
+  it("never takes a tier from the page", async () => {
+    const saved = await bodyOf(
+      saveAs("session=cy", { ...KAELA, name: "Wren", tier: "multichrome" })
+    );
+
+    expect(saved.tier).toBe("bronze");
+  });
+
+  it("refuses the signed out, other sites and names the hall can't show", async () => {
+    expect(await statusOf(saveAs("", KAELA))).toBe(401);
+    expect(
+      await statusOf(saveAs("session=ben", KAELA, "https://evil.irmahs.dev"))
+    ).toBe(403);
+
+    const refused = await Promise.all(
+      ["", "Kaela2", "www.example.com", "A".repeat(31)].map((name) =>
+        statusOf(saveAs("session=ben", { ...KAELA, name }))
+      )
+    );
+
+    expect(refused).toEqual([400, 400, 400, 400]);
+    expect(
+      await statusOf(saveAs("session=ben", { ...KAELA, element: "aether" }))
+    ).toBe(400);
+  });
+
+  it("lets only an admin take someone's draconoid down", async () => {
+    await saveAs("session=cy", { ...KAELA, name: "Wren" });
+    const wren = await mineOf("session=cy");
+    const id = wren?.id ?? "";
+    const asAna = await hallAs("session=ana");
+
+    expect(await statusOf(takeDown("session=ben", id))).toBe(403);
+    expect(asAna.admin).toBe(true);
+    expect(await statusOf(takeDown("session=ana", id))).toBe(204);
+    expect(await mineOf("session=cy")).toBeNull();
+    expect(await statusOf(takeDown("session=ana", id))).toBe(404);
+    expect(await statusOf(takeDown("session=ana", "1;drop"))).toBe(404);
+  });
+
+  it("lets a draconoid go when its maker asks", async () => {
+    await saveAs("session=ben", KAELA);
+
+    const status = await statusOf(
+      fetch(`http://${base}/api/court-of-draconia/me`, {
+        headers: { cookie: "session=ben", origin: ORIGIN },
+        method: "DELETE",
+      })
+    );
+
+    expect(status).toBe(204);
+    expect(await mineOf("session=ben")).toBeNull();
   });
 });

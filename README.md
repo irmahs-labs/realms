@@ -37,9 +37,20 @@ A browser keeps each site's `localStorage` apart, so a Book of Shadows saved on 
 
 The potion books, on the server, are copied once by `scripts/import-potions.sh` (see Deploy).
 
+## Court of Draconia
+
+The dragon realm, at `/court-of-draconia`, from the Elemental Magic System. Every visitor can become a **draconoid**, half human and half dragon: a name, an element (earth, water, fire or air), a light or dark affinity, and a basic magic role (wayfarer, guardian, artificer, seer, illusionist or summoner). Light moves outward (growth, release, radiance), dark inward (depth, density, what is hidden); every light power has a mirrored dark one. Every draconoid starts at **bronze**; silver, gold and multichrome come later.
+
+- **The Court** (`/court-of-draconia`): your draconoid, the six original elemental wielders (Queen Ljósa, King Tenebrus, and a dragon ruler for each season: Chunlin, Žarko, Ehecatl and Himani), and how the magic works.
+- **Your draconoid** (`/court-of-draconia/draconoid`): make or remake it, with a live card of its emblem, powers, skills and duo ultimates. Saving takes an irmahs.dev account; each account has one draconoid.
+- **The hall** (`/court-of-draconia/hall`): everyone's draconoids, newest first, by element and affinity. With a draconoid of your own, pick anyone of the other affinity to unleash a duo ultimate with them. Admins (Alma Housila's `APP_ACCESS` list in irmahs-labs/auth, as for Mini Games) can take one down.
+- **Duo ultimates** (`/court-of-draconia/ultimates`): the sixteen catastrophes a light and a dark draconoid unleash together, light element down the side, dark across the top.
+
+Emblems follow the system's colours: the element fills most of it (green earth, blue water, red fire, yellow air), the affinity colours its glyph (white or black), and the tier is the trim (bronze, silver, gold, or a shifting multichrome).
+
 ## Where things are kept
 
-The Book of Shadows (both people's birth details and the card of the day included) keeps everything in the browser's `localStorage`, until the visitor deletes it or clears their site data. Potion Brewing's recipe books live on the server.
+The Book of Shadows (both people's birth details and the card of the day included) keeps everything in the browser's `localStorage`, until the visitor deletes it or clears their site data. Potion Brewing's recipe books and the Court of Draconia's draconoids live on the server.
 
 ## Develop
 
@@ -58,9 +69,9 @@ npm run db:up     # Postgres on localhost:5436, migrations applied
 npm run dev:api   # the server on :3002; Vite forwards /api to it
 ```
 
-and [irmahs-labs/auth](https://github.com/irmahs-labs/auth) running on `localhost:3001` (its README says how), so there is someone to sign in as. `TEST_DATABASE_URL=postgres://realms@localhost:5436/realms npm test` also runs the recipe books' database tests, which are skipped otherwise. The local database has no password: it only answers this machine.
+and [irmahs-labs/auth](https://github.com/irmahs-labs/auth) running on `localhost:3001` (its README says how), so there is someone to sign in as. `TEST_DATABASE_URL=postgres://realms@localhost:5436/realms npm test` also runs the recipe books' and the hall's database tests, which are skipped otherwise. The local database has no password: it only answers this machine.
 
-The server (`server/`) is [Hono](https://hono.dev/) on Node. It serves the built site, `/api/me`, `/api/potions` (the shared recipe book), `/api/potions/brewers`, `/api/potions/brew`, `/api/potions/solo` and `/api/potions/solo/brew` (each player's own book). It learns who is brewing from the shared irmahs.dev sign-in cookie, by asking the account service, and takes brews only from the site itself. The books go in its own Postgres database (`db/migrations/`, applied by [dbmate](https://github.com/amacneil/dbmate)). Potion Brewing's recipes, `src/realms/book-of-shadows/potion-brewing/recipes.ts`, are read only by the server, which brews.
+The server (`server/`) is [Hono](https://hono.dev/) on Node. It serves the built site, `/api/me`, `/api/potions` (the shared recipe book), `/api/potions/brewers`, `/api/potions/brew`, `/api/potions/solo` and `/api/potions/solo/brew` (each player's own book), and the Court of Draconia's `/api/court-of-draconia/hall`, `/api/court-of-draconia/me` (make, remake or let go of your draconoid) and `/api/court-of-draconia/draconoids/:id` (admins only). It learns who is brewing from the shared irmahs.dev sign-in cookie, by asking the account service, and takes brews only from the site itself. The books go in its own Postgres database (`db/migrations/`, applied by [dbmate](https://github.com/amacneil/dbmate)). Potion Brewing's recipes, `src/realms/book-of-shadows/potion-brewing/recipes.ts`, are read only by the server, which brews.
 
 ## Deploy
 
@@ -71,7 +82,7 @@ Secrets (Settings → Secrets and variables → Actions):
 | Secret | What |
 | --- | --- |
 | `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS`, `DEPLOY_HOST` | Organization level, shared with the other repos |
-| `REALMS_POSTGRES_PASSWORD` | The database's password (the recipe books), `openssl rand -base64 32`. Read only when the database is first created |
+| `REALMS_POSTGRES_PASSWORD` | The database's password (the recipe books and the hall), `openssl rand -base64 32`. Read only when the database is first created |
 
 ### First setup (one time)
 

@@ -26,6 +26,55 @@ const FRENCH = new Map([
     "Seul le site lui-même peut recommencer un grimoire.",
   ],
   ["Sign in to start over.", "Connectez-vous pour recommencer."],
+  [
+    "Draconoids are only made from the site itself.",
+    "Les draconoïdes ne sont créés que depuis le site lui-même.",
+  ],
+  [
+    "Sign in to make your draconoid.",
+    "Connectez-vous pour créer votre draconoïde.",
+  ],
+  [
+    "That's a lot of changes. Try again in a minute.",
+    "Ça fait beaucoup de changements. Réessayez dans une minute.",
+  ],
+  [
+    "A name is 1 to 30 letters, with spaces, hyphens or apostrophes between them.",
+    "Un nom fait 1 à 30 lettres, avec des espaces, des traits d’union ou des apostrophes entre elles.",
+  ],
+  [
+    "Draconoids are only let go from the site itself.",
+    "Les draconoïdes ne sont libérés que depuis le site lui-même.",
+  ],
+  [
+    "Sign in to let your draconoid go.",
+    "Connectez-vous pour libérer votre draconoïde.",
+  ],
+  [
+    "Draconoids are only taken down from the site itself.",
+    "Les draconoïdes ne sont retirés que depuis le site lui-même.",
+  ],
+  [
+    "Sign in to take a draconoid down.",
+    "Connectez-vous pour retirer un draconoïde.",
+  ],
+  [
+    "Only an admin can take a draconoid down.",
+    "Seul un admin peut retirer un draconoïde.",
+  ],
+  ["There is no such draconoid.", "Ce draconoïde n’existe pas."],
+  // The hall's own, when the server didn't say
+  ["Your draconoid wasn't saved.", "Votre draconoïde n’a pas été enregistré."],
+  ["Your draconoid wasn't let go.", "Votre draconoïde n’a pas été libéré."],
+  ["That draconoid wasn't taken down.", "Ce draconoïde n’a pas été retiré."],
+  [
+    "The hall's answer made no sense.",
+    "La réponse de la salle n’avait aucun sens.",
+  ],
+  [
+    "The hall can't be reached right now.",
+    "La salle est injoignable pour le moment.",
+  ],
   // The cauldron's own, when the server didn't say
   ["The brew didn't go through.", "La préparation n’est pas passée."],
   [
