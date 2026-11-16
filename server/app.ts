@@ -30,6 +30,7 @@ import { createLimiter } from "./limiter";
 import type { BrewLog, Recorded } from "./potions";
 import { shortName } from "./session";
 import type { IsAdmin, SessionAccount, WhoIs } from "./session";
+import type { AskWitchQuiz } from "./witch-quiz";
 
 /** Enough for anyone mixing by hand; too few to try every mix in a night. */
 const BREWS_PER_MINUTE = 30;
@@ -107,6 +108,8 @@ interface AppOptions {
     /** False when there is no such draconoid. */
     remove: (id: string) => Promise<boolean>;
   };
+  /** The visitor's witch quiz result, asked of Mini Games with their cookie. */
+  witchQuiz: AskWitchQuiz;
   /** Whether a visitor may take draconoids down, from their cookie. */
   isAdmin: IsAdmin;
   /** The site's own origin; brews and saves from any other are refused. */
@@ -115,7 +118,8 @@ interface AppOptions {
 
 /**
  * The server's routes: /api for who is signed in, Potion Brewing's recipe
- * books and the Court of Draconia's hall. Who someone is comes from the
+ * books, the witch quiz result on the Book of Shadows' profile and the Court
+ * of Draconia's hall. Who someone is comes from the
  * shared irmahs.dev sign-in cookie, asked of the account service, never from
  * anything the page sends.
  */
@@ -123,6 +127,7 @@ export const createApp = ({
   whoIs,
   potions,
   draconoids,
+  witchQuiz,
   isAdmin,
   appOrigin,
 }: AppOptions) => {
@@ -297,6 +302,18 @@ export const createApp = ({
     await potions.resetSolo(account.id);
 
     return c.body(null, 204);
+  });
+
+  // The visitor's witch quiz result for the Book of Shadows' profile, asked
+  // of Mini Games with their cookie: the quiz and its results live there.
+  app.get("/api/book-of-shadows/witch-quiz", async (c) => {
+    const answer = await witchQuiz(c.req.header("cookie"));
+
+    if (!answer) {
+      return c.text("Mini Games can't be reached right now.", 502);
+    }
+
+    return c.json(answer);
   });
 
   // The hall: everyone's draconoids, signed in or not, and the asker's own.

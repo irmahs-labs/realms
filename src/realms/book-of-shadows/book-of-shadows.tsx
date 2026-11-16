@@ -32,6 +32,7 @@ import { SkyTab } from "./sky-tab";
 import { TarotTab } from "./tarot-tab";
 import { localTimeZone, wallTimeAt } from "./time";
 import { DailyCard, TodayPanel } from "./today-panel";
+import { WitchQuizCard } from "./witch-quiz-card";
 
 const TAB_NAMES = {
   en: {
@@ -279,6 +280,7 @@ const BookOfShadows = ({ name }: PageProps) => {
               chart={chart}
               thisYear={thisYear}
             />
+            <WitchQuizCard />
             <MatchSummary
               name={theirName}
               rows={

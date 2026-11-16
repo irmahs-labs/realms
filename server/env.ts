@@ -20,6 +20,11 @@ export const env = {
   // server's shared network, http://localhost:3001 locally.
   authUrl: required("AUTH_INTERNAL_URL"),
   databaseUrl: required("DATABASE_URL"),
+  // Mini Games, as this server reaches it, for the witch quiz result on the
+  // Book of Shadows' profile: http://minigames:3000 on the shared network.
+  // Unset locally, unless Mini Games runs too: the profile then says its
+  // result can't be reached.
+  minigamesUrl: process.env.MINIGAMES_INTERNAL_URL || undefined,
   port: Number(process.env.PORT ?? 3002),
   // The built site, served beside the API in production. Unset in development,
   // where Vite serves it and forwards /api here.

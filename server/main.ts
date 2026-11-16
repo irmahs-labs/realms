@@ -21,6 +21,7 @@ import {
   resetSolo,
 } from "./potions";
 import { askAccountService, askAdminAccess } from "./session";
+import { askWitchQuiz } from "./witch-quiz";
 
 const pool = connect(env.databaseUrl);
 
@@ -43,6 +44,7 @@ const { app } = createApp({
     save: (account, fields) => saveDraconoid(pool, account, fields),
   },
   isAdmin: askAdminAccess(env.authUrl),
+  witchQuiz: askWitchQuiz(env.minigamesUrl),
   whoIs: askAccountService(env.authUrl),
 });
 
