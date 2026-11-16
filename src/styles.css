@@ -540,7 +540,7 @@ a:hover {
   padding: 16px 12px 12px;
 }
 
-/* ── wheel of fortune ── */
+/* ── panels, pickers and switches ── */
 /* Cute Matcha's Segmented: joined options, the chosen one strong. */
 .picker {
   display: flex;
@@ -573,9 +573,6 @@ a:hover {
 .picker__option:focus-visible {
   outline-offset: -5px;
 }
-.picker__add {
-  color: var(--text-muted);
-}
 
 .layout {
   display: flex;
@@ -591,91 +588,8 @@ a:hover {
 .panel--narrow {
   flex: 1 1 320px;
 }
-.panel--wheel {
-  flex: 999 1 520px;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  padding: 16px 12px 12px;
-}
-.panel--slices {
-  flex: 1 1 340px;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 16px 12px 12px;
-}
 
-.wheel {
-  position: relative;
-  width: min(460px, 100%);
-  aspect-ratio: 1 / 1;
-}
-.wheel__pointer {
-  position: absolute;
-  top: -18px;
-  left: 50%;
-  z-index: 3;
-  transform: translateX(-50%);
-}
-.wheel__rim {
-  position: absolute;
-  inset: -10px;
-  border-radius: 50%;
-  background: var(--ground);
-  border: var(--line);
-  box-shadow: 4px 4px 0 #0f1411;
-}
-.wheel__disc {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 3px solid var(--outline);
-  overflow: hidden;
-}
-/* The face turns inside the still, round disc, which clips its corners. */
-.wheel__face {
-  display: block;
-  width: 100%;
-  height: 100%;
-  transition: transform 4.5s cubic-bezier(0.12, 0.72, 0.08, 1);
-}
-.wheel__label {
-  fill: var(--on-accent);
-  font-family: var(--body);
-  font-weight: 900;
-}
-.wheel__label--empty {
-  fill: var(--text-muted);
-}
-.wheel__hub {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 2;
-  width: 72px;
-  height: 72px;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--raised);
-  border: 3px solid var(--outline);
-  box-shadow: var(--shadow-hard);
-  color: var(--text-muted);
-}
-
-.slices__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.slices__head,
-.slices__foot {
+.slices__head {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -691,32 +605,7 @@ a:hover {
   font-weight: 400;
   color: var(--text-muted);
 }
-.slices {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.slice {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.slice__dot {
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: var(--line);
-}
-.slice__num {
-  min-width: 20px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-muted);
-}
+
 .field {
   width: 100%;
   min-height: 44px;
@@ -742,10 +631,6 @@ a:hover {
 }
 .field::-webkit-date-and-time-value {
   text-align: left;
-}
-.slice__input {
-  flex: 1;
-  min-width: 0;
 }
 
 /* Cute Matcha's Switch: raised when off, strong when on. */
@@ -814,14 +699,6 @@ a:hover {
   gap: 10px;
 }
 
-/* ── super tic-tac-toe ── */
-.panel--system {
-  flex: 999 1 520px;
-  min-width: 0;
-  display: flex;
-  justify-content: center;
-  padding: 16px 12px 12px;
-}
 .panel--log {
   flex: 1 1 300px;
   min-width: 0;
@@ -829,111 +706,6 @@ a:hover {
   flex-direction: column;
   gap: 16px;
   padding: 16px 12px 12px;
-}
-.system {
-  width: min(620px, 100%);
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-/* A planet: a small board, lit up in accent while the next move may go on it. */
-.planet {
-  position: relative;
-  min-width: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 8px;
-  border: var(--line);
-  border-radius: var(--radius-field);
-  background: var(--panel);
-  transition: opacity 0.15s;
-}
-.planet--open {
-  background: var(--accent-soft);
-}
-.planet--waiting {
-  opacity: 0.55;
-}
-.planet--pink {
-  background: var(--pink);
-}
-.planet--purple {
-  background: var(--purple);
-}
-.planet__name {
-  overflow: hidden;
-  text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font: 700 12px/1.2 var(--body);
-  color: var(--text);
-}
-.planet--open .planet__name,
-.planet--pink .planet__name,
-.planet--purple .planet__name {
-  color: var(--on-accent);
-}
-.planet__cells {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
-}
-.cell {
-  aspect-ratio: 1 / 1;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: var(--stroke-base) solid var(--outline);
-  border-radius: 6px;
-  background: var(--raised);
-  font-size: clamp(12px, 2.8vw, 20px);
-  line-height: 1;
-}
-.cell:not(:disabled):hover {
-  background: var(--raised-hover);
-}
-/* The planet shows whether it is in play; a square never fades on its own. */
-.cell:disabled {
-  opacity: 1;
-  cursor: default;
-}
-.cell--pink {
-  background: var(--pink);
-}
-.cell--purple {
-  background: var(--purple);
-}
-.cell--last {
-  box-shadow: inset 0 0 0 2px var(--outline);
-}
-.cell__planet {
-  color: var(--text-muted);
-  opacity: 0.6;
-}
-/* A conquered planet's flag over its squares: the winner's mark, large. */
-.planet__flag {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: inherit;
-  font-size: clamp(36px, 9vw, 72px);
-  pointer-events: none;
-}
-.planet--pink .planet__flag {
-  background: color-mix(in srgb, var(--pink) 80%, transparent);
-}
-.planet--purple .planet__flag {
-  background: color-mix(in srgb, var(--purple) 80%, transparent);
-}
-/* Filled with nobody holding three in a row: a white flag on the plain panel. */
-.planet--drawn .planet__flag {
-  background: color-mix(in srgb, var(--panel) 80%, transparent);
 }
 
 .turn {
@@ -946,38 +718,7 @@ a:hover {
   font-size: 15px;
   line-height: 1.45;
 }
-.score {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.score__row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 8px 14px;
-  border: var(--line);
-  border-radius: var(--radius-field);
-  color: var(--on-accent);
-  font-weight: 700;
-}
-.score--pink {
-  background: var(--pink);
-}
-.score--purple {
-  background: var(--purple);
-}
-.score__row dd {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 900;
-}
-.score__row dd span {
-  font-size: 14px;
-  font-weight: 400;
-}
+
 .how-to {
   margin: 0;
   padding-left: 20px;
@@ -993,15 +734,6 @@ a:hover {
   line-height: 1.45;
 }
 
-/* ── online play and the leaderboard ── */
-.panel--notice {
-  align-self: flex-start;
-  max-width: 560px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 16px 12px 12px;
-}
 .panel--board {
   display: flex;
   flex-direction: column;
@@ -1033,27 +765,13 @@ a:hover {
   text-decoration: none;
 }
 .board__rank,
-.board__points,
 .board__record {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-.board__points {
-  font-weight: 900;
-}
+
 .board__record {
   color: var(--text-muted);
-}
-.board__you {
-  background: var(--accent-soft);
-  color: var(--on-accent);
-}
-.board__you .board__record {
-  color: var(--on-accent);
-}
-/* You, below the top: set apart from it by a heavier rule. */
-.board__below tr:first-child > * {
-  border-top: var(--line);
 }
 
 /* ── potion brewing ── */
@@ -1541,10 +1259,7 @@ a:hover {
   font-weight: 800;
   color: var(--strong);
 }
-.moon-cal__festival {
-  font-size: 15px;
-  line-height: 1;
-}
+
 .lunar-months {
   margin: 0;
   font-size: 14px;
@@ -2195,415 +1910,6 @@ a:hover {
   text-align: center;
 }
 
-/* ── sticky board (hub) ── */
-.panel--stickies {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px 12px 12px;
-}
-.stickies__head {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.stickies__title {
-  margin: 0;
-  font-size: 26px;
-  line-height: 1.1;
-}
-.stickies__sign-in {
-  align-self: flex-start;
-}
-/* A note's paper: fixed colours, like a drawing, with ink on top. */
-.sticky--lemon {
-  background: var(--note-lemon);
-}
-.sticky--matcha {
-  background: var(--note-matcha);
-}
-.sticky--strawberry {
-  background: var(--note-strawberry);
-}
-.sticky--taro {
-  background: var(--note-taro);
-}
-.sticky--blue {
-  background: var(--note-blue);
-}
-.sticky--white {
-  background: var(--note-white);
-}
-/* Writing a note: two lines of paper, and one row under it. */
-.composer {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-width: 640px;
-}
-.composer__body {
-  min-height: 0;
-  padding: 8px 12px;
-  color: var(--ink);
-  font: 400 16px/1.45 var(--body);
-  resize: none;
-}
-.composer__body::placeholder {
-  color: var(--ink);
-  opacity: 0.6;
-}
-.composer__row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 16px;
-}
-/* The count and notes left take the room between the colours and the button. */
-.composer__count {
-  flex: 1;
-  font-size: 13px;
-  color: var(--text-muted);
-}
-.composer__count--over {
-  color: var(--danger);
-  font-weight: 700;
-}
-.swatches {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-.swatches legend {
-  float: left;
-  margin-right: 4px;
-}
-.swatch {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: var(--stroke-base) solid var(--outline);
-  border-radius: 50%;
-}
-/* The chosen colour: a selected ring around the swatch. */
-.swatch[aria-pressed="true"] {
-  box-shadow:
-    0 0 0 3px var(--panel),
-    0 0 0 5px var(--selected);
-}
-/* The corkboard: a well the notes are pinned to, scrolling in its own
-   frame so a busy day never makes the hub endless. */
-.corkboard-frame {
-  max-height: min(70vh, 640px);
-  padding: 18px 14px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  border: var(--stroke-base) solid var(--outline);
-  border-radius: var(--radius-field);
-  background: var(--raised);
-}
-.corkboard {
-  position: relative;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-/* On a wide screen the notes hang in the margins either side of the hub's
-   column, on a layer as wide as the page that lets clicks through to it. */
-.hub {
-  position: relative;
-}
-/* A little below the header, so the top notes' tape clears it. */
-.hub__sides {
-  position: absolute;
-  top: 24px;
-  left: 0;
-  right: 0;
-  pointer-events: none;
-}
-.corkboard--sides .sticky {
-  pointer-events: auto;
-}
-/* A note sits where it was dropped; NOTE_WIDTH in src/board/layout.ts. */
-.sticky {
-  position: absolute;
-  width: 190px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-height: 140px;
-  padding: 16px 14px 10px;
-  border: var(--stroke-base) solid var(--outline);
-  border-radius: 4px;
-  box-shadow: var(--shadow-soft);
-  color: var(--ink);
-  cursor: grab;
-  user-select: none;
-}
-.sticky--held {
-  cursor: grabbing;
-  transform: scale(1.03);
-  box-shadow: var(--shadow-hard);
-}
-/* The tape at the top: what a finger drags by, and what the arrow keys
-   move. */
-.sticky__tape {
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  width: 64px;
-  height: 20px;
-  padding: 0;
-  translate: -50% 0;
-  border: 1px solid var(--outline);
-  border-radius: 2px;
-  background: var(--note-tape);
-  cursor: grab;
-  touch-action: none;
-}
-.sticky--tilt-0 {
-  transform: rotate(-1.5deg);
-}
-.sticky--tilt-1 {
-  transform: rotate(1deg);
-}
-.sticky--tilt-2 {
-  transform: rotate(-0.5deg);
-}
-.sticky__body {
-  flex: 1;
-  margin: 0;
-  font: 400 15px/1.45 var(--body);
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-.sticky__time {
-  margin: 0;
-  font-size: 12px;
-  opacity: 0.75;
-}
-.sticky__votes {
-  display: flex;
-  gap: 6px;
-}
-.sticky__vote {
-  padding: 2px 9px;
-  border: var(--stroke-base) solid var(--ink);
-  border-radius: var(--radius-pill);
-  background: transparent;
-  color: var(--ink);
-  font: 700 12px/1.4 var(--body);
-}
-.sticky__vote[aria-pressed="true"] {
-  background: var(--selected);
-  color: var(--on-selected);
-}
-.sticky__vote:disabled {
-  cursor: default;
-  opacity: 0.75;
-}
-.sticky__remove {
-  align-self: flex-start;
-  padding: 2px 10px;
-  border: var(--stroke-base) solid var(--ink);
-  border-radius: var(--radius-pill);
-  background: transparent;
-  color: var(--ink);
-  font: 700 12px/1.4 var(--body);
-}
-.sticky__remove:hover {
-  background: var(--white);
-}
-
-/* ── quizzes ── */
-.quiz {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: 760px;
-  padding: 16px 12px 12px;
-}
-.quiz--result {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 28px 40px;
-  max-width: none;
-}
-.quiz__verdict {
-  flex: 1 1 320px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.quiz__title {
-  margin: 0;
-  font-size: 34px;
-  line-height: 1.1;
-}
-.quiz__title:focus {
-  outline: none;
-}
-.quiz__prompt {
-  font-size: 28px;
-}
-.quiz__about {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.5;
-}
-.quiz__head {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.quiz__progress {
-  display: block;
-  height: 10px;
-  border: var(--line);
-  border-radius: var(--radius-pill);
-  background: var(--raised);
-  overflow: hidden;
-}
-.quiz__progress span {
-  display: block;
-  height: 100%;
-  background: var(--selected);
-  transition: width 0.2s;
-}
-.quiz__answers {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.quiz__answer {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  min-height: 52px;
-  padding: 10px 16px 10px 10px;
-  border: var(--line);
-  border-radius: var(--radius-field);
-  background: var(--raised);
-  font: 600 15px/1.35 var(--body);
-  text-align: left;
-  transition:
-    transform 0.12s,
-    box-shadow 0.12s,
-    background 0.12s;
-}
-/* Only a mouse hovers: on a touch screen the tapped answer would stay lit on
-   the next question. */
-@media (hover: hover) {
-  .quiz__answer:hover {
-    background: var(--raised-hover);
-    transform: translate(-1px, -1px);
-    box-shadow: var(--shadow-soft);
-  }
-}
-.quiz__letter {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: var(--line);
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--on-accent);
-  font: 600 14px/1 var(--display);
-}
-.quiz__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.quiz-card__result {
-  margin: 0;
-  font-size: 14px;
-  color: var(--text-muted);
-}
-.quiz-card__result strong {
-  color: var(--text);
-}
-
-/* The result's pie and its legend, which is also its table. */
-.pie {
-  flex: 1 1 360px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 20px 28px;
-  margin: 0;
-}
-.pie__chart {
-  flex: none;
-  width: min(220px, 100%);
-  height: auto;
-}
-.pie__slice {
-  stroke: var(--outline);
-  stroke-width: 2px;
-  stroke-linejoin: round;
-  transition: opacity 0.12s;
-}
-.pie__slice[data-dim="true"],
-.pie__item[data-dim="true"] {
-  opacity: 0.35;
-}
-.pie__legend {
-  flex: 1 1 180px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.pie__legend ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.pie__item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 14.5px;
-  line-height: 1.35;
-  transition: opacity 0.12s;
-}
-.pie__swatch {
-  flex: none;
-  width: 14px;
-  height: 14px;
-  margin-top: 2px;
-  border: var(--stroke-base) solid var(--outline);
-  border-radius: 4px;
-}
-.pie__name {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  font-weight: 700;
-}
-.pie__folded {
-  font-weight: 400;
-  font-size: 12.5px;
-  color: var(--text-muted);
-}
-.pie__share {
-  font-variant-numeric: tabular-nums;
-  font-weight: 700;
-}
-
 @media (max-width: 600px) {
   .app-header {
     padding: 12px 16px;
@@ -2645,37 +1951,16 @@ a:hover {
     flex: 1;
     padding: 0 10px;
   }
-  .panel--wheel {
-    padding: 40px 16px 20px;
-  }
+
   .btn--spin {
     min-width: 0;
     width: 100%;
   }
-  .panel--system {
-    padding: 32px 10px 12px;
-  }
-  .system {
-    gap: 6px;
-  }
-  .planet {
-    gap: 4px;
-    padding: 4px;
-  }
-  .planet__name {
-    font-size: 10px;
-  }
-  .planet__cells {
-    gap: 2px;
-  }
-  .cell {
-    border-radius: 4px;
-  }
+
   .panel--board {
     padding: 28px 12px 16px;
   }
   .panel--pantry,
-  .panel--stickies,
   .panel--book {
     padding: 28px 16px 18px;
   }
@@ -2715,19 +2000,11 @@ a:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wheel__face {
-    transition-duration: 1.2s;
-  }
   .btn,
   .realm-card,
-  .planet,
   .switch__track,
   .switch__thumb,
-  .eight-ball__die,
-  .quiz__answer,
-  .quiz__progress span,
-  .pie__slice,
-  .pie__item {
+  .eight-ball__die {
     transition: none;
   }
 }
@@ -2898,114 +2175,6 @@ a:hover {
   opacity: 0.6;
 }
 
-/* ── calendar ── */
-.cal-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 16px 12px 12px;
-}
-.cal-kinds {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.cal-kind {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.chip.cal-kind[aria-pressed="true"] {
-  background: var(--selected);
-  color: var(--on-selected);
-}
-/* A day's festivals, as their marks. */
-.cal-marks {
-  margin-top: auto;
-  font-size: 14px;
-  line-height: 1.2;
-  word-break: break-all;
-}
-.cal-marks small {
-  margin-left: 1px;
-  font-size: 10.5px;
-  font-weight: 700;
-}
-.occasions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.occasion {
-  display: flex;
-  gap: 12px;
-  padding: 12px 14px;
-  border: var(--stroke-base) solid var(--outline);
-  border-radius: var(--radius-field);
-  background: var(--raised);
-}
-.occasion__emoji {
-  flex: none;
-  font-size: 26px;
-  line-height: 1.2;
-}
-.occasion__body {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-.occasion__when {
-  margin: 0;
-  font: 700 12.5px/1.3 var(--body);
-  color: var(--text-muted);
-}
-.occasion__name {
-  margin: 0;
-  font-size: 20px;
-  line-height: 1.2;
-}
-.occasion__script {
-  font-family: var(--body);
-  font-weight: 600;
-  color: var(--text-muted);
-}
-.occasion__about {
-  margin: 0;
-  font-size: 14.5px;
-  line-height: 1.45;
-}
-.occasion__local {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 14px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 14px;
-}
-.occasion__countries {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.45;
-  color: var(--text-muted);
-}
-.occasion__countries summary {
-  cursor: pointer;
-}
-.occasion__add {
-  margin-top: 4px;
-  min-height: 36px;
-  padding: 0 12px;
-  font-size: 13.5px;
-}
-
 /* The account pill while the session is asked for: a skeleton of its exact
    size, so nothing moves when the answer comes. */
 .account--loading {
@@ -3038,156 +2207,4 @@ a:hover {
   .btn--primary:not(:disabled):active {
     transform: none;
   }
-}
-
-/* ── the arena ── */
-.arena-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 16px 12px 12px;
-}
-.arena-districts {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.arena-district {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 10px;
-  border: var(--stroke-base) solid var(--outline);
-  border-radius: var(--radius-field);
-  background: var(--raised);
-}
-.arena-district__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-.arena-district__name {
-  margin: 0;
-  font-size: 17px;
-}
-.arena-district__add {
-  align-self: flex-start;
-}
-.arena-place {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.arena-place .field {
-  flex: 1;
-  min-width: 0;
-}
-.arena-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-.arena-muted {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 13.5px;
-}
-.arena-switch {
-  justify-content: space-between;
-  text-align: left;
-}
-.arena-count {
-  margin: 0;
-  font-weight: 700;
-}
-.arena-phase__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 4px 12px;
-}
-.arena-phase__title {
-  margin: 0;
-  font-size: 30px;
-}
-.arena-phase__title:focus,
-.arena-end__name:focus {
-  outline: none;
-}
-.arena-events {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.arena-event {
-  display: flex;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: var(--radius-field);
-  background: var(--raised);
-  font-size: 15.5px;
-  line-height: 1.45;
-}
-.arena-event__mark {
-  flex: none;
-  width: 1.3em;
-  text-align: center;
-  color: var(--text-muted);
-}
-.arena-event--deadly {
-  border: var(--stroke-base) solid var(--outline);
-}
-.arena-fallen {
-  margin: 0;
-  font-size: 14.5px;
-}
-.arena-roster {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.arena-roster ul {
-  margin: 4px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.arena-roster__district {
-  font: 700 13px/1.3 var(--body);
-  color: var(--text-muted);
-}
-.arena-roster__one {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  font-size: 15px;
-  line-height: 1.6;
-}
-.arena-roster__one--fallen .arena-roster__name {
-  text-decoration: line-through;
-  color: var(--text-muted);
-}
-.arena-end__name {
-  margin: 0;
-  font-size: 34px;
-  line-height: 1.15;
-}
-.arena-placings {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 0;
-  padding-left: 1.6em;
-  font-size: 15px;
 }
