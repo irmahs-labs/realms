@@ -50,7 +50,7 @@ Emblems follow the system's colours: the element fills most of it (green earth, 
 
 ## Where things are kept
 
-The Book of Shadows (both people's birth details and the card of the day included) keeps everything in the browser's `localStorage`, until the visitor deletes it or clears their site data. Potion Brewing's recipe books and the Court of Draconia's draconoids live on the server.
+The Book of Shadows (both people's birth details and the card of the day included) keeps everything in the browser's `localStorage`, until the visitor deletes it or clears their site data. Potion Brewing's recipe books and the Court of Draconia's draconoids live on the server. The witch type on the profile comes from the witch quiz on [Mini Games](https://minigames.irmahs.dev/quizzes/what-type-of-witch), which keeps a signed-in visitor's last result on their account; Realms' server asks Mini Games for it with the visitor's cookie and keeps nothing of it.
 
 ## Develop
 

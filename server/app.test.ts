@@ -10,6 +10,7 @@ import type { Hall, HallEntry } from "../src/realms/court-of-draconia/api";
 import { createApp } from "./app";
 import type { DraconoidFields } from "./draconoids";
 import type { WhoIs } from "./session";
+import type { AskWitchQuiz } from "./witch-quiz";
 
 const ORIGIN = "http://localhost:5173";
 const ANA = { id: "00000000-0000-4000-8000-00000000000a", name: "Ana Lopez" };
@@ -156,6 +157,30 @@ const draconoids = {
   },
 };
 
+/** Stands in for Mini Games: Ben took the witch quiz signed in, Cy didn't. */
+const witchQuiz: AskWitchQuiz = (cookie) => {
+  if (cookie === "session=down") {
+    return Promise.resolve(null);
+  }
+
+  const result =
+    cookie === "session=ben"
+      ? {
+          ranked: [
+            {
+              about: { en: "Code is a spell.", fr: "Le code est un sort." },
+              id: "tech",
+              name: { en: "Tech witch", fr: "Sorcière tech" },
+              points: 41,
+            },
+          ],
+          takenAt: "2026-11-16T10:00:00.000Z",
+        }
+      : null;
+
+  return Promise.resolve({ result, signedIn: Boolean(cookie) });
+};
+
 const { app } = createApp({
   appOrigin: ORIGIN,
   draconoids,
@@ -163,6 +188,7 @@ const { app } = createApp({
   isAdmin: (cookie) => Promise.resolve(cookie === "session=ana"),
   potions,
   whoIs,
+  witchQuiz,
 });
 
 const server = serve({ fetch: app.fetch, port: 0 });
@@ -544,5 +570,32 @@ describe("/api/court-of-draconia", () => {
 
     expect(status).toBe(204);
     expect(await mineOf("session=ben")).toBeNull();
+  });
+});
+
+/** The Book of Shadows' witch quiz result, asked as `cookie`. */
+const askWitchQuizAs = (cookie: string) =>
+  fetch(`http://${base}/api/book-of-shadows/witch-quiz`, {
+    headers: { cookie },
+  });
+
+describe("/api/book-of-shadows/witch-quiz", () => {
+  it("passes on the witch type Mini Games keeps for the visitor", async () => {
+    expect(await bodyOf(askWitchQuizAs("session=ben"))).toMatchObject({
+      result: { ranked: [{ id: "tech", name: { en: "Tech witch" } }] },
+      signedIn: true,
+    });
+    expect(await bodyOf(askWitchQuizAs("session=cy"))).toEqual({
+      result: null,
+      signedIn: true,
+    });
+    expect(await bodyOf(askWitchQuizAs(""))).toEqual({
+      result: null,
+      signedIn: false,
+    });
+  });
+
+  it("says so when Mini Games can't be reached", async () => {
+    expect(await statusOf(askWitchQuizAs("session=down"))).toBe(502);
   });
 });
