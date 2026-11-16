@@ -1,14 +1,43 @@
-# The app on the server, reached by Caddy (irmahs-labs/proxy) on the shared
-# `proxy` network under its alias. Rename `app` in the alias to the repo's name,
-# and use that name in the Caddyfile block.
+# Local development: Postgres, and dbmate to apply db/migrations to it.
+#
+#   npm run db:up               start Postgres and apply pending migrations
+#   npm run db:new -- <name>    create db/migrations/<timestamp>_<name>.sql
+#   npm run db:reset            delete the local database and rebuild it
+#
+# There is no password: this database is for this machine only; production
+# has its own credentials (compose.prod.yaml). Port 5436, so it runs beside the account service's
+# database on 5433, Pantry Spinner's on 5432, Mini Games' on 5434 and Irma in Paris' on 5435.
 services:
-  app:
-    build: .
-    restart: unless-stopped
-    networks:
-      proxy:
-        aliases: [app]
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: realms
+      # No password: Postgres is only reachable from this machine (127.0.0.1)
+      # and the containers beside it, so it lets the local user straight in.
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: realms
+    ports:
+      - "127.0.0.1:${DB_PORT-5436}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U realms -d realms"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
 
-networks:
-  proxy:
-    external: true
+  migrate:
+    image: ghcr.io/amacneil/dbmate:2
+    profiles: [tools]
+    environment:
+      DATABASE_URL: postgres://realms@db:5432/realms?sslmode=disable
+      DBMATE_MIGRATIONS_DIR: /db/migrations
+      DBMATE_NO_DUMP_SCHEMA: "true"
+    volumes:
+      - ./db:/db
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
