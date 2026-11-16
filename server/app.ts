@@ -19,10 +19,17 @@ import {
 } from "../src/realms/book-of-shadows/potion-brewing/brewing";
 import { isValidSelection } from "../src/realms/book-of-shadows/potion-brewing/rules";
 import type { Selection } from "../src/realms/book-of-shadows/potion-brewing/rules";
+import {
+  HALL_SIZE,
+  draconoidRequest,
+} from "../src/realms/court-of-draconia/api";
+import type { Hall, HallEntry } from "../src/realms/court-of-draconia/api";
+import { isValidName, tidyName } from "../src/realms/court-of-draconia/rules";
+import type { DraconoidFields } from "./draconoids";
 import { createLimiter } from "./limiter";
 import type { BrewLog, Recorded } from "./potions";
 import { shortName } from "./session";
-import type { SessionAccount, WhoIs } from "./session";
+import type { IsAdmin, SessionAccount, WhoIs } from "./session";
 
 /** Enough for anyone mixing by hand; too few to try every mix in a night. */
 const BREWS_PER_MINUTE = 30;
@@ -44,6 +51,34 @@ const readCauldron = async (request: Request): Promise<Selection | null> => {
   }
 };
 
+/** Plenty for anyone making and remaking their draconoid; too few to flood the hall. */
+const SAVES_PER_MINUTE = 20;
+
+/** A draconoid's number in the hall, as the database has it: a bigint. */
+const DRACONOID_ID = /^\d{1,18}$/u;
+
+/**
+ * The draconoid a request asks to save, its name tidied, or null when it is
+ * not JSON, not a draconoid, or one whose name the hall can't show.
+ */
+const readDraconoid = async (
+  request: Request
+): Promise<DraconoidFields | null> => {
+  try {
+    const parsed = draconoidRequest.safeParse(await request.json());
+
+    if (!parsed.success) {
+      return null;
+    }
+
+    const name = tidyName(parsed.data.name);
+
+    return isValidName(name) ? { ...parsed.data, name } : null;
+  } catch {
+    return null;
+  }
+};
+
 interface AppOptions {
   whoIs: WhoIs;
   /** Potion Brewing's shared recipe book. */
@@ -60,18 +95,40 @@ interface AppOptions {
     ) => Promise<{ isNew: boolean; foundAt: string }>;
     resetSolo: (userId: string) => Promise<void>;
   };
-  /** The site's own origin; brews from any other are refused. */
+  /** The Court of Draconia's hall: one draconoid per account. */
+  draconoids: {
+    readHall: (limit: number) => Promise<HallEntry[]>;
+    readMine: (userId: string) => Promise<HallEntry | null>;
+    save: (
+      account: SessionAccount,
+      fields: DraconoidFields
+    ) => Promise<HallEntry>;
+    removeMine: (userId: string) => Promise<void>;
+    /** False when there is no such draconoid. */
+    remove: (id: string) => Promise<boolean>;
+  };
+  /** Whether a visitor may take draconoids down, from their cookie. */
+  isAdmin: IsAdmin;
+  /** The site's own origin; brews and saves from any other are refused. */
   appOrigin: string;
 }
 
 /**
- * The server's routes: /api for who is signed in and Potion Brewing's
- * recipe books. Who someone is comes from the shared irmahs.dev sign-in
- * cookie, asked of the account service, never from anything the page sends.
+ * The server's routes: /api for who is signed in, Potion Brewing's recipe
+ * books and the Court of Draconia's hall. Who someone is comes from the
+ * shared irmahs.dev sign-in cookie, asked of the account service, never from
+ * anything the page sends.
  */
-export const createApp = ({ whoIs, potions, appOrigin }: AppOptions) => {
+export const createApp = ({
+  whoIs,
+  potions,
+  draconoids,
+  isAdmin,
+  appOrigin,
+}: AppOptions) => {
   const app = new Hono();
   const brews = createLimiter({ max: BREWS_PER_MINUTE, windowMs: 60_000 });
+  const saves = createLimiter({ max: SAVES_PER_MINUTE, windowMs: 60_000 });
 
   app.get("/healthz", (c) => c.text("ok"));
 
@@ -238,6 +295,102 @@ export const createApp = ({ whoIs, potions, appOrigin }: AppOptions) => {
     }
 
     await potions.resetSolo(account.id);
+
+    return c.body(null, 204);
+  });
+
+  // The hall: everyone's draconoids, signed in or not, and the asker's own.
+  // An admin is asked of the account service only when signed in.
+  app.get("/api/court-of-draconia/hall", async (c) => {
+    const cookie = c.req.header("cookie");
+    const { account } = await whoIs(cookie);
+
+    const [all, mine, admin] = await Promise.all([
+      draconoids.readHall(HALL_SIZE),
+      account ? draconoids.readMine(account.id) : null,
+      account ? isAdmin(cookie) : false,
+    ]);
+
+    return c.json({ admin, draconoids: all, mine } satisfies Hall);
+  });
+
+  // Makes or remakes the asker's draconoid: from the site itself, since the
+  // sign-in cookie reaches here from any irmahs.dev page, signed in, and a
+  // name the hall can show. The tier is never the page's to set.
+  app.put("/api/court-of-draconia/me", async (c) => {
+    if (c.req.header("origin") !== appOrigin) {
+      return c.text("Draconoids are only made from the site itself.", 403);
+    }
+
+    const { account } = await whoIs(c.req.header("cookie"));
+
+    if (!account) {
+      return c.text("Sign in to make your draconoid.", 401);
+    }
+
+    if (!saves.allow(account.id)) {
+      return c.text("That's a lot of changes. Try again in a minute.", 429);
+    }
+
+    const fields = await readDraconoid(c.req.raw);
+
+    if (!fields) {
+      return c.text(
+        "A name is 1 to 30 letters, with spaces, hyphens or apostrophes between them.",
+        400
+      );
+    }
+
+    const saved = await draconoids.save(
+      { id: account.id, name: shortName(account.name) },
+      fields
+    );
+
+    return c.json(saved satisfies HallEntry);
+  });
+
+  app.delete("/api/court-of-draconia/me", async (c) => {
+    if (c.req.header("origin") !== appOrigin) {
+      return c.text("Draconoids are only let go from the site itself.", 403);
+    }
+
+    const { account } = await whoIs(c.req.header("cookie"));
+
+    if (!account) {
+      return c.text("Sign in to let your draconoid go.", 401);
+    }
+
+    await draconoids.removeMine(account.id);
+
+    return c.body(null, 204);
+  });
+
+  // Takes someone's draconoid down: admins only, listed for ADMIN_APP in the
+  // account service's APP_ACCESS.
+  app.delete("/api/court-of-draconia/draconoids/:id", async (c) => {
+    if (c.req.header("origin") !== appOrigin) {
+      return c.text(
+        "Draconoids are only taken down from the site itself.",
+        403
+      );
+    }
+
+    const cookie = c.req.header("cookie");
+    const { account } = await whoIs(cookie);
+
+    if (!account) {
+      return c.text("Sign in to take a draconoid down.", 401);
+    }
+
+    if (!(await isAdmin(cookie))) {
+      return c.text("Only an admin can take a draconoid down.", 403);
+    }
+
+    const id = c.req.param("id");
+
+    if (!(DRACONOID_ID.test(id) && (await draconoids.remove(id)))) {
+      return c.text("There is no such draconoid.", 404);
+    }
 
     return c.body(null, 204);
   });

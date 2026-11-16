@@ -114,3 +114,41 @@ export const SpellCreatorIcon = () => (
     <circle cx="29" cy="28" r="1.6" fill="#2f3b34" />
   </svg>
 );
+
+/** A golden crown, its middle point a dragon's horn, over a scaled band. */
+export const CourtOfDraconiaIcon = () => (
+  <svg aria-hidden="true" width="40" height="40" viewBox="0 0 40 40">
+    <rect
+      x="3"
+      y="3"
+      width="34"
+      height="34"
+      rx="9"
+      fill="#d4dd9c"
+      stroke="var(--text)"
+      strokeWidth="1.5"
+    />
+    <path
+      d="M9 27V15l6 5 5-11 5 11 6-5v12z"
+      fill="#f2d27a"
+      stroke="#2f3b34"
+      strokeWidth="1.5"
+      strokeLinejoin="round"
+    />
+    <rect x="9" y="27" width="22" height="5" rx="1" fill="#2f3b34" />
+    <path
+      d="M12 29.5a2 2 0 0 1 4 0M18 29.5a2 2 0 0 1 4 0M24 29.5a2 2 0 0 1 4 0"
+      fill="none"
+      stroke="#afc584"
+      strokeWidth="1.2"
+    />
+    <circle
+      cx="20"
+      cy="21"
+      r="2.2"
+      fill="#b5372f"
+      stroke="#2f3b34"
+      strokeWidth="1"
+    />
+  </svg>
+);

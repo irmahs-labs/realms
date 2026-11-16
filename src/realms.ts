@@ -3,6 +3,7 @@ import type { ComponentType, LazyExoticComponent } from "react";
 
 import {
   BookOfShadowsIcon,
+  CourtOfDraconiaIcon,
   PotionBrewingIcon,
   SpellCreatorIcon,
 } from "./components/app-icons";
@@ -72,6 +73,42 @@ export const REALMS: readonly Realm[] = [
       },
     ],
     slug: "book-of-shadows",
+  },
+  {
+    Icon: CourtOfDraconiaIcon,
+    blurb: {
+      en: "The dragon realm. Become a draconoid with an element, an affinity and a role, meet everyone else’s, and unleash duo ultimates.",
+      fr: "Le royaume des dragons. Devenez draconoïde avec un élément, une affinité et un rôle, rencontrez ceux des autres, et déchaînez des ultimes en duo.",
+    },
+    legend: "draconia.realm",
+    name: { en: "Court of Draconia", fr: "Cour de Draconia" },
+    pages: [
+      {
+        Icon: CourtOfDraconiaIcon,
+        Screen: lazy(() => import("./realms/court-of-draconia/court")),
+        name: { en: "Court of Draconia", fr: "Cour de Draconia" },
+        slug: "",
+      },
+      {
+        Icon: CourtOfDraconiaIcon,
+        Screen: lazy(() => import("./realms/court-of-draconia/draconoid")),
+        name: { en: "Your draconoid", fr: "Votre draconoïde" },
+        slug: "draconoid",
+      },
+      {
+        Icon: CourtOfDraconiaIcon,
+        Screen: lazy(() => import("./realms/court-of-draconia/hall")),
+        name: { en: "The hall", fr: "La salle" },
+        slug: "hall",
+      },
+      {
+        Icon: CourtOfDraconiaIcon,
+        Screen: lazy(() => import("./realms/court-of-draconia/ultimates")),
+        name: { en: "Duo ultimates", fr: "Ultimes en duo" },
+        slug: "ultimates",
+      },
+    ],
+    slug: "court-of-draconia",
   },
 ];
 
