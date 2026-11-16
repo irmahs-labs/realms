@@ -22,6 +22,14 @@ export interface RealmPage {
   Screen: LazyExoticComponent<ComponentType<PageProps>>;
 }
 
+/** A page entry: its slug, its name in each language, its icon, and its screen, loaded when opened. */
+const pageEntry = (
+  slug: string,
+  name: Record<Language, string>,
+  Icon: ComponentType,
+  load: () => Promise<{ default: ComponentType<PageProps> }>
+): RealmPage => ({ Icon, Screen: lazy(load), name, slug });
+
 /**
  * A realm: a world of its own, with its pages. Adding one is an entry here
  * and a folder under src/realms/<slug>/; the hub lists it and the app routes
@@ -49,28 +57,24 @@ export const REALMS: readonly Realm[] = [
     legend: "book-of-shadows.epub",
     name: { en: "Book of Shadows", fr: "Livre des ombres" },
     pages: [
-      {
-        Icon: BookOfShadowsIcon,
-        Screen: lazy(() => import("./realms/book-of-shadows/book-of-shadows")),
-        name: { en: "Book of Shadows", fr: "Livre des ombres" },
-        slug: "",
-      },
-      {
-        Icon: PotionBrewingIcon,
-        Screen: lazy(
-          () => import("./realms/book-of-shadows/potion-brewing/potion-brewing")
-        ),
-        name: { en: "Potion Brewing", fr: "Préparation de potions" },
-        slug: "potion-brewing",
-      },
-      {
-        Icon: SpellCreatorIcon,
-        Screen: lazy(
-          () => import("./realms/book-of-shadows/spell-creator/spell-creator")
-        ),
-        name: { en: "Spell Creator", fr: "Créateur de sorts" },
-        slug: "spell-creator",
-      },
+      pageEntry(
+        "",
+        { en: "Book of Shadows", fr: "Livre des ombres" },
+        BookOfShadowsIcon,
+        () => import("./realms/book-of-shadows/book-of-shadows")
+      ),
+      pageEntry(
+        "potion-brewing",
+        { en: "Potion Brewing", fr: "Préparation de potions" },
+        PotionBrewingIcon,
+        () => import("./realms/book-of-shadows/potion-brewing/potion-brewing")
+      ),
+      pageEntry(
+        "spell-creator",
+        { en: "Spell Creator", fr: "Créateur de sorts" },
+        SpellCreatorIcon,
+        () => import("./realms/book-of-shadows/spell-creator/spell-creator")
+      ),
     ],
     slug: "book-of-shadows",
   },
@@ -83,30 +87,30 @@ export const REALMS: readonly Realm[] = [
     legend: "draconia.realm",
     name: { en: "Court of Draconia", fr: "Cour de Draconia" },
     pages: [
-      {
-        Icon: CourtOfDraconiaIcon,
-        Screen: lazy(() => import("./realms/court-of-draconia/court")),
-        name: { en: "Court of Draconia", fr: "Cour de Draconia" },
-        slug: "",
-      },
-      {
-        Icon: CourtOfDraconiaIcon,
-        Screen: lazy(() => import("./realms/court-of-draconia/draconoid")),
-        name: { en: "Your draconoid", fr: "Votre draconoïde" },
-        slug: "draconoid",
-      },
-      {
-        Icon: CourtOfDraconiaIcon,
-        Screen: lazy(() => import("./realms/court-of-draconia/hall")),
-        name: { en: "The hall", fr: "La salle" },
-        slug: "hall",
-      },
-      {
-        Icon: CourtOfDraconiaIcon,
-        Screen: lazy(() => import("./realms/court-of-draconia/ultimates")),
-        name: { en: "Duo ultimates", fr: "Ultimes en duo" },
-        slug: "ultimates",
-      },
+      pageEntry(
+        "",
+        { en: "Court of Draconia", fr: "Cour de Draconia" },
+        CourtOfDraconiaIcon,
+        () => import("./realms/court-of-draconia/court")
+      ),
+      pageEntry(
+        "draconoid",
+        { en: "Your draconoid", fr: "Votre draconoïde" },
+        CourtOfDraconiaIcon,
+        () => import("./realms/court-of-draconia/draconoid")
+      ),
+      pageEntry(
+        "hall",
+        { en: "The hall", fr: "La salle" },
+        CourtOfDraconiaIcon,
+        () => import("./realms/court-of-draconia/hall")
+      ),
+      pageEntry(
+        "ultimates",
+        { en: "Duo ultimates", fr: "Ultimes en duo" },
+        CourtOfDraconiaIcon,
+        () => import("./realms/court-of-draconia/ultimates")
+      ),
     ],
     slug: "court-of-draconia",
   },
