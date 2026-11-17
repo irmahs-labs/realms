@@ -51,6 +51,11 @@ describe("RealmHeader", () => {
     expect(hrefs(page.querySelectorAll(".realm-tabs a"))).toEqual([
       "/",
       "/book-of-shadows",
+      "/book-of-shadows/compatibility",
+      "/book-of-shadows/birth-chart",
+      "/book-of-shadows/moon",
+      "/book-of-shadows/sky",
+      "/book-of-shadows/tarot",
       "/book-of-shadows/potion-brewing",
       "/book-of-shadows/spell-creator",
     ]);

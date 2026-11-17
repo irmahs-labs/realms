@@ -69,8 +69,8 @@ export const BirthDetails = ({
       {who === "partner" ? (
         <p className="hint">
           {tr(
-            "A partner, a friend or a crush: the Birth chart, Numerology and Lunar Zodiac pages then show how the two of you match.",
-            "Un partenaire, un ami ou un coup de cœur : les pages Thème astral, Numérologie et Zodiaque lunaire montrent alors votre compatibilité."
+            "A partner, a friend or a crush: below, how the two of you match by your charts, your numbers and your animals.",
+            "Un partenaire, un ami ou un coup de cœur : plus bas, votre compatibilité selon vos thèmes, vos nombres et vos animaux."
           )}
         </p>
       ) : null}

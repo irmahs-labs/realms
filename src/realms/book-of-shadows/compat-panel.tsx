@@ -53,32 +53,13 @@ export const MatchPanel = ({ legend, title, match, name }: MatchPanelProps) => (
   </section>
 );
 
-/** What the match panel says before there is anyone to match with. */
-export const NoMatch = ({ onOpen }: { onOpen: () => void }) => (
-  <section className="panel panel--book match match--empty">
-    <span className="legend">compatibility.txt</span>
-    <h2 className="display book__title">
-      {tr("How do you match?", "Êtes-vous compatibles ?")}
-    </h2>
-    <p className="page__sub">
-      {tr(
-        "Add someone else’s birth details on your profile, and this page shows how the two of you get on.",
-        "Ajoutez la naissance de quelqu’un d’autre dans votre profil, et cette page montre comment vous vous entendez."
-      )}
-    </p>
-    <button type="button" className="btn" onClick={onOpen}>
-      {tr("Add someone", "Ajouter quelqu’un")}
-    </button>
-  </section>
-);
-
 interface SummaryRow {
   label: string;
   match: Match;
   onOpen: () => void;
 }
 
-/** On the profile: the three scores side by side, each opening its page. */
+/** The three scores side by side, each scrolling to its own panel. */
 export const MatchSummary = ({
   name,
   rows,

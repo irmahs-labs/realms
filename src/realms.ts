@@ -91,9 +91,39 @@ export const REALMS: readonly Realm[] = [
     pages: [
       pageEntry(
         "",
-        { en: "Book of Shadows", fr: "Livre des ombres" },
+        { en: "Profile", fr: "Profil" },
         BookOfShadowsIcon,
         () => import("./realms/book-of-shadows/book-of-shadows")
+      ),
+      pageEntry(
+        "compatibility",
+        { en: "Compatibility calculator", fr: "Calculateur de compatibilité" },
+        BookOfShadowsIcon,
+        () => import("./realms/book-of-shadows/compatibility-page")
+      ),
+      pageEntry(
+        "birth-chart",
+        { en: "Birth chart", fr: "Thème astral" },
+        BookOfShadowsIcon,
+        () => import("./realms/book-of-shadows/birth-chart-page")
+      ),
+      pageEntry(
+        "moon",
+        { en: "Moon and sabbats", fr: "Lune et sabbats" },
+        BookOfShadowsIcon,
+        () => import("./realms/book-of-shadows/moon-page")
+      ),
+      pageEntry(
+        "sky",
+        { en: "Sky", fr: "Ciel" },
+        BookOfShadowsIcon,
+        () => import("./realms/book-of-shadows/sky-page")
+      ),
+      pageEntry(
+        "tarot",
+        { en: "Tarot", fr: "Tarot" },
+        BookOfShadowsIcon,
+        () => import("./realms/book-of-shadows/tarot-page")
       ),
       pageEntry(
         "potion-brewing",

@@ -27,7 +27,8 @@ export const withoutTrailingSlashes = (path: string): string => {
   return path.slice(0, end);
 };
 
-const navigate = (to: string) => {
+/** Goes to `to` in the app, as a Link does. */
+export const navigate = (to: string) => {
   if (to === window.location.pathname) {
     return;
   }
