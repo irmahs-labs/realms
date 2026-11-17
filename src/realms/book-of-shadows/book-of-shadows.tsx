@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
-import { RealmHeader } from "../../components/realm-header";
 import { useLanguage } from "../../lib/language";
 import { openBook } from "./carry-over";
 import { ChartTab } from "./chart-tab";
@@ -309,36 +308,33 @@ const BookOfShadows = () => {
   };
 
   return (
-    <>
-      <RealmHeader realm="book-of-shadows" here="" />
-      <main className="page">
-        <p className="page__sub">
-          {tr(
-            "your moons, sabbats, stars, numbers and cards, in one book",
-            "vos lunes, sabbats, étoiles, nombres et cartes, dans un seul livre"
-          )}
-        </p>
+    <main className="page">
+      <p className="page__sub">
+        {tr(
+          "your moons, sabbats, stars, numbers and cards, in one book",
+          "vos lunes, sabbats, étoiles, nombres et cartes, dans un seul livre"
+        )}
+      </p>
 
-        <nav
-          aria-label={tr("Pages of the book", "Pages du livre")}
-          className="picker picker--scroll"
-        >
-          {TABS.map((entry) => (
-            <button
-              key={entry}
-              type="button"
-              className="picker__option"
-              aria-pressed={entry === tab}
-              onClick={() => open(entry)}
-            >
-              {TAB_NAMES[language][entry]}
-            </button>
-          ))}
-        </nav>
+      <nav
+        aria-label={tr("Pages of the book", "Pages du livre")}
+        className="picker picker--scroll"
+      >
+        {TABS.map((entry) => (
+          <button
+            key={entry}
+            type="button"
+            className="picker__option"
+            aria-pressed={entry === tab}
+            onClick={() => open(entry)}
+          >
+            {TAB_NAMES[language][entry]}
+          </button>
+        ))}
+      </nav>
 
-        {panel()}
-      </main>
-    </>
+      {panel()}
+    </main>
   );
 };
 

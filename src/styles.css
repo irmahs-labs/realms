@@ -259,6 +259,24 @@ a:hover {
   overflow-x: auto;
   scrollbar-width: none;
 }
+/* The way back to every realm: quiet, before the tabs, not one of them */
+.realm-tabs__back {
+  flex: none;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 10px;
+  padding: 6px 4px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.realm-tabs__back:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
 .realm-tab {
   flex: none;
   padding: 8px 16px;
@@ -357,8 +375,7 @@ a:hover {
 }
 
 @media (max-width: 600px) {
-  .realm-tabs,
-  .app-header .realm-back {
+  .realm-tabs {
     display: none;
   }
   .app-header .realm-menu-button {

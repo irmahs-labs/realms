@@ -1,6 +1,5 @@
 import { useId, useState } from "react";
 
-import { RealmHeader } from "../../components/realm-header";
 import { signInUrl } from "../../lib/account";
 import { useLanguage } from "../../lib/language";
 import { Link } from "../../lib/router";
@@ -293,105 +292,102 @@ const DraconoidMaker = () => {
   };
 
   return (
-    <>
-      <RealmHeader realm="court-of-draconia" here="draconoid" />
-      <main className="page">
-        <p className="page__sub">{t.sub}</p>
-        {hall === null ? <p className="hint">{t.noServer}</p> : null}
+    <main className="page">
+      <p className="page__sub">{t.sub}</p>
+      {hall === null ? <p className="hint">{t.noServer}</p> : null}
 
-        <div className="layout">
-          <section
-            className="panel panel--wide draco-form"
-            aria-label={t.newName}
+      <div className="layout">
+        <section
+          className="panel panel--wide draco-form"
+          aria-label={t.newName}
+        >
+          <span className="legend">draconoid.cfg</span>
+          <form
+            className="draco-form__fields"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void save();
+            }}
           >
-            <span className="legend">draconoid.cfg</span>
-            <form
-              className="draco-form__fields"
-              onSubmit={(event) => {
-                event.preventDefault();
-                void save();
-              }}
-            >
-              <div className="stack">
-                <label className="field-label" htmlFor={nameField}>
-                  {t.name}
-                </label>
-                <input
-                  id={nameField}
-                  className="field"
-                  value={choice.name}
-                  maxLength={MAX_NAME}
-                  autoComplete="off"
-                  aria-describedby={`${nameField}-hint`}
-                  onChange={(event) => pick({ name: event.target.value })}
-                />
-                <p id={`${nameField}-hint`} className="hint">
-                  {t.nameHint}
-                </p>
-              </div>
-              <Picker
-                label={t.element}
-                options={ELEMENTS}
-                value={choice.element}
-                nameOf={(element) => ELEMENT_INFO[element].name[language]}
-                onPick={(element) => pick({ element })}
+            <div className="stack">
+              <label className="field-label" htmlFor={nameField}>
+                {t.name}
+              </label>
+              <input
+                id={nameField}
+                className="field"
+                value={choice.name}
+                maxLength={MAX_NAME}
+                autoComplete="off"
+                aria-describedby={`${nameField}-hint`}
+                onChange={(event) => pick({ name: event.target.value })}
               />
-              <Picker
-                label={t.affinity}
-                options={AFFINITIES}
-                value={choice.affinity}
-                nameOf={(affinity) => AFFINITY_INFO[affinity].name[language]}
-                onPick={(affinity) => pick({ affinity })}
-              />
-              <p className="hint">
-                {AFFINITY_INFO[choice.affinity].about[language]}
+              <p id={`${nameField}-hint`} className="hint">
+                {t.nameHint}
               </p>
-              <Picker
-                label={t.role}
-                grid
-                options={ROLES}
-                value={choice.role}
-                nameOf={(role) => ROLE_INFO[role].name[language]}
-                onPick={(role) => pick({ role })}
-              />
-              <p className="hint">{t.tierHint}</p>
+            </div>
+            <Picker
+              label={t.element}
+              options={ELEMENTS}
+              value={choice.element}
+              nameOf={(element) => ELEMENT_INFO[element].name[language]}
+              onPick={(element) => pick({ element })}
+            />
+            <Picker
+              label={t.affinity}
+              options={AFFINITIES}
+              value={choice.affinity}
+              nameOf={(affinity) => AFFINITY_INFO[affinity].name[language]}
+              onPick={(affinity) => pick({ affinity })}
+            />
+            <p className="hint">
+              {AFFINITY_INFO[choice.affinity].about[language]}
+            </p>
+            <Picker
+              label={t.role}
+              grid
+              options={ROLES}
+              value={choice.role}
+              nameOf={(role) => ROLE_INFO[role].name[language]}
+              onPick={(role) => pick({ role })}
+            />
+            <p className="hint">{t.tierHint}</p>
 
-              <div className="draco-form__actions">
-                {action()}
-                {mine ? (
-                  <button
-                    type="button"
-                    className="btn btn--quiet"
-                    onClick={() => confirm.press("let-go", letGo)}
-                  >
-                    {confirm.armed === "let-go" ? t.letGoSure : t.letGo}
-                  </button>
-                ) : null}
-              </div>
-              <p className="hint" aria-live="polite">
-                {saved ? (
-                  <>
-                    {t.saved}{" "}
-                    <Link href="/court-of-draconia/hall">{t.viewHall}</Link>
-                  </>
-                ) : (
-                  message
-                )}
-              </p>
-            </form>
-          </section>
+            <div className="draco-form__actions">
+              {action()}
+              {mine ? (
+                <button
+                  type="button"
+                  className="btn btn--quiet"
+                  onClick={() => confirm.press("let-go", letGo)}
+                >
+                  {confirm.armed === "let-go" ? t.letGoSure : t.letGo}
+                </button>
+              ) : null}
+            </div>
+            <p className="hint" aria-live="polite">
+              {saved ? (
+                <>
+                  {t.saved}{" "}
+                  <Link href="/court-of-draconia/hall">{t.viewHall}</Link>
+                </>
+              ) : (
+                message
+              )}
+            </p>
+          </form>
+        </section>
 
-          <section
-            className="panel panel--narrow draco-preview"
-            aria-live="polite"
-          >
-            <span className="legend">preview.png</span>
-            <DraconoidCard draconoid={draconoid} size="large" />
-            <Powers draconoid={draconoid} />
-          </section>
-        </div>
-      </main>
-    </>
+        <section
+          className="panel panel--narrow draco-preview"
+          aria-live="polite"
+        >
+          <span className="legend">preview.png</span>
+          <DraconoidCard draconoid={draconoid} size="large" />
+          <Powers draconoid={draconoid} />
+        </section>
+      </div>
+    </main>
   );
 };
 

@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { RealmsIcon } from "./components/app-icons";
 import { Footer } from "./components/footer";
 import { Header } from "./components/header";
+import { RealmHeader } from "./components/realm-header";
 import { Hub } from "./hub";
 import { APP_NAME } from "./lib/brand";
 import { useCopy, useLanguage } from "./lib/language";
@@ -77,6 +78,8 @@ const PageAt = ({ path }: { path: string }): ReactNode => {
     <>
       {/* React puts this in the head while the page is open. */}
       <title>{`${title} · ${APP_NAME}`}</title>
+      {/* The header stays while the page under it changes */}
+      <RealmHeader realm={found.realm.slug} here={page.slug} />
       <Suspense fallback={<main className="page" aria-busy="true" />}>
         <page.Screen name={name} />
       </Suspense>

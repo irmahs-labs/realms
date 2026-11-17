@@ -102,8 +102,9 @@ const RealmMenu = ({ realm, here }: { realm: string; here: string }) => {
 
 /**
  * Every realm page's header: the realm's icon and name, "Realms · by Irma
- * HS" under it, a way back to every realm, and the shared pills. Under it,
- * the realm's pages as tabs, the open one lifted in lime. On a phone the
+ * HS" under it, and the shared pills, nothing more. Under it, a quiet way
+ * back to every realm, then the realm's pages as tabs, the open one lifted
+ * in lime. On a phone the
  * tabs give way to the menu.
  */
 export const RealmHeader = ({
@@ -126,13 +127,12 @@ export const RealmHeader = ({
         href={`/${entry.slug}`}
         app={APP_NAME}
         lead={<RealmMenu realm={realm} here={here} />}
-      >
-        <Link href="/" className="btn realm-back">
+      />
+      <nav className="realm-tabs" aria-label={t.pages(name)}>
+        <Link href="/" className="realm-tabs__back">
           <Icon name="back" size={16} />
           {t.all}
         </Link>
-      </Header>
-      <nav className="realm-tabs" aria-label={t.pages(name)}>
         {entry.pages.map((page) => (
           <Link
             key={page.slug}
