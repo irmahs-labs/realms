@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import type { ReactNode } from "react";
 
 import { RealmsIcon } from "./components/app-icons";
@@ -8,7 +8,7 @@ import { Hub } from "./hub";
 import { APP_NAME } from "./lib/brand";
 import { useCopy, useLanguage } from "./lib/language";
 import { Link, usePath, withoutTrailingSlashes } from "./lib/router";
-import { findPage } from "./realms";
+import { findPage, preloadRealm } from "./realms";
 
 const NOT_FOUND = {
   en: {
@@ -46,20 +46,32 @@ const NotFound = () => {
 /** The page for `path`: the hub, a realm's page, or none. */
 const PageAt = ({ path }: { path: string }): ReactNode => {
   const language = useLanguage();
+  const found = path === "/" ? null : findPage(path);
+  const realm = found?.realm;
+
+  // Once a realm's page is open, its other pages load while the browser
+  // is idle, so going to them doesn't wait the first time
+  useEffect(() => {
+    if (!realm) {
+      return;
+    }
+
+    const id = window.setTimeout(() => preloadRealm(realm), 300);
+
+    return () => window.clearTimeout(id);
+  }, [realm]);
 
   if (path === "/") {
     return <Hub />;
   }
 
-  const found = findPage(path);
-
   if (!found) {
     return <NotFound />;
   }
 
-  const { page, realm } = found;
+  const { page } = found;
   const name = page.name[language];
-  const title = page.slug ? `${name} · ${realm.name[language]}` : name;
+  const title = page.slug ? `${name} · ${found.realm.name[language]}` : name;
 
   return (
     <>

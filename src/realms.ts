@@ -20,6 +20,8 @@ export interface RealmPage {
   name: Record<Language, string>;
   Icon: ComponentType;
   Screen: LazyExoticComponent<ComponentType<PageProps>>;
+  /** Loads the screen's code ahead of time, so opening it later is instant. */
+  preload: () => Promise<void>;
 }
 
 /** A page entry: its slug, its name in each language, its icon, and its screen, loaded when opened. */
@@ -28,7 +30,15 @@ const pageEntry = (
   name: Record<Language, string>,
   Icon: ComponentType,
   load: () => Promise<{ default: ComponentType<PageProps> }>
-): RealmPage => ({ Icon, Screen: lazy(load), name, slug });
+): RealmPage => ({
+  Icon,
+  Screen: lazy(load),
+  name,
+  preload: async () => {
+    await load();
+  },
+  slug,
+});
 
 /**
  * A realm: a world of its own, with its pages. Adding one is an entry here
@@ -133,6 +143,25 @@ export const findPage = (
   }
 
   return null;
+};
+
+/**
+ * Loads every page of a realm in the background, once: called when one of
+ * them opens, so moving between them doesn't wait for their code the first
+ * time. A page that fails to load here still loads when opened.
+ */
+const preloaded = new Set<string>();
+
+export const preloadRealm = (realm: Realm) => {
+  if (preloaded.has(realm.slug)) {
+    return;
+  }
+
+  preloaded.add(realm.slug);
+
+  for (const page of realm.pages) {
+    page.preload().catch(() => null);
+  }
 };
 
 /** The realm `slug`; every page of a realm finds its own with this. */
