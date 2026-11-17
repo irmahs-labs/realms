@@ -1,0 +1,61 @@
+// @vitest-environment jsdom
+import { act } from "react";
+import { createRoot } from "react-dom/client";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+import { RealmHeader } from "./realm-header";
+
+// The account pill asks who is signed in: nobody, here
+vi.stubGlobal(
+  "fetch",
+  vi.fn().mockResolvedValue(Response.json({ account: null }))
+);
+
+// React's flag for act(), as a test runner sets it
+Reflect.set(globalThis, "IS_REACT_ACT_ENVIRONMENT", true);
+
+afterEach(() => {
+  document.body.innerHTML = "";
+});
+
+/** The header as the page draws it, to look through. */
+const drawn = (realm: string, here: string) => {
+  const page = document.createElement("div");
+
+  document.body.append(page);
+  act(() => createRoot(page).render(<RealmHeader realm={realm} here={here} />));
+
+  return page;
+};
+
+const hrefs = (links: NodeListOf<Element>) =>
+  [...links].map((link) => link.getAttribute("href"));
+
+describe("RealmHeader", () => {
+  it("names the realm, and marks the open page among its tabs", () => {
+    const page = drawn("book-of-shadows", "potion-brewing");
+
+    expect(page.querySelector("h1")?.textContent).toBe("Book of Shadows");
+    expect(hrefs(page.querySelectorAll(".realm-tabs a"))).toEqual([
+      "/book-of-shadows",
+      "/book-of-shadows/potion-brewing",
+      "/book-of-shadows/spell-creator",
+    ]);
+    expect(
+      page.querySelector('.realm-tabs [aria-current="page"]')?.textContent
+    ).toBe("Potion Brewing");
+  });
+
+  it("lists every realm and its pages in the phone's menu", () => {
+    const page = drawn("court-of-draconia", "hall");
+    const menu = hrefs(page.querySelectorAll(".realm-drawer a"));
+
+    expect(menu).toContain("/book-of-shadows/spell-creator");
+    expect(menu).toContain("/");
+    expect(
+      page
+        .querySelector('.realm-drawer [aria-current="page"]')
+        ?.getAttribute("href")
+    ).toBe("/court-of-draconia/hall");
+  });
+});

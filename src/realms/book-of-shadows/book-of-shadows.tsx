@@ -1,11 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
-import { BookOfShadowsIcon } from "../../components/app-icons";
-import { Header } from "../../components/header";
-import { RealmNav } from "../../components/realm-nav";
+import { RealmHeader } from "../../components/realm-header";
 import { useLanguage } from "../../lib/language";
-import type { PageProps } from "../../realms";
 import { openBook } from "./carry-over";
 import { ChartTab } from "./chart-tab";
 import { chartMatch, lunarMatch, numbersMatch } from "./compat";
@@ -85,7 +82,7 @@ type MatchTab = keyof typeof MATCHES;
 
 const MATCH_TABS: readonly MatchTab[] = ["chart", "numbers", "lunar-zodiac"];
 
-const BookOfShadows = ({ name }: PageProps) => {
+const BookOfShadows = () => {
   const [state, setState] = useState<BookState>(openBook);
   // Every line of the book reads the page's language as it renders.
   const language = useLanguage();
@@ -313,9 +310,7 @@ const BookOfShadows = ({ name }: PageProps) => {
 
   return (
     <>
-      <Header icon={<BookOfShadowsIcon />} name={name} href="/book-of-shadows">
-        <RealmNav realm="book-of-shadows" here="" />
-      </Header>
+      <RealmHeader realm="book-of-shadows" here="" />
       <main className="page">
         <p className="page__sub">
           {tr(

@@ -1,10 +1,7 @@
 import { useState } from "react";
 
-import { CourtOfDraconiaIcon } from "../../components/app-icons";
-import { Header } from "../../components/header";
-import { RealmNav } from "../../components/realm-nav";
+import { RealmHeader } from "../../components/realm-header";
 import { useLanguage } from "../../lib/language";
-import type { PageProps } from "../../realms";
 import { ELEMENT_INFO, ULTIMATES, bentElement } from "./magic";
 import { ELEMENTS } from "./rules";
 import type { Element } from "./rules";
@@ -41,7 +38,7 @@ interface Cell {
 }
 
 /** All sixteen duo ultimates, and what the one picked does. */
-const Ultimates = ({ name }: PageProps) => {
+const Ultimates = () => {
   const language = useLanguage();
   const t = COPY[language];
   const { hall } = useHall();
@@ -66,13 +63,7 @@ const Ultimates = ({ name }: PageProps) => {
 
   return (
     <>
-      <Header
-        icon={<CourtOfDraconiaIcon />}
-        name={name}
-        href="/court-of-draconia/ultimates"
-      >
-        <RealmNav realm="court-of-draconia" here="ultimates" />
-      </Header>
+      <RealmHeader realm="court-of-draconia" here="ultimates" />
       <main className="page">
         <p className="page__sub">{t.sub}</p>
         {mine ? (

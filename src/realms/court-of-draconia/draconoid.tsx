@@ -1,14 +1,11 @@
 import { useId, useState } from "react";
 
-import { CourtOfDraconiaIcon } from "../../components/app-icons";
-import { Header } from "../../components/header";
-import { RealmNav } from "../../components/realm-nav";
+import { RealmHeader } from "../../components/realm-header";
 import { signInUrl } from "../../lib/account";
 import { useLanguage } from "../../lib/language";
 import { Link } from "../../lib/router";
 import { serverWords } from "../../lib/server-words";
 import { useConfirm } from "../../lib/use-confirm";
-import type { PageProps } from "../../realms";
 import type { HallEntry } from "./api";
 import { DraconoidCard } from "./draconoid-card";
 import { letGoMine, saveMine } from "./hall-api";
@@ -208,7 +205,7 @@ const Powers = ({ draconoid }: { draconoid: Draconoid }) => {
 };
 
 /** Makes or remakes the visitor's draconoid, with a live card of what it is. */
-const DraconoidMaker = ({ name }: PageProps) => {
+const DraconoidMaker = () => {
   const language = useLanguage();
   const t = COPY[language];
   const { account, hall, reload } = useHall();
@@ -297,13 +294,7 @@ const DraconoidMaker = ({ name }: PageProps) => {
 
   return (
     <>
-      <Header
-        icon={<CourtOfDraconiaIcon />}
-        name={name}
-        href="/court-of-draconia/draconoid"
-      >
-        <RealmNav realm="court-of-draconia" here="draconoid" />
-      </Header>
+      <RealmHeader realm="court-of-draconia" here="draconoid" />
       <main className="page">
         <p className="page__sub">{t.sub}</p>
         {hall === null ? <p className="hint">{t.noServer}</p> : null}

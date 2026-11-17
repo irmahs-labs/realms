@@ -1,9 +1,6 @@
-import { CourtOfDraconiaIcon } from "../../components/app-icons";
-import { Header } from "../../components/header";
-import { RealmNav } from "../../components/realm-nav";
+import { RealmHeader } from "../../components/realm-header";
 import { useLanguage } from "../../lib/language";
 import { Link } from "../../lib/router";
-import type { PageProps } from "../../realms";
 import { DraconoidCard } from "./draconoid-card";
 import { CourtSeal } from "./emblem";
 import { COURT, ELEMENT_INFO } from "./magic";
@@ -119,19 +116,13 @@ const Yours = () => {
 };
 
 /** The Court of Draconia's first page: you, the Court, and how its magic works. */
-const Court = ({ name }: PageProps) => {
+const Court = () => {
   const language = useLanguage();
   const t = COPY[language];
 
   return (
     <>
-      <Header
-        icon={<CourtOfDraconiaIcon />}
-        name={name}
-        href="/court-of-draconia"
-      >
-        <RealmNav realm="court-of-draconia" here="" />
-      </Header>
+      <RealmHeader realm="court-of-draconia" here="" />
       <main className="page">
         <p className="page__sub">{t.sub}</p>
 
