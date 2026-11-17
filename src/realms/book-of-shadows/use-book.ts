@@ -119,13 +119,3 @@ export const useBook = () => {
     timeZone,
   };
 };
-
-/** Where each of the book's pages lives, for links between them. */
-export const BOOK_PATHS = {
-  birthChart: "/book-of-shadows/birth-chart",
-  compatibility: "/book-of-shadows/compatibility",
-  moon: "/book-of-shadows/moon",
-  profile: "/book-of-shadows",
-  sky: "/book-of-shadows/sky",
-  tarot: "/book-of-shadows/tarot",
-} as const;

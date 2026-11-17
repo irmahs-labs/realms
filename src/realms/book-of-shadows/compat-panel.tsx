@@ -56,10 +56,11 @@ export const MatchPanel = ({ legend, title, match, name }: MatchPanelProps) => (
 interface SummaryRow {
   label: string;
   match: Match;
-  onOpen: () => void;
+  /** Its panel further down the page: "#match-chart". */
+  href: string;
 }
 
-/** The three scores side by side, each scrolling to its own panel. */
+/** The three scores side by side, each a link to its own panel. */
 export const MatchSummary = ({
   name,
   rows,
@@ -78,13 +79,13 @@ export const MatchSummary = ({
     </h2>
     {rows ? (
       <ul className="match__summary">
-        {rows.map(({ label, match, onOpen }) => (
+        {rows.map(({ label, match, href }) => (
           <li key={label}>
-            <button type="button" className="match__row" onClick={onOpen}>
+            <a className="match__row" href={href}>
               <span className="match__label">{label}</span>
               <Meter percent={match.score} />
               <span className="display match__row-score">{match.score}%</span>
-            </button>
+            </a>
           </li>
         ))}
       </ul>

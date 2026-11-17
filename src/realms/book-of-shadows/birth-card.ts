@@ -1,3 +1,5 @@
+import { digitSum } from "./numerology";
+import type { Birth } from "./profile";
 import { MAJOR_ARCANA } from "./tarot";
 import type { TarotCard } from "./tarot";
 
@@ -9,12 +11,11 @@ import type { TarotCard } from "./tarot";
  * its digits added once more (19, The Sun, and 10, the Wheel of Fortune).
  */
 
-const digitSum = (n: number): number =>
-  [...String(n)].reduce((sum, digit) => sum + Number(digit), 0);
+/** The day a birth card is read from. */
+type BirthDay = Pick<Birth, "year" | "month" | "date">;
 
-/** The birth number, 1 to 22, from a day key ("1990-07-15"). */
-export const birthNumber = (day: string): number => {
-  const [year = 0, month = 0, date = 0] = day.split("-").map(Number);
+/** The birth number, 1 to 22. */
+export const birthNumber = ({ year, month, date }: BirthDay): number => {
   let total = year + month + date;
 
   while (total > 22) {
@@ -26,11 +27,11 @@ export const birthNumber = (day: string): number => {
 
 /** A major arcana card by its number, 22 standing for The Fool (0). */
 const majorNumbered = (n: number): TarotCard | null =>
-  MAJOR_ARCANA[n === 22 ? 0 : n] ?? null;
+  MAJOR_ARCANA[n % 22] ?? null;
 
 /** Your birth card, and its pair when the number has two digits. */
-export const birthCards = (day: string): TarotCard[] => {
-  const number = birthNumber(day);
+export const birthCards = (birth: BirthDay): TarotCard[] => {
+  const number = birthNumber(birth);
   const first = majorNumbered(number);
   const second = number >= 10 ? majorNumbered(digitSum(number)) : null;
 

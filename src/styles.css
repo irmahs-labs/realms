@@ -63,6 +63,8 @@
   --series-other: #a8a69c;
 
   --stroke-base: 1.5px;
+  /* Every field and its value, the same height: date and time fields too. */
+  --field-height: 44px;
   --stroke-panel: 2px;
   --line: var(--stroke-panel) solid var(--outline);
   /* Concentric corners: a 20px panel padded 12px holds 8px fields */
@@ -744,7 +746,7 @@ a:hover {
 
 .field {
   width: 100%;
-  min-height: 44px;
+  min-height: var(--field-height);
   padding: 0 12px;
   border: var(--stroke-base) solid var(--outline);
   border-radius: var(--radius-field);
@@ -766,8 +768,8 @@ a:hover {
   text-align: left;
   /* Without their native look their value sits at the top: a line as
      tall as the inside of the field keeps it in the middle, as text is. */
-  height: 44px;
-  line-height: calc(44px - 2 * var(--stroke-base));
+  height: var(--field-height);
+  line-height: calc(var(--field-height) - 2 * var(--stroke-base));
 }
 .field::-webkit-date-and-time-value {
   text-align: left;
@@ -1138,12 +1140,6 @@ a:hover {
 }
 
 /* ── book of shadows ── */
-/* Six pages: on a narrow screen the tabs scroll sideways instead of wrapping. */
-.picker--scroll {
-  flex-wrap: nowrap;
-  max-width: 100%;
-  overflow-x: auto;
-}
 .panel--book {
   min-width: 0;
   display: flex;
@@ -1876,6 +1872,8 @@ a:hover {
   border-radius: var(--radius-field);
   background: var(--raised);
   text-align: left;
+  color: inherit;
+  text-decoration: none;
 }
 .match__row:hover {
   background: var(--panel);
@@ -1886,9 +1884,6 @@ a:hover {
 .match__row-score {
   font-size: 20px;
   text-align: right;
-}
-.match--empty {
-  align-items: flex-start;
 }
 
 /* The Lunar zodiac */
@@ -2090,9 +2085,6 @@ a:hover {
   .board th,
   .board td {
     padding: 8px 6px;
-  }
-  .picker--scroll .picker__option {
-    flex: none;
   }
   .lights {
     grid-template-columns: 1fr;

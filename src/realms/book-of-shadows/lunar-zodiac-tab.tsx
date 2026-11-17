@@ -67,16 +67,13 @@ const traditionally = (day: string, year: number): string | null => {
 const YourAnimal = ({
   birth,
   birthTime,
-  onOpenProfile,
 }: {
   birth: Birth | null;
   birthTime: string;
-  onOpenProfile: () => void;
 }) => {
   if (!birth) {
     return (
       <NeedsBirth
-        onOpen={onOpenProfile}
         legend="your-animal.txt"
         title={tr("Your animal", "Votre animal")}
         text={tr(
@@ -391,13 +388,11 @@ export const LunarZodiacTab = ({
   birthTime,
   now,
   timeZone,
-  onOpenProfile,
 }: {
   birth: Birth | null;
   birthTime: string;
   now: Date;
   timeZone: string;
-  onOpenProfile: () => void;
 }) => {
   const today = dayKey(now, timeZone);
   const current = lunarYearOf(today);
@@ -406,11 +401,7 @@ export const LunarZodiacTab = ({
   return (
     <>
       <div className="layout">
-        <YourAnimal
-          birth={birth}
-          birthTime={birthTime}
-          onOpenProfile={onOpenProfile}
-        />
+        <YourAnimal birth={birth} birthTime={birthTime} />
         <ThisYear year={current} />
       </div>
       <TwelveAnimals yours={yours?.animal ?? null} current={current} />

@@ -1,10 +1,11 @@
 import { birthCards } from "./birth-card";
 import { say, tr } from "./french";
+import type { Birth } from "./profile";
 import { TarotFace } from "./tarot-face";
 
 /** Your tarot birth cards, from your birth date, with what they mean. */
-export const BirthCardPanel = ({ day }: { day: string }) => {
-  const cards = birthCards(day);
+export const BirthCardPanel = ({ birth }: { birth: Birth }) => {
+  const cards = birthCards(birth);
 
   return (
     <section aria-labelledby="birth-card-title" className="panel panel--book">

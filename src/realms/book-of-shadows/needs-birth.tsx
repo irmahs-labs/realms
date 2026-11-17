@@ -1,7 +1,10 @@
+import { Link } from "../../lib/router";
 import { tr } from "./french";
 
+/** Where the birth date is filled in: the book's first page. */
+export const PROFILE_PATH = "/book-of-shadows";
+
 interface NeedsBirthProps {
-  onOpen: () => void;
   legend?: string;
   title?: string;
   text?: string;
@@ -11,7 +14,6 @@ interface NeedsBirthProps {
 
 /** What a page that reads the birth date shows without one. */
 export const NeedsBirth = ({
-  onOpen,
   legend = "locked.txt",
   title,
   text,
@@ -29,8 +31,8 @@ export const NeedsBirth = ({
           "Il lui faut votre date de naissance, dans votre profil."
         )}
     </p>
-    <button type="button" className="btn btn--primary" onClick={onOpen}>
+    <Link href={PROFILE_PATH} className="btn btn--primary">
       {tr("Fill in your profile", "Remplir votre profil")}
-    </button>
+    </Link>
   </section>
 );

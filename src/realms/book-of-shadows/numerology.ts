@@ -6,7 +6,8 @@
  */
 export const MASTER_NUMBERS: readonly number[] = [11, 22, 33];
 
-const digitSum = (n: number) =>
+/** 1987 → 25: the digits added once. */
+export const digitSum = (n: number) =>
   [...String(Math.abs(n))].reduce((sum, digit) => sum + Number(digit), 0);
 
 /** 1987 → 25 → 7; 29 → 11 stays. */
