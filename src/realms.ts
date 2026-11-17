@@ -1,12 +1,7 @@
 import { createElement, lazy } from "react";
 import type { ComponentType } from "react";
 
-import {
-  BookOfShadowsIcon,
-  CourtOfDraconiaIcon,
-  PotionBrewingIcon,
-  SpellCreatorIcon,
-} from "./components/app-icons";
+import { BookOfShadowsIcon, CourtOfDraconiaIcon } from "./components/app-icons";
 import type { Language } from "./lib/language";
 
 /** What every page screen is given: its own entry's name, for its heading. */
@@ -18,7 +13,6 @@ export interface PageProps {
 export interface RealmPage {
   slug: string;
   name: Record<Language, string>;
-  Icon: ComponentType;
   /** The page itself: drawn at once when its code is in, loaded on demand when not. */
   Screen: ComponentType<PageProps>;
   /** Loads the screen's code ahead of time, so opening it later is instant. */
@@ -26,15 +20,13 @@ export interface RealmPage {
 }
 
 /**
- * A page entry: its slug, its name in each language, its icon, and its
- * screen. The screen's code loads when the page is first opened, or ahead
+ * A page entry: its slug, its name in each language, and its screen. The screen's code loads when the page is first opened, or ahead
  * (preload); once it's in, the page is drawn at once, without the moment
  * of waiting a lazy component always takes, even for code already loaded.
  */
 const pageEntry = (
   slug: string,
   name: Record<Language, string>,
-  Icon: ComponentType,
   load: () => Promise<{ default: ComponentType<PageProps> }>
 ): RealmPage => {
   let ready: ComponentType<PageProps> | null = null;
@@ -52,7 +44,6 @@ const pageEntry = (
   const Screen = (props: PageProps) => createElement(ready ?? Lazy, props);
 
   return {
-    Icon,
     Screen,
     name,
     preload: async () => {
@@ -91,20 +82,42 @@ export const REALMS: readonly Realm[] = [
     pages: [
       pageEntry(
         "",
-        { en: "Book of Shadows", fr: "Livre des ombres" },
-        BookOfShadowsIcon,
+        { en: "Profile", fr: "Profil" },
         () => import("./realms/book-of-shadows/book-of-shadows")
+      ),
+      pageEntry(
+        "compatibility",
+        { en: "Compatibility calculator", fr: "Calculateur de compatibilité" },
+        () => import("./realms/book-of-shadows/compatibility-page")
+      ),
+      pageEntry(
+        "birth-chart",
+        { en: "Birth chart", fr: "Thème astral" },
+        () => import("./realms/book-of-shadows/birth-chart-page")
+      ),
+      pageEntry(
+        "moon",
+        { en: "Moon and sabbats", fr: "Lune et sabbats" },
+        () => import("./realms/book-of-shadows/moon-page")
+      ),
+      pageEntry(
+        "sky",
+        { en: "Sky", fr: "Ciel" },
+        () => import("./realms/book-of-shadows/sky-page")
+      ),
+      pageEntry(
+        "tarot",
+        { en: "Tarot", fr: "Tarot" },
+        () => import("./realms/book-of-shadows/tarot-page")
       ),
       pageEntry(
         "potion-brewing",
         { en: "Potion Brewing", fr: "Préparation de potions" },
-        PotionBrewingIcon,
         () => import("./realms/book-of-shadows/potion-brewing/potion-brewing")
       ),
       pageEntry(
         "spell-creator",
         { en: "Spell Creator", fr: "Créateur de sorts" },
-        SpellCreatorIcon,
         () => import("./realms/book-of-shadows/spell-creator/spell-creator")
       ),
     ],
@@ -122,25 +135,21 @@ export const REALMS: readonly Realm[] = [
       pageEntry(
         "",
         { en: "Court of Draconia", fr: "Cour de Draconia" },
-        CourtOfDraconiaIcon,
         () => import("./realms/court-of-draconia/court")
       ),
       pageEntry(
         "draconoid",
         { en: "Your draconoid", fr: "Votre draconoïde" },
-        CourtOfDraconiaIcon,
         () => import("./realms/court-of-draconia/draconoid")
       ),
       pageEntry(
         "hall",
         { en: "The hall", fr: "La salle" },
-        CourtOfDraconiaIcon,
         () => import("./realms/court-of-draconia/hall")
       ),
       pageEntry(
         "ultimates",
         { en: "Duo ultimates", fr: "Ultimes en duo" },
-        CourtOfDraconiaIcon,
         () => import("./realms/court-of-draconia/ultimates")
       ),
     ],

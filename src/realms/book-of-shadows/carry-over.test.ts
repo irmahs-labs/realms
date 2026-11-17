@@ -37,7 +37,7 @@ describe("carriedBook", () => {
     const carried = carriedBook(`#book=${older}`);
 
     expect(carried?.profile.name).toBe("Ana");
-    expect(carried?.tab).toBe("profile");
+    expect(carried?.southern).toBe(false);
   });
 
   it("finds nothing in any other fragment, or in a damaged one", () => {

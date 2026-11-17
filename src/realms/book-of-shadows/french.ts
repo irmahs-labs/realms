@@ -1,7 +1,6 @@
 import { currentLanguage } from "../../lib/language";
 import { BUDDHIST_CALENDAR } from "./french/buddhist-calendar";
 import { COMPAT } from "./french/compat";
-import { EIGHT_BALL } from "./french/eight-ball";
 import { LUNAR_ZODIAC } from "./french/lunar-zodiac";
 import { MOON } from "./french/moon";
 import { NUMEROLOGY } from "./french/numerology";
@@ -24,7 +23,6 @@ const FRENCH = new Map<string, string>([
   ...LUNAR_ZODIAC,
   ...COMPAT,
   ...PROFILE,
-  ...EIGHT_BALL,
   ...SKY,
   ...SABBATS,
   ...MOON,

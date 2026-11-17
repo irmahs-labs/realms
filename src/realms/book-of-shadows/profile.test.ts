@@ -156,7 +156,6 @@ describe("loadState", () => {
       partner: EMPTY_PROFILE,
       profile: EMPTY_PROFILE,
       southern: false,
-      tab: "profile",
     });
     window.localStorage.removeItem(STORAGE_KEY);
   });

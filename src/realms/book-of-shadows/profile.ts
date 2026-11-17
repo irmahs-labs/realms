@@ -23,21 +23,6 @@ import type { Element, Placement } from "./zodiac";
 
 export const STORAGE_KEY = "realms:book-of-shadows:v1";
 
-/** The book's pages, in order: yours first, then the sky's and the cards'. */
-export const TABS = [
-  "profile",
-  "chart",
-  "numbers",
-  "lunar-zodiac",
-  "moon",
-  "sabbats",
-  "sky",
-  "tarot",
-  "eight-ball",
-] as const;
-
-export type Tab = (typeof TABS)[number];
-
 export const MAX_NAME = 80;
 export const MAX_PLACE = 80;
 
@@ -75,7 +60,7 @@ const dailyPullSchema = z.object({
 
 /**
  * Everything the Book of Shadows remembers, in this browser's localStorage:
- * the open tab, which way the Wheel of the Year turns, your birth details
+ * which way the Wheel of the Year turns, your birth details
  * and those of someone to match them with, and today's card. Nothing leaves
  * the browser.
  */
@@ -84,7 +69,6 @@ export const bookStateSchema = z.object({
   partner: withFallback(profileSchema, () => ({ ...EMPTY_PROFILE })),
   profile: withFallback(profileSchema, () => ({ ...EMPTY_PROFILE })),
   southern: withFallback(z.boolean(), false),
-  tab: withFallback(z.enum(TABS), "profile"),
 });
 
 export type BookState = z.infer<typeof bookStateSchema>;
