@@ -4,11 +4,21 @@ import type { Birth } from "./profile";
 import { TarotFace } from "./tarot-face";
 
 /** Your tarot birth cards, from your birth date, with what they mean. */
-export const BirthCardPanel = ({ birth }: { birth: Birth }) => {
+export const BirthCardPanel = ({
+  birth,
+  className = "",
+}: {
+  birth: Birth;
+  /** Extra panel classes: "panel--narrow" beside another panel. */
+  className?: string;
+}) => {
   const cards = birthCards(birth);
 
   return (
-    <section aria-labelledby="birth-card-title" className="panel panel--book">
+    <section
+      aria-labelledby="birth-card-title"
+      className={`panel panel--book ${className}`}
+    >
       <span className="legend">birth-card.png</span>
       <h2 id="birth-card-title" className="display book__title">
         {cards.length > 1

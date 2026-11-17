@@ -1,10 +1,13 @@
+import { Link } from "../../lib/router";
 import { useConfirm } from "../../lib/use-confirm";
+import { birthCards } from "./birth-card";
 import { BirthplaceField } from "./birthplace-field";
 import { LONG_DAY, formatDay } from "./format";
 import { inFrench, pick, say, tr } from "./french";
 import { lunarYearOf, yearName } from "./lunar-zodiac";
 import { Meter } from "./meter";
 import { MoonGlyph } from "./moon-glyph";
+import { BIRTH_DETAILS_PATH } from "./needs-birth";
 import { meaningOf } from "./numerology";
 import {
   MAX_NAME,
@@ -248,36 +251,30 @@ const Light = ({
   </div>
 );
 
-/** What changes between your card and your soulmate's. */
+/** What changes between your avatar and your soulmate's. */
 const CARDS = {
   partner: {
     empty: [
-      "Write in their birth date to see their card: their Sun, Moon and rising, their craft, their numbers, and the moon they were born under.",
-      "Inscrivez sa date de naissance pour voir sa carte : son Soleil, sa Lune et son ascendant, sa magie, ses nombres, et la lune sous laquelle il ou elle est né·e.",
+      "Write in their birth date to see their avatar: their Sun, Moon and rising, their craft, their numbers, and the moon they were born under.",
+      "Inscrivez sa date de naissance pour voir son avatar : son Soleil, sa Lune et son ascendant, sa magie, ses nombres, et la lune sous laquelle il ou elle est né·e.",
     ],
-    legend: "soulmate-card.png",
+    legend: "soulmate-avatar.png",
     their: ["their", "sa"],
-    title: ["Their witch card", "Sa carte de sorcière"],
+    title: ["Their avatar", "Son avatar"],
   },
   you: {
     empty: [
-      "Write in your birth date to open your book: your Sun, Moon and rising, your craft, your numbers, and the moon you were born under.",
-      "Inscrivez votre date de naissance pour ouvrir votre livre : votre Soleil, votre Lune et votre ascendant, votre magie, vos nombres, et la lune sous laquelle vous êtes né·e.",
+      "Write in your birth date, on the birth chart page, to open your book: your Sun, Moon and rising, your craft, your numbers, your birth card, and the moon you were born under.",
+      "Inscrivez votre date de naissance, sur la page du thème astral, pour ouvrir votre livre : votre Soleil, votre Lune et votre ascendant, votre magie, vos nombres, votre carte de naissance, et la lune sous laquelle vous êtes né·e.",
     ],
-    legend: "witch-card.png",
+    legend: "avatar.png",
     their: ["your", "votre"],
-    title: ["Your witch card", "Votre carte de sorcière"],
+    title: ["Your avatar", "Votre avatar"],
   },
 } as const;
 
-/** A witch card: a profile at a glance, drawn from everything else. */
-export const WitchCard = ({
-  who,
-  profile,
-  birth,
-  chart,
-  thisYear,
-}: CardProps) => {
+/** An avatar: a profile at a glance, drawn from everything else. */
+export const Avatar = ({ who, profile, birth, chart, thisYear }: CardProps) => {
   const card = CARDS[who];
   const titleId = `${who}-card-title`;
 
@@ -289,6 +286,11 @@ export const WitchCard = ({
           {pick(card.title)}
         </h2>
         <p className="page__sub">{pick(card.empty)}</p>
+        {who === "you" ? (
+          <Link href={BIRTH_DETAILS_PATH} className="btn btn--primary">
+            {tr("Fill in your birth details", "Remplir vos informations")}
+          </Link>
+        ) : null}
       </section>
     );
   }
@@ -301,6 +303,7 @@ export const WitchCard = ({
   const moonPhase = birthMoonOf(birth);
   const season = birthSeasonOf(birth);
   const lunar = lunarYearOf(birth.day);
+  const cards = birthCards(birth);
   const weekday = planetaryDayOf(birth);
   const [moonFrom, moonTo] = chart.moonSpan ?? [];
   const moonUnsure = moonFrom && moonTo && moonFrom.sign !== moonTo.sign;
@@ -376,6 +379,14 @@ export const WitchCard = ({
             {tr("a ", "")}
             {say(moonPhase)}
           </dd>
+        </div>
+        <div>
+          <dt>
+            {cards.length > 1
+              ? tr("Birth cards", "Cartes de naissance")
+              : tr("Birth card", "Carte de naissance")}
+          </dt>
+          <dd>{cards.map((entry) => say(entry.name)).join(" · ")}</dd>
         </div>
         <div>
           <dt>{tr("Lunar zodiac", "Zodiaque lunaire")}</dt>

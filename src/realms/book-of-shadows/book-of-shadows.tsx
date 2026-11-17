@@ -1,5 +1,5 @@
 import { useLanguage } from "../../lib/language";
-import { BirthDetails, WitchCard } from "./profile-tab";
+import { Avatar } from "./profile-tab";
 import { DailyCard, TodayPanel } from "./today-panel";
 import { useBook } from "./use-book";
 import { WitchQuizCard } from "./witch-quiz-card";
@@ -8,17 +8,7 @@ import { WitchQuizCard } from "./witch-quiz-card";
 const Profile = () => {
   const language = useLanguage();
 
-  const {
-    birth,
-    chart,
-    clearer,
-    editor,
-    now,
-    setState,
-    state,
-    thisYear,
-    timeZone,
-  } = useBook();
+  const { birth, chart, now, setState, state, thisYear, timeZone } = useBook();
 
   return (
     <main className="page">
@@ -37,13 +27,7 @@ const Profile = () => {
           }
         />
       </div>
-      <BirthDetails
-        who="you"
-        profile={state.profile}
-        onChange={editor("profile")}
-        onClear={clearer("profile")}
-      />
-      <WitchCard
+      <Avatar
         who="you"
         profile={state.profile}
         birth={birth}

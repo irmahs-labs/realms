@@ -45,8 +45,8 @@ const NumberCard = ({
       ) : (
         <p className="number-card__about">
           {tr(
-            "Add your name on your profile to find it.",
-            "Ajoutez votre nom dans votre profil pour le trouver."
+            "Add your name above to find it.",
+            "Ajoutez votre nom plus haut pour le trouver."
           )}
         </p>
       )}
