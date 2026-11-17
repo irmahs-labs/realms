@@ -1,7 +1,7 @@
 import { MatchPanel, MatchSummary } from "./compat-panel";
 import { tr } from "./french";
 import { NeedsBirth } from "./needs-birth";
-import { BirthDetails, WitchCard } from "./profile-tab";
+import { Avatar, BirthDetails } from "./profile-tab";
 import { useBook } from "./use-book";
 
 /** The three ways you match someone, in order, and how each is named. */
@@ -51,7 +51,7 @@ const Compatibility = () => {
         onChange={editor("partner")}
         onClear={clearer("partner")}
       />
-      <WitchCard
+      <Avatar
         who="partner"
         profile={state.partner}
         birth={theirBirth}
@@ -75,8 +75,8 @@ const Compatibility = () => {
           legend="compatibility.txt"
           title={tr("How do you match?", "Êtes-vous compatibles ?")}
           text={tr(
-            "To compare the two of you, the book needs your birth date too, on your profile.",
-            "Pour vous comparer, le livre a aussi besoin de votre date de naissance, dans votre profil."
+            "To compare the two of you, the book needs your birth date too, on the birth chart page.",
+            "Pour vous comparer, le livre a aussi besoin de votre date de naissance, sur la page du thème astral."
           )}
         />
       )}

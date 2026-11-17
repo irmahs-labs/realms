@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import { festivalsIn } from "./buddhist-calendar";
 import { LONG_DAY, formatDay } from "./format";
 import { inFrench, say, tr } from "./french";
@@ -77,10 +79,11 @@ const YourAnimal = ({
         legend="your-animal.txt"
         title={tr("Your animal", "Votre animal")}
         text={tr(
-          "Your birth date on your profile tells which of the twelve is yours.",
-          "Votre date de naissance, dans votre profil, dit lequel des douze est le vôtre."
+          "Your birth date, above, tells which of the twelve is yours.",
+          "Votre date de naissance, plus haut, dit lequel des douze est le vôtre."
         )}
         className="panel--wide"
+        link={false}
       />
     );
   }
@@ -157,57 +160,6 @@ const YourAnimal = ({
         ) : null}
       </dl>
       {note ? <p className="hint">{note}</p> : null}
-    </section>
-  );
-};
-
-/** The year we are in, and when tradition starts it. */
-const ThisYear = ({ year }: { year: LunarYear }) => {
-  const next = lunarYear(year.year + 1);
-  const newYear = lunarNewYear(year.year);
-  const songkran = songkranOf(year.year);
-
-  return (
-    <section
-      aria-labelledby="this-year-title"
-      className="panel panel--book panel--narrow lunar-year"
-    >
-      <span className="legend">this-year.txt</span>
-      <span aria-hidden="true" className="lunar-you__emoji">
-        {year.animal.emoji}
-      </span>
-      <p className="kicker">
-        {tr("This year", "Cette année")} · {cycleName(year)}
-      </p>
-      <h2 id="this-year-title" className="display page__title">
-        {tr(
-          `Year of the ${yearName(year)}`,
-          `Année ${year.animal.id === "goat" ? "de la" : "du"} ${yearName(year)}`
-        )}
-      </h2>
-      <p className="page__sub">
-        {tr(
-          `From 1 January to 31 December ${year.year}. By tradition it begins at the Lunar New Year, ${formatDay(newYear, LONG_DAY)}`,
-          `Du 1er janvier au 31 décembre ${year.year}. Par tradition, elle commence au Nouvel an lunaire, le ${formatDay(newYear, LONG_DAY)}`
-        )}
-        {songkran
-          ? tr(
-              `, and in Cambodia at Khmer New Year, ${formatDay(songkran, LONG_DAY)}`,
-              `, et au Cambodge au Nouvel an khmer, le ${formatDay(songkran, LONG_DAY)}`
-            )
-          : ""}
-        .
-      </p>
-      <p>
-        {tr(
-          `A ${year.element} year is ${ELEMENT_LORE[year.element]}; the ${year.animal.name} brings ${year.animal.keywords}.`,
-          `Une année de ${say(year.element)} est ${say(ELEMENT_LORE[year.element])} ; ${theAnimal(year.animal)} apporte ${say(year.animal.keywords)}.`
-        )}
-      </p>
-      <p className="hint">
-        {tr("Next: the ", "Ensuite : ")}
-        {yearName(next)} {next.animal.emoji}.
-      </p>
     </section>
   );
 };
@@ -386,11 +338,14 @@ const HeavenlyStems = ({
 export const LunarZodiacTab = ({
   birth,
   birthTime,
+  beside,
   now,
   timeZone,
 }: {
   birth: Birth | null;
   birthTime: string;
+  /** A narrow panel beside your animal: the birth card. */
+  beside?: ReactNode;
   now: Date;
   timeZone: string;
 }) => {
@@ -402,7 +357,7 @@ export const LunarZodiacTab = ({
     <>
       <div className="layout">
         <YourAnimal birth={birth} birthTime={birthTime} />
-        <ThisYear year={current} />
+        {beside}
       </div>
       <TwelveAnimals yours={yours?.animal ?? null} current={current} />
       <HeavenlyStems

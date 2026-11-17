@@ -86,11 +86,6 @@ export const REALMS: readonly Realm[] = [
         () => import("./realms/book-of-shadows/book-of-shadows")
       ),
       pageEntry(
-        "compatibility",
-        { en: "Compatibility calculator", fr: "Calculateur de compatibilité" },
-        () => import("./realms/book-of-shadows/compatibility-page")
-      ),
-      pageEntry(
         "birth-chart",
         { en: "Birth chart", fr: "Thème astral" },
         () => import("./realms/book-of-shadows/birth-chart-page")
@@ -119,6 +114,11 @@ export const REALMS: readonly Realm[] = [
         "spell-creator",
         { en: "Spell Creator", fr: "Créateur de sorts" },
         () => import("./realms/book-of-shadows/spell-creator/spell-creator")
+      ),
+      pageEntry(
+        "compatibility",
+        { en: "Compatibility calculator", fr: "Calculateur de compatibilité" },
+        () => import("./realms/book-of-shadows/compatibility-page")
       ),
     ],
     slug: "book-of-shadows",
