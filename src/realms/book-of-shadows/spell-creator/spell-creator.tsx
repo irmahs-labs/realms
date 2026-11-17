@@ -1,6 +1,5 @@
 import { useEffect, useId, useState } from "react";
 
-import { RealmHeader } from "../../../components/realm-header";
 import { Icon } from "../../../lib/icon";
 import { useCopy } from "../../../lib/language";
 import { loadPronunciations } from "./dictionary";
@@ -295,104 +294,101 @@ const SpellCreator = () => {
   }
 
   return (
-    <>
-      <RealmHeader realm="book-of-shadows" here="spell-creator" />
-      <main className="page">
-        <p className="page__sub" lang="en">
-          write two rhyming lines: the better the rhyme, the stronger the spell
+    <main className="page">
+      <p className="page__sub" lang="en">
+        write two rhyming lines: the better the rhyme, the stronger the spell
+      </p>
+      {t.englishOnly ? (
+        <p className="hint" lang="fr">
+          {t.englishOnly}
         </p>
-        {t.englishOnly ? (
-          <p className="hint" lang="fr">
-            {t.englishOnly}
-          </p>
-        ) : null}
+      ) : null}
 
-        <div className="layout" lang="en">
-          <div className="spell-main">
-            <section className="panel spell-panel">
-              <span className="legend">spell.txt</span>
-              <form
-                className="stack spell-form"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  cast(text);
-                }}
-              >
-                <label className="field-label" htmlFor={field}>
-                  Your spell
-                </label>
-                <textarea
-                  id={field}
-                  className="field spell-form__text"
-                  rows={5}
-                  maxLength={MAX_SPELL}
-                  placeholder={
-                    "Silver candle, shining bright,\nguide me home on wings of light."
-                  }
-                  value={text}
-                  onChange={(event) => setText(event.target.value)}
-                />
-                <p className="hint">
-                  One verse a line, or a couplet a line with a comma between its
-                  two verses.
-                </p>
-                <div>
+      <div className="layout" lang="en">
+        <div className="spell-main">
+          <section className="panel spell-panel">
+            <span className="legend">spell.txt</span>
+            <form
+              className="stack spell-form"
+              onSubmit={(event) => {
+                event.preventDefault();
+                cast(text);
+              }}
+            >
+              <label className="field-label" htmlFor={field}>
+                Your spell
+              </label>
+              <textarea
+                id={field}
+                className="field spell-form__text"
+                rows={5}
+                maxLength={MAX_SPELL}
+                placeholder={
+                  "Silver candle, shining bright,\nguide me home on wings of light."
+                }
+                value={text}
+                onChange={(event) => setText(event.target.value)}
+              />
+              <p className="hint">
+                One verse a line, or a couplet a line with a comma between its
+                two verses.
+              </p>
+              <div>
+                <button
+                  type="submit"
+                  className="btn btn--primary"
+                  disabled={dictionary.state !== "ready" || !text.trim()}
+                >
+                  <Icon name="spin" size={18} />
+                  {castLabel}
+                </button>
+              </div>
+            </form>
+          </section>
+
+          {reading ? <Result reading={reading} /> : null}
+        </div>
+
+        <section
+          className="panel panel--narrow spell-panel"
+          aria-labelledby="spell-tiers"
+        >
+          <span className="legend">tiers.csv</span>
+          <h2 id="spell-tiers" className="field-label">
+            How strong is a spell?
+          </h2>
+          <ol className="spell-tiers">
+            {TIERS.map((tier) => (
+              <li key={tier} className="spell-tiers__row">
+                <span
+                  aria-hidden="true"
+                  className={`spell-tier spell-tier--small spell-tier--${tier.toLowerCase()}`}
+                >
+                  {tier}
+                </span>
+                <div className="stack">
+                  <span>
+                    <span className="sr-only">{`Tier ${tier}: `}</span>
+                    {RULES[tier]}
+                  </span>
                   <button
-                    type="submit"
-                    className="btn btn--primary"
-                    disabled={dictionary.state !== "ready" || !text.trim()}
+                    type="button"
+                    className="spell-tiers__try"
+                    disabled={dictionary.state !== "ready"}
+                    onClick={() => {
+                      setText(EXAMPLES[tier]);
+                      cast(EXAMPLES[tier]);
+                    }}
                   >
-                    <Icon name="spin" size={18} />
-                    {castLabel}
+                    {`try a tier ${tier} spell`}
                   </button>
                 </div>
-              </form>
-            </section>
-
-            {reading ? <Result reading={reading} /> : null}
-          </div>
-
-          <section
-            className="panel panel--narrow spell-panel"
-            aria-labelledby="spell-tiers"
-          >
-            <span className="legend">tiers.csv</span>
-            <h2 id="spell-tiers" className="field-label">
-              How strong is a spell?
-            </h2>
-            <ol className="spell-tiers">
-              {TIERS.map((tier) => (
-                <li key={tier} className="spell-tiers__row">
-                  <span
-                    aria-hidden="true"
-                    className={`spell-tier spell-tier--small spell-tier--${tier.toLowerCase()}`}
-                  >
-                    {tier}
-                  </span>
-                  <div className="stack">
-                    <span>
-                      <span className="sr-only">{`Tier ${tier}: `}</span>
-                      {RULES[tier]}
-                    </span>
-                    <button
-                      type="button"
-                      className="spell-tiers__try"
-                      disabled={dictionary.state !== "ready"}
-                      onClick={() => {
-                        setText(EXAMPLES[tier]);
-                        cast(EXAMPLES[tier]);
-                      }}
-                    >
-                      {`try a tier ${tier} spell`}
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </section>
-        </div>
-      </main>
-    </>
+              </li>
+            ))}
+          </ol>
+        </section>
+      </div>
+    </main>
   );
 };
 

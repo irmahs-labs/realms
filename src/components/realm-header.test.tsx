@@ -32,11 +32,24 @@ const hrefs = (links: NodeListOf<Element>) =>
   [...links].map((link) => link.getAttribute("href"));
 
 describe("RealmHeader", () => {
+  it("keeps the header to the realm's name and the shared pills", () => {
+    const page = drawn("book-of-shadows", "");
+
+    // Only the phone's menu, a dialog inside it, links back to every realm
+    const back = [...page.querySelectorAll("header a[href='/']")].filter(
+      (link) => !link.closest("dialog")
+    );
+
+    expect(back).toEqual([]);
+  });
+
   it("names the realm, and marks the open page among its tabs", () => {
     const page = drawn("book-of-shadows", "potion-brewing");
 
     expect(page.querySelector("h1")?.textContent).toBe("Book of Shadows");
+    // A way back to every realm first, then the realm's pages
     expect(hrefs(page.querySelectorAll(".realm-tabs a"))).toEqual([
+      "/",
       "/book-of-shadows",
       "/book-of-shadows/potion-brewing",
       "/book-of-shadows/spell-creator",

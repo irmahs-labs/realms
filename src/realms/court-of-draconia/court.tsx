@@ -1,4 +1,3 @@
-import { RealmHeader } from "../../components/realm-header";
 import { useLanguage } from "../../lib/language";
 import { Link } from "../../lib/router";
 import { DraconoidCard } from "./draconoid-card";
@@ -121,84 +120,81 @@ const Court = () => {
   const t = COPY[language];
 
   return (
-    <>
-      <RealmHeader realm="court-of-draconia" here="" />
-      <main className="page">
-        <p className="page__sub">{t.sub}</p>
+    <main className="page">
+      <p className="page__sub">{t.sub}</p>
 
-        <section className="panel court-panel" aria-labelledby="court-yours">
-          <span className="legend">your-draconoid.png</span>
-          <h2 id="court-yours" className="display court-panel__title">
-            {t.yoursTitle}
-          </h2>
-          <Yours />
-        </section>
+      <section className="panel court-panel" aria-labelledby="court-yours">
+        <span className="legend">your-draconoid.png</span>
+        <h2 id="court-yours" className="display court-panel__title">
+          {t.yoursTitle}
+        </h2>
+        <Yours />
+      </section>
 
-        <section className="panel court-panel" aria-labelledby="court-court">
-          <span className="legend">the-court.txt</span>
-          <h2 id="court-court" className="display court-panel__title">
-            {t.courtTitle}
-          </h2>
-          <p className="court-panel__lead">{t.courtLead}</p>
-          <ul className="court-members">
-            {COURT.map((member) => (
-              <li key={member.id} className="court-member">
-                <CourtSeal wields={member.wields} size={64} />
-                <div className="court-member__text">
-                  <p className="kicker">
-                    {member.title[language]}
-                    {member.season ? ` · ${member.season[language]}` : null}
-                  </p>
-                  <h3 className="display court-member__name">{member.name}</h3>
-                  <p className="court-member__what">
-                    {member.species[language]} · {member.creature[language]} ·{" "}
-                    {member.origin[language]}
-                  </p>
+      <section className="panel court-panel" aria-labelledby="court-court">
+        <span className="legend">the-court.txt</span>
+        <h2 id="court-court" className="display court-panel__title">
+          {t.courtTitle}
+        </h2>
+        <p className="court-panel__lead">{t.courtLead}</p>
+        <ul className="court-members">
+          {COURT.map((member) => (
+            <li key={member.id} className="court-member">
+              <CourtSeal wields={member.wields} size={64} />
+              <div className="court-member__text">
+                <p className="kicker">
+                  {member.title[language]}
+                  {member.season ? ` · ${member.season[language]}` : null}
+                </p>
+                <h3 className="display court-member__name">{member.name}</h3>
+                <p className="court-member__what">
+                  {member.species[language]} · {member.creature[language]} ·{" "}
+                  {member.origin[language]}
+                </p>
+                <p className="court-member__meaning">
+                  {member.nameMeaning[language]}
+                </p>
+                {member.titleMeaning ? (
                   <p className="court-member__meaning">
-                    {member.nameMeaning[language]}
+                    <span className="sr-only">{t.title}: </span>
+                    {member.title[language]}: {member.titleMeaning[language]}
                   </p>
-                  {member.titleMeaning ? (
-                    <p className="court-member__meaning">
-                      <span className="sr-only">{t.title}: </span>
-                      {member.title[language]}: {member.titleMeaning[language]}
-                    </p>
-                  ) : null}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="panel court-panel" aria-labelledby="court-magic">
-          <span className="legend">magic.md</span>
-          <h2 id="court-magic" className="display court-panel__title">
-            {t.magicTitle}
-          </h2>
-          <dl className="court-layers">
-            {t.layers.map(([term, what]) => (
-              <div key={term}>
-                <dt>{term}</dt>
-                <dd>{what}</dd>
+                ) : null}
               </div>
-            ))}
-          </dl>
-          <h3 className="display court-panel__subtitle">{t.seasons}</h3>
-          <p className="court-seasons">
-            {SEASON_ORDER.map((element) => (
-              <span key={element} className="court-season">
-                <span
-                  className="court-season__dot"
-                  style={{ background: ELEMENT_INFO[element].colour }}
-                  aria-hidden="true"
-                />
-                {ELEMENT_INFO[element].season[language]}:{" "}
-                {ELEMENT_INFO[element].name[language]}
-              </span>
-            ))}
-          </p>
-        </section>
-      </main>
-    </>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="panel court-panel" aria-labelledby="court-magic">
+        <span className="legend">magic.md</span>
+        <h2 id="court-magic" className="display court-panel__title">
+          {t.magicTitle}
+        </h2>
+        <dl className="court-layers">
+          {t.layers.map(([term, what]) => (
+            <div key={term}>
+              <dt>{term}</dt>
+              <dd>{what}</dd>
+            </div>
+          ))}
+        </dl>
+        <h3 className="display court-panel__subtitle">{t.seasons}</h3>
+        <p className="court-seasons">
+          {SEASON_ORDER.map((element) => (
+            <span key={element} className="court-season">
+              <span
+                className="court-season__dot"
+                style={{ background: ELEMENT_INFO[element].colour }}
+                aria-hidden="true"
+              />
+              {ELEMENT_INFO[element].season[language]}:{" "}
+              {ELEMENT_INFO[element].name[language]}
+            </span>
+          ))}
+        </p>
+      </section>
+    </main>
   );
 };
 

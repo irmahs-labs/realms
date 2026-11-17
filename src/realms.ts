@@ -1,5 +1,5 @@
-import { lazy } from "react";
-import type { ComponentType, LazyExoticComponent } from "react";
+import { createElement, lazy } from "react";
+import type { ComponentType } from "react";
 
 import {
   BookOfShadowsIcon,
@@ -19,26 +19,48 @@ export interface RealmPage {
   slug: string;
   name: Record<Language, string>;
   Icon: ComponentType;
-  Screen: LazyExoticComponent<ComponentType<PageProps>>;
+  /** The page itself: drawn at once when its code is in, loaded on demand when not. */
+  Screen: ComponentType<PageProps>;
   /** Loads the screen's code ahead of time, so opening it later is instant. */
   preload: () => Promise<void>;
 }
 
-/** A page entry: its slug, its name in each language, its icon, and its screen, loaded when opened. */
+/**
+ * A page entry: its slug, its name in each language, its icon, and its
+ * screen. The screen's code loads when the page is first opened, or ahead
+ * (preload); once it's in, the page is drawn at once, without the moment
+ * of waiting a lazy component always takes, even for code already loaded.
+ */
 const pageEntry = (
   slug: string,
   name: Record<Language, string>,
   Icon: ComponentType,
   load: () => Promise<{ default: ComponentType<PageProps> }>
-): RealmPage => ({
-  Icon,
-  Screen: lazy(load),
-  name,
-  preload: async () => {
-    await load();
-  },
-  slug,
-});
+): RealmPage => {
+  let ready: ComponentType<PageProps> | null = null;
+
+  const loadAndKeep = async () => {
+    const loaded = await load();
+
+    ready = loaded.default;
+
+    return loaded;
+  };
+
+  const Lazy = lazy(loadAndKeep);
+
+  const Screen = (props: PageProps) => createElement(ready ?? Lazy, props);
+
+  return {
+    Icon,
+    Screen,
+    name,
+    preload: async () => {
+      await loadAndKeep();
+    },
+    slug,
+  };
+};
 
 /**
  * A realm: a world of its own, with its pages. Adding one is an entry here

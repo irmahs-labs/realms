@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import { RealmHeader } from "../../components/realm-header";
 import { useLanguage } from "../../lib/language";
 import { ELEMENT_INFO, ULTIMATES, bentElement } from "./magic";
 import { ELEMENTS } from "./rules";
@@ -62,110 +61,107 @@ const Ultimates = () => {
       : cell.dark === mine.element);
 
   return (
-    <>
-      <RealmHeader realm="court-of-draconia" here="ultimates" />
-      <main className="page">
-        <p className="page__sub">{t.sub}</p>
-        {mine ? (
-          <p className="hint">
-            {t.yours(
-              bentElement(mine.element, mine.affinity, language),
-              mine.affinity === "light" ? t.yoursRow : t.yoursColumn
-            )}
+    <main className="page">
+      <p className="page__sub">{t.sub}</p>
+      {mine ? (
+        <p className="hint">
+          {t.yours(
+            bentElement(mine.element, mine.affinity, language),
+            mine.affinity === "light" ? t.yoursRow : t.yoursColumn
+          )}
+        </p>
+      ) : null}
+
+      <div className="layout">
+        <section className="panel panel--wide ultimates-panel">
+          <span className="legend">ultimates.csv</span>
+          <p className="ultimates__caption" aria-hidden="true">
+            {t.caption}
           </p>
-        ) : null}
-
-        <div className="layout">
-          <section className="panel panel--wide ultimates-panel">
-            <span className="legend">ultimates.csv</span>
-            <p className="ultimates__caption" aria-hidden="true">
-              {t.caption}
-            </p>
-            <div className="ultimates-scroll">
-              <table className="ultimates">
-                <caption className="sr-only">{t.caption}</caption>
-                <thead>
-                  <tr>
-                    <th scope="col" className="ultimates__corner">
-                      {t.corner}
+          <div className="ultimates-scroll">
+            <table className="ultimates">
+              <caption className="sr-only">{t.caption}</caption>
+              <thead>
+                <tr>
+                  <th scope="col" className="ultimates__corner">
+                    {t.corner}
+                  </th>
+                  {ELEMENTS.map((dark) => (
+                    <th key={dark} scope="col">
+                      <span
+                        className="ultimates__bar"
+                        style={{ background: ELEMENT_INFO[dark].colour }}
+                        aria-hidden="true"
+                      />
+                      {bentElement(dark, "dark", language)}
                     </th>
-                    {ELEMENTS.map((dark) => (
-                      <th key={dark} scope="col">
-                        <span
-                          className="ultimates__bar"
-                          style={{ background: ELEMENT_INFO[dark].colour }}
-                          aria-hidden="true"
-                        />
-                        {bentElement(dark, "dark", language)}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {ELEMENTS.map((light) => (
-                    <tr key={light}>
-                      <th scope="row">
-                        <span
-                          className="ultimates__bar ultimates__bar--side"
-                          style={{ background: ELEMENT_INFO[light].colour }}
-                          aria-hidden="true"
-                        />
-                        {bentElement(light, "light", language)}
-                      </th>
-                      {ELEMENTS.map((dark) => {
-                        const cell = { dark, light };
-
-                        const classes = [
-                          "ultimates__cell",
-                          light === dark ? "ultimates__cell--same" : "",
-                          isMine(cell) ? "ultimates__cell--mine" : "",
-                        ]
-                          .filter(Boolean)
-                          .join(" ");
-
-                        return (
-                          <td key={dark} className={classes}>
-                            <button
-                              type="button"
-                              className="ultimates__pick"
-                              aria-pressed={
-                                picked.light === light && picked.dark === dark
-                              }
-                              onClick={() => setChosen(cell)}
-                            >
-                              {ULTIMATES[light][dark].name[language]}
-                              {light === dark ? (
-                                <span className="sr-only"> ({t.same})</span>
-                              ) : null}
-                            </button>
-                          </td>
-                        );
-                      })}
-                    </tr>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
+                </tr>
+              </thead>
+              <tbody>
+                {ELEMENTS.map((light) => (
+                  <tr key={light}>
+                    <th scope="row">
+                      <span
+                        className="ultimates__bar ultimates__bar--side"
+                        style={{ background: ELEMENT_INFO[light].colour }}
+                        aria-hidden="true"
+                      />
+                      {bentElement(light, "light", language)}
+                    </th>
+                    {ELEMENTS.map((dark) => {
+                      const cell = { dark, light };
 
-          <section
-            className="panel panel--narrow ultimates-picked"
-            aria-live="polite"
-            aria-labelledby="ultimate-name"
-          >
-            <span className="legend">ultimate.exe</span>
-            <p className="kicker">
-              {bentElement(picked.light, "light", language)} +{" "}
-              {bentElement(picked.dark, "dark", language).toLowerCase()}
-            </p>
-            <h2 id="ultimate-name" className="display ultimates-picked__name">
-              {ultimate.name[language]}
-            </h2>
-            <p>{ultimate.effect[language]}</p>
-          </section>
-        </div>
-      </main>
-    </>
+                      const classes = [
+                        "ultimates__cell",
+                        light === dark ? "ultimates__cell--same" : "",
+                        isMine(cell) ? "ultimates__cell--mine" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ");
+
+                      return (
+                        <td key={dark} className={classes}>
+                          <button
+                            type="button"
+                            className="ultimates__pick"
+                            aria-pressed={
+                              picked.light === light && picked.dark === dark
+                            }
+                            onClick={() => setChosen(cell)}
+                          >
+                            {ULTIMATES[light][dark].name[language]}
+                            {light === dark ? (
+                              <span className="sr-only"> ({t.same})</span>
+                            ) : null}
+                          </button>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section
+          className="panel panel--narrow ultimates-picked"
+          aria-live="polite"
+          aria-labelledby="ultimate-name"
+        >
+          <span className="legend">ultimate.exe</span>
+          <p className="kicker">
+            {bentElement(picked.light, "light", language)} +{" "}
+            {bentElement(picked.dark, "dark", language).toLowerCase()}
+          </p>
+          <h2 id="ultimate-name" className="display ultimates-picked__name">
+            {ultimate.name[language]}
+          </h2>
+          <p>{ultimate.effect[language]}</p>
+        </section>
+      </div>
+    </main>
   );
 };
 

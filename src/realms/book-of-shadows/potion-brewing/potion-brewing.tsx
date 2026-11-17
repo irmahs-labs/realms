@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import * as z from "zod/mini";
 
-import { RealmHeader } from "../../../components/realm-header";
 import { currentAccount, signInUrl } from "../../../lib/account";
 import type { Account } from "../../../lib/account";
 import { useCopy, useLanguage } from "../../../lib/language";
@@ -811,136 +810,126 @@ const PotionBrewing = () => {
   const chosen = selection.map((part) => part.name);
 
   return (
-    <>
-      <RealmHeader realm="book-of-shadows" here="potion-brewing" />
-      <main className="page">
-        <p className="page__sub">{t.sub}</p>
+    <main className="page">
+      <p className="page__sub">{t.sub}</p>
 
-        <nav aria-label={t.whichGrimoire} className="picker">
-          {modeSchema.options.map((option) => (
-            <button
-              key={option}
-              type="button"
-              className="picker__option"
-              aria-pressed={option === mode}
-              onClick={() => {
-                setMode(option);
-                setTrouble(null);
-              }}
-            >
-              {t.modes[option]}
-            </button>
-          ))}
-        </nav>
-
-        <div className="layout">
-          <section aria-label={t.ingredients} className="panel panel--pantry">
-            <span className="legend">pantry.csv</span>
-
-            <div className="stack">
-              <h2 className="display turn">{t.bases}</h2>
-              <p className="hint">{t.basesHint}</p>
-            </div>
-            {BASE_KINDS.map((kind) => (
-              <Shelf
-                key={kind}
-                kind={kind}
-                chosen={chosen}
-                onChoose={(next) => setSelection(choose(selection, next))}
-              />
-            ))}
-
-            <div className="stack">
-              <h2 className="display turn">{t.toppings}</h2>
-              <p className="hint">{t.toppingsHint}</p>
-            </div>
-            {TOPPING_KINDS.map((kind) => (
-              <Shelf
-                key={kind}
-                kind={kind}
-                chosen={chosen}
-                onChoose={(next) => setSelection(choose(selection, next))}
-              />
-            ))}
-          </section>
-
-          <section
-            aria-labelledby="cauldron-title"
-            className="panel panel--log"
+      <nav aria-label={t.whichGrimoire} className="picker">
+        {modeSchema.options.map((option) => (
+          <button
+            key={option}
+            type="button"
+            className="picker__option"
+            aria-pressed={option === mode}
+            onClick={() => {
+              setMode(option);
+              setTrouble(null);
+            }}
           >
-            <span className="legend">cauldron.bat</span>
+            {t.modes[option]}
+          </button>
+        ))}
+      </nav>
 
-            <div className="stack">
-              <p className="kicker">{t.inCauldron}</p>
-              <h2 id="cauldron-title" className="display turn">
-                {ready ? t.ready : t.pick}
-              </h2>
-            </div>
-            <Cauldron
-              selection={selection}
-              onForm={(ingredient, form) =>
-                setSelection(setForm(selection, ingredient, form))
-              }
+      <div className="layout">
+        <section aria-label={t.ingredients} className="panel panel--pantry">
+          <span className="legend">pantry.csv</span>
+
+          <div className="stack">
+            <h2 className="display turn">{t.bases}</h2>
+            <p className="hint">{t.basesHint}</p>
+          </div>
+          {BASE_KINDS.map((kind) => (
+            <Shelf
+              key={kind}
+              kind={kind}
+              chosen={chosen}
+              onChoose={(next) => setSelection(choose(selection, next))}
             />
-            <p className="turn__note" aria-live="polite">
-              {status()}
-            </p>
+          ))}
 
-            <div className="result__actions">
-              {account === null ? (
-                <a href={signInUrl()} className="btn btn--primary btn--spin">
-                  {t.signInBrew}
-                </a>
-              ) : (
-                <button
-                  type="button"
-                  className="btn btn--primary btn--spin"
-                  disabled={!ready || brewing || account === undefined}
-                  onClick={brewIt}
-                >
-                  {brewing ? t.brewing : t.brew}
-                </button>
-              )}
+          <div className="stack">
+            <h2 className="display turn">{t.toppings}</h2>
+            <p className="hint">{t.toppingsHint}</p>
+          </div>
+          {TOPPING_KINDS.map((kind) => (
+            <Shelf
+              key={kind}
+              kind={kind}
+              chosen={chosen}
+              onChoose={(next) => setSelection(choose(selection, next))}
+            />
+          ))}
+        </section>
+
+        <section aria-labelledby="cauldron-title" className="panel panel--log">
+          <span className="legend">cauldron.bat</span>
+
+          <div className="stack">
+            <p className="kicker">{t.inCauldron}</p>
+            <h2 id="cauldron-title" className="display turn">
+              {ready ? t.ready : t.pick}
+            </h2>
+          </div>
+          <Cauldron
+            selection={selection}
+            onForm={(ingredient, form) =>
+              setSelection(setForm(selection, ingredient, form))
+            }
+          />
+          <p className="turn__note" aria-live="polite">
+            {status()}
+          </p>
+
+          <div className="result__actions">
+            {account === null ? (
+              <a href={signInUrl()} className="btn btn--primary btn--spin">
+                {t.signInBrew}
+              </a>
+            ) : (
               <button
                 type="button"
-                className="btn btn--quiet"
-                disabled={selection.length === 0}
-                onClick={() => setSelection(EMPTY)}
+                className="btn btn--primary btn--spin"
+                disabled={!ready || brewing || account === undefined}
+                onClick={brewIt}
               >
-                {t.empty}
+                {brewing ? t.brewing : t.brew}
               </button>
-            </div>
-            <p className="hint" aria-live="polite">
-              {notice()}
-            </p>
+            )}
+            <button
+              type="button"
+              className="btn btn--quiet"
+              disabled={selection.length === 0}
+              onClick={() => setSelection(EMPTY)}
+            >
+              {t.empty}
+            </button>
+          </div>
+          <p className="hint" aria-live="polite">
+            {notice()}
+          </p>
 
-            <div className="stack">
-              <h3 className="field-label">{t.how}</h3>
-              <ol className="how-to">
-                {t.howTo.map((step) => (
-                  <li key={step}>{step}</li>
-                ))}
-                <li>
-                  {t.howToLast[mode]} {t.mysteryElse}
-                </li>
-              </ol>
-            </div>
-          </section>
-        </div>
+          <div className="stack">
+            <h3 className="field-label">{t.how}</h3>
+            <ol className="how-to">
+              {t.howTo.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+              <li>
+                {t.howToLast[mode]} {t.mysteryElse}
+              </li>
+            </ol>
+          </div>
+        </section>
+      </div>
 
-        {mode === "solo" ? (
-          <SoloBook
-            account={account}
-            pages={soloPages}
-            onStartOver={startOver}
-          />
-        ) : (
-          <SharedBook account={account} book={book} now={now} />
-        )}
+      {mode === "solo" ? (
+        <SoloBook account={account} pages={soloPages} onStartOver={startOver} />
+      ) : (
+        <SharedBook account={account} book={book} now={now} />
+      )}
 
-        <BrewDialog view={view} onClose={() => setView(null)} />
-      </main>
-    </>
+      <BrewDialog view={view} onClose={() => setView(null)} />
+    </main>
   );
 };
 

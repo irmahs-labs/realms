@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import { RealmHeader } from "../../components/realm-header";
 import { signInUrl } from "../../lib/account";
 import { useLanguage } from "../../lib/language";
 import { Link } from "../../lib/router";
@@ -236,66 +235,63 @@ const Hall = () => {
   };
 
   return (
-    <>
-      <RealmHeader realm="court-of-draconia" here="hall" />
-      <main className="page">
-        <p className="page__sub">{t.sub}</p>
-        {invite()}
+    <main className="page">
+      <p className="page__sub">{t.sub}</p>
+      {invite()}
 
-        {mine && partner ? <DuoResult mine={mine} theirs={partner} /> : null}
+      {mine && partner ? <DuoResult mine={mine} theirs={partner} /> : null}
 
-        <section className="panel hall-panel" aria-labelledby="hall-count">
-          <span className="legend">hall.csv</span>
-          <h2 id="hall-count" className="display court-panel__title">
-            {t.count(shown.length)}
-          </h2>
-          <div className="hall-filters">
-            <fieldset className="draco-form__set">
-              <legend className="sr-only">{t.elementFilter}</legend>
-              <div className="picker">
-                {(["all", ...ELEMENTS] as const).map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    className="picker__option"
-                    aria-pressed={element === option}
-                    onClick={() => setElement(option)}
-                  >
-                    {option === "all"
-                      ? t.all
-                      : ELEMENT_INFO[option].name[language]}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-            <fieldset className="draco-form__set">
-              <legend className="sr-only">{t.affinityFilter}</legend>
-              <div className="picker">
-                {(["all", ...AFFINITIES] as const).map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    className="picker__option"
-                    aria-pressed={affinity === option}
-                    onClick={() => setAffinity(option)}
-                  >
-                    {option === "all"
-                      ? t.all
-                      : AFFINITY_INFO[option].name[language]}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-          </div>
-          {message ? (
-            <p className="hint" aria-live="polite">
-              {message}
-            </p>
-          ) : null}
-          {body()}
-        </section>
-      </main>
-    </>
+      <section className="panel hall-panel" aria-labelledby="hall-count">
+        <span className="legend">hall.csv</span>
+        <h2 id="hall-count" className="display court-panel__title">
+          {t.count(shown.length)}
+        </h2>
+        <div className="hall-filters">
+          <fieldset className="draco-form__set">
+            <legend className="sr-only">{t.elementFilter}</legend>
+            <div className="picker">
+              {(["all", ...ELEMENTS] as const).map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  className="picker__option"
+                  aria-pressed={element === option}
+                  onClick={() => setElement(option)}
+                >
+                  {option === "all"
+                    ? t.all
+                    : ELEMENT_INFO[option].name[language]}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset className="draco-form__set">
+            <legend className="sr-only">{t.affinityFilter}</legend>
+            <div className="picker">
+              {(["all", ...AFFINITIES] as const).map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  className="picker__option"
+                  aria-pressed={affinity === option}
+                  onClick={() => setAffinity(option)}
+                >
+                  {option === "all"
+                    ? t.all
+                    : AFFINITY_INFO[option].name[language]}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        </div>
+        {message ? (
+          <p className="hint" aria-live="polite">
+            {message}
+          </p>
+        ) : null}
+        {body()}
+      </section>
+    </main>
   );
 };
 
