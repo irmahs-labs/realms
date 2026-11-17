@@ -29,9 +29,7 @@ type MatchKind = keyof typeof MATCHES;
 const MATCH_KINDS: readonly MatchKind[] = ["chart", "numbers", "lunar-zodiac"];
 
 const scrollTo = (kind: MatchKind) => () =>
-  document
-    .querySelector(`#match-${kind}`)
-    ?.scrollIntoView({ block: "start" });
+  document.querySelector(`#match-${kind}`)?.scrollIntoView({ block: "start" });
 
 /**
  * The compatibility calculator: someone else's birth details, and how the
