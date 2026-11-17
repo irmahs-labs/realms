@@ -115,7 +115,7 @@ export const SpellCreatorIcon = () => (
   </svg>
 );
 
-/** A cream crown, its middle point a dragon's horn, a green gem at its heart, over a scaled band. */
+/** A cream crown, its middle point a dragon's horn, a green jewel at its heart. */
 export const CourtOfDraconiaIcon = () => (
   <svg aria-hidden="true" width="40" height="40" viewBox="0 0 40 40">
     <rect
@@ -129,26 +129,19 @@ export const CourtOfDraconiaIcon = () => (
       strokeWidth="1.5"
     />
     <path
-      d="M9 27V15l6 5 5-11 5 11 6-5v12z"
+      d="M8 29.5V16l6.5 5.5L20 9l5.5 12.5L32 16v13.5z"
       fill="#fff3cf"
       stroke="#2f3b34"
       strokeWidth="1.5"
       strokeLinejoin="round"
     />
-    <rect x="9" y="27" width="22" height="5" rx="1" fill="#2f3b34" />
-    <path
-      d="M12 29.5a2 2 0 0 1 4 0M18 29.5a2 2 0 0 1 4 0M24 29.5a2 2 0 0 1 4 0"
-      fill="none"
-      stroke="#afc584"
-      strokeWidth="1.2"
-    />
     <circle
       cx="20"
-      cy="21"
-      r="2.2"
+      cy="23.5"
+      r="2.8"
       fill="#afc584"
       stroke="#2f3b34"
-      strokeWidth="1"
+      strokeWidth="1.2"
     />
   </svg>
 );
