@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import * as z from "zod/mini";
 
-import { PotionBrewingIcon } from "../../../components/app-icons";
-import { Header } from "../../../components/header";
-import { RealmNav } from "../../../components/realm-nav";
+import { RealmHeader } from "../../../components/realm-header";
 import { currentAccount, signInUrl } from "../../../lib/account";
 import type { Account } from "../../../lib/account";
 import { useCopy, useLanguage } from "../../../lib/language";
@@ -11,7 +9,6 @@ import type { Language } from "../../../lib/language";
 import { serverWords } from "../../../lib/server-words";
 import { readStored, writeStored } from "../../../lib/storage";
 import { useConfirm } from "../../../lib/use-confirm";
-import type { PageProps } from "../../../realms";
 import type { Book, Brewer, LatestBrew, Page, SoloPage } from "./api";
 import {
   fetchBook,
@@ -654,7 +651,7 @@ const SharedBook = ({
   );
 };
 
-const PotionBrewing = ({ name }: PageProps) => {
+const PotionBrewing = () => {
   const language = useLanguage();
   const t = COPY[language];
   const [selection, setSelection] = useState<Selection>(EMPTY);
@@ -815,13 +812,7 @@ const PotionBrewing = ({ name }: PageProps) => {
 
   return (
     <>
-      <Header
-        icon={<PotionBrewingIcon />}
-        name={name}
-        href="/book-of-shadows/potion-brewing"
-      >
-        <RealmNav realm="book-of-shadows" here="potion-brewing" />
-      </Header>
+      <RealmHeader realm="book-of-shadows" here="potion-brewing" />
       <main className="page">
         <p className="page__sub">{t.sub}</p>
 

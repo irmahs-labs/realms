@@ -1,14 +1,11 @@
 import { useState } from "react";
 
-import { CourtOfDraconiaIcon } from "../../components/app-icons";
-import { Header } from "../../components/header";
-import { RealmNav } from "../../components/realm-nav";
+import { RealmHeader } from "../../components/realm-header";
 import { signInUrl } from "../../lib/account";
 import { useLanguage } from "../../lib/language";
 import { Link } from "../../lib/router";
 import { serverWords } from "../../lib/server-words";
 import { useConfirm } from "../../lib/use-confirm";
-import type { PageProps } from "../../realms";
 import type { HallEntry } from "./api";
 import { DraconoidCard } from "./draconoid-card";
 import { takeDown } from "./hall-api";
@@ -111,7 +108,7 @@ const DuoResult = ({
 };
 
 /** Everyone's draconoids, and what yours unleashes with each. */
-const Hall = ({ name }: PageProps) => {
+const Hall = () => {
   const language = useLanguage();
   const t = COPY[language];
   const { account, hall, reload } = useHall();
@@ -240,13 +237,7 @@ const Hall = ({ name }: PageProps) => {
 
   return (
     <>
-      <Header
-        icon={<CourtOfDraconiaIcon />}
-        name={name}
-        href="/court-of-draconia/hall"
-      >
-        <RealmNav realm="court-of-draconia" here="hall" />
-      </Header>
+      <RealmHeader realm="court-of-draconia" here="hall" />
       <main className="page">
         <p className="page__sub">{t.sub}</p>
         {invite()}

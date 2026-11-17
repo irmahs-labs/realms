@@ -1,11 +1,8 @@
 import { useEffect, useId, useState } from "react";
 
-import { SpellCreatorIcon } from "../../../components/app-icons";
-import { Header } from "../../../components/header";
-import { RealmNav } from "../../../components/realm-nav";
+import { RealmHeader } from "../../../components/realm-header";
 import { Icon } from "../../../lib/icon";
 import { useCopy } from "../../../lib/language";
-import type { PageProps } from "../../../realms";
 import { loadPronunciations } from "./dictionary";
 import { EXAMPLES } from "./examples";
 import type { Pronounce } from "./pronunciations";
@@ -276,7 +273,7 @@ const useDictionary = () => {
 const MAX_SPELL = 600;
 
 /** Spell Creator: write a rhyming spell and cast it; the better it rhymes, the stronger it is. */
-const SpellCreator = ({ name }: PageProps) => {
+const SpellCreator = () => {
   const t = useCopy(COPY);
   const dictionary = useDictionary();
   const [text, setText] = useState("");
@@ -299,13 +296,7 @@ const SpellCreator = ({ name }: PageProps) => {
 
   return (
     <>
-      <Header
-        icon={<SpellCreatorIcon />}
-        name={name}
-        href="/book-of-shadows/spell-creator"
-      >
-        <RealmNav realm="book-of-shadows" here="spell-creator" />
-      </Header>
+      <RealmHeader realm="book-of-shadows" here="spell-creator" />
       <main className="page">
         <p className="page__sub" lang="en">
           write two rhyming lines: the better the rhyme, the stronger the spell
