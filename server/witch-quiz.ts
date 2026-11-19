@@ -1,3 +1,4 @@
+import { fetchParsed } from "../src/lib/fetch-parsed";
 import { witchQuizAnswer } from "../src/realms/book-of-shadows/witch-quiz-api";
 import type { WitchQuizAnswer } from "../src/realms/book-of-shadows/witch-quiz-api";
 
@@ -23,23 +24,12 @@ export const askWitchQuiz =
       return null;
     }
 
-    try {
-      const response = await fetch(
-        `${minigamesUrl}/api/quizzes/what-type-of-witch/result`,
-        {
-          headers: cookie ? { cookie } : {},
-          signal: AbortSignal.timeout(TIMEOUT_MS),
-        }
-      );
-
-      if (!response.ok) {
-        return null;
+    return await fetchParsed(
+      `${minigamesUrl}/api/quizzes/what-type-of-witch/result`,
+      witchQuizAnswer,
+      {
+        headers: cookie ? { cookie } : {},
+        signal: AbortSignal.timeout(TIMEOUT_MS),
       }
-
-      const parsed = witchQuizAnswer.safeParse(await response.json());
-
-      return parsed.success ? parsed.data : null;
-    } catch {
-      return null;
-    }
+    );
   };

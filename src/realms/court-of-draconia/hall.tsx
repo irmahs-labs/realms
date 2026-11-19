@@ -60,6 +60,40 @@ const COPY = {
 
 type Filter<T> = T | "all";
 
+/** One filter of the hall: "all", then each of its options. */
+const FilterPicker = <T extends string>({
+  label,
+  all,
+  options,
+  value,
+  nameOf,
+  onPick,
+}: {
+  label: string;
+  all: string;
+  options: readonly T[];
+  value: Filter<T>;
+  nameOf: (option: T) => string;
+  onPick: (option: Filter<T>) => void;
+}) => (
+  <fieldset className="draco-form__set">
+    <legend className="sr-only">{label}</legend>
+    <div className="picker">
+      {(["all", ...options] as const).map((option) => (
+        <button
+          key={option}
+          type="button"
+          className="picker__option"
+          aria-pressed={value === option}
+          onClick={() => onPick(option)}
+        >
+          {option === "all" ? all : nameOf(option)}
+        </button>
+      ))}
+    </div>
+  </fieldset>
+);
+
 /** The ultimate your draconoid and another unleash, once one is picked. */
 const DuoResult = ({
   mine,
@@ -247,42 +281,22 @@ const Hall = () => {
           {t.count(shown.length)}
         </h2>
         <div className="hall-filters">
-          <fieldset className="draco-form__set">
-            <legend className="sr-only">{t.elementFilter}</legend>
-            <div className="picker">
-              {(["all", ...ELEMENTS] as const).map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  className="picker__option"
-                  aria-pressed={element === option}
-                  onClick={() => setElement(option)}
-                >
-                  {option === "all"
-                    ? t.all
-                    : ELEMENT_INFO[option].name[language]}
-                </button>
-              ))}
-            </div>
-          </fieldset>
-          <fieldset className="draco-form__set">
-            <legend className="sr-only">{t.affinityFilter}</legend>
-            <div className="picker">
-              {(["all", ...AFFINITIES] as const).map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  className="picker__option"
-                  aria-pressed={affinity === option}
-                  onClick={() => setAffinity(option)}
-                >
-                  {option === "all"
-                    ? t.all
-                    : AFFINITY_INFO[option].name[language]}
-                </button>
-              ))}
-            </div>
-          </fieldset>
+          <FilterPicker
+            label={t.elementFilter}
+            all={t.all}
+            options={ELEMENTS}
+            value={element}
+            nameOf={(option) => ELEMENT_INFO[option].name[language]}
+            onPick={setElement}
+          />
+          <FilterPicker
+            label={t.affinityFilter}
+            all={t.all}
+            options={AFFINITIES}
+            value={affinity}
+            nameOf={(option) => AFFINITY_INFO[option].name[language]}
+            onPick={setAffinity}
+          />
         </div>
         {message ? (
           <p className="hint" aria-live="polite">

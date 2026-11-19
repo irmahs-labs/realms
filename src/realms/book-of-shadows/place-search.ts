@@ -1,5 +1,6 @@
 import * as z from "zod/mini";
 
+import { fetchParsed } from "../../lib/fetch-parsed";
 import type { Place } from "./places";
 import { isTimeZone } from "./time";
 
@@ -64,17 +65,7 @@ export const searchPlaces = async (
 ): Promise<Place[] | null> => {
   const url = `${ENDPOINT}?name=${encodeURIComponent(query.trim())}&count=8&language=en&format=json`;
 
-  try {
-    const response = await fetch(url, { signal });
+  const answer = await fetchParsed(url, answerSchema, { signal });
 
-    if (!response.ok) {
-      return null;
-    }
-
-    const parsed = answerSchema.safeParse(await response.json());
-
-    return parsed.success ? placesIn(parsed.data) : null;
-  } catch {
-    return null;
-  }
+  return answer ? placesIn(answer) : null;
 };

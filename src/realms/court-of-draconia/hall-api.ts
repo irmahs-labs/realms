@@ -1,3 +1,4 @@
+import { fetchParsed } from "../../lib/fetch-parsed";
 import { hall, hallEntry } from "./api";
 import type { DraconoidRequest, Hall, HallEntry } from "./api";
 
@@ -9,21 +10,7 @@ const HALL = "/api/court-of-draconia/hall";
 const MINE = "/api/court-of-draconia/me";
 
 /** The hall, or null when the server can't be reached. */
-export const fetchHall = async (): Promise<Hall | null> => {
-  try {
-    const response = await fetch(HALL);
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const parsed = hall.safeParse(await response.json());
-
-    return parsed.success ? parsed.data : null;
-  } catch {
-    return null;
-  }
-};
+export const fetchHall = (): Promise<Hall | null> => fetchParsed(HALL, hall);
 
 export type Done<T> = { ok: true; value: T } | { ok: false; message: string };
 

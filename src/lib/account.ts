@@ -1,5 +1,7 @@
 import * as z from "zod/mini";
 
+import { fetchParsed } from "./fetch-parsed";
+
 /**
  * Signing in happens at the IrmaHS Labs account service, shared by every
  * irmahs.dev app: the site sends people there and they come back signed in.
@@ -19,19 +21,9 @@ export type Account = NonNullable<z.infer<typeof meAnswer>["account"]>;
  * server cannot be reached (online play is then unavailable).
  */
 export const currentAccount = async (): Promise<Account | null | undefined> => {
-  try {
-    const response = await fetch("/api/me");
+  const answer = await fetchParsed("/api/me", meAnswer);
 
-    if (!response.ok) {
-      return undefined;
-    }
-
-    const parsed = meAnswer.safeParse(await response.json());
-
-    return parsed.success ? parsed.data.account : undefined;
-  } catch {
-    return undefined;
-  }
+  return answer?.account;
 };
 
 /** The sign-in page, set to bring the visitor back to this page. */
