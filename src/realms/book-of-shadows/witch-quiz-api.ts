@@ -1,5 +1,7 @@
 import * as z from "zod/mini";
 
+import { fetchParsed } from "../../lib/fetch-parsed";
+
 /**
  * The witch quiz lives on Mini Games (minigames.irmahs.dev/quizzes), which
  * keeps a signed-in visitor's last result on their account. This server
@@ -37,18 +39,5 @@ export const witchQuizAnswer = z.object({
 export type WitchQuizAnswer = z.infer<typeof witchQuizAnswer>;
 
 /** The visitor's witch quiz result, or null when it can't be reached. */
-export const fetchWitchQuiz = async (): Promise<WitchQuizAnswer | null> => {
-  try {
-    const response = await fetch("/api/book-of-shadows/witch-quiz");
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const parsed = witchQuizAnswer.safeParse(await response.json());
-
-    return parsed.success ? parsed.data : null;
-  } catch {
-    return null;
-  }
-};
+export const fetchWitchQuiz = (): Promise<WitchQuizAnswer | null> =>
+  fetchParsed("/api/book-of-shadows/witch-quiz", witchQuizAnswer);

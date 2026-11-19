@@ -1,25 +1,13 @@
 import type { ZodMiniType } from "zod/mini";
 
+import { fetchParsed } from "../../../lib/fetch-parsed";
 import { book, brewAnswer, brewers, soloBook, soloBrewAnswer } from "./api";
 import type { Book, Brewer, SoloPage } from "./api";
 import type { Selection } from "./rules";
 
 /** The shared recipe book, or null when the server cannot be reached. */
-export const fetchBook = async (): Promise<Book | null> => {
-  try {
-    const response = await fetch("/api/potions");
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const parsed = book.safeParse(await response.json());
-
-    return parsed.success ? parsed.data : null;
-  } catch {
-    return null;
-  }
-};
+export const fetchBook = (): Promise<Book | null> =>
+  fetchParsed("/api/potions", book);
 
 export type Sent<T> = { ok: true; answer: T } | { ok: false; message: string };
 
@@ -63,19 +51,9 @@ export const postSoloBrew = (selection: Selection) =>
 
 /** The player's own book, or null when it cannot be had. */
 export const fetchSoloBook = async (): Promise<SoloPage[] | null> => {
-  try {
-    const response = await fetch("/api/potions/solo");
+  const answer = await fetchParsed("/api/potions/solo", soloBook);
 
-    if (!response.ok) {
-      return null;
-    }
-
-    const parsed = soloBook.safeParse(await response.json());
-
-    return parsed.success ? parsed.data.pages : null;
-  } catch {
-    return null;
-  }
+  return answer?.pages ?? null;
 };
 
 /** Empties the player's own book; false when it did not happen. */
@@ -93,18 +71,8 @@ export const resetSoloBook = async (): Promise<boolean> => {
 export const fetchBrewers = async (
   potion: string
 ): Promise<Brewer[] | null> => {
-  try {
-    const query = new URLSearchParams({ potion });
-    const response = await fetch(`/api/potions/brewers?${query}`);
+  const query = new URLSearchParams({ potion });
+  const answer = await fetchParsed(`/api/potions/brewers?${query}`, brewers);
 
-    if (!response.ok) {
-      return null;
-    }
-
-    const parsed = brewers.safeParse(await response.json());
-
-    return parsed.success ? parsed.data.brewers : null;
-  } catch {
-    return null;
-  }
+  return answer?.brewers ?? null;
 };
