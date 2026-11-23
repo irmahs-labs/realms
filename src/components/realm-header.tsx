@@ -11,6 +11,7 @@ const COPY = {
   en: {
     all: "all realms",
     close: "Close the menu",
+    home: "Realms home: every realm",
     menu: "Menu",
     pages: (realm: string) => `${realm}: its pages`,
     realms: "Every realm and its pages",
@@ -18,6 +19,7 @@ const COPY = {
   fr: {
     all: "tous les royaumes",
     close: "Fermer le menu",
+    home: "Accueil de Realms : tous les royaumes",
     menu: "Menu",
     pages: (realm: string) => `${realm} : ses pages`,
     realms: "Tous les royaumes et leurs pages",
@@ -101,7 +103,7 @@ const RealmMenu = ({ realm, here }: { realm: string; here: string }) => {
 };
 
 /**
- * Every realm page's header: the realm's icon and name, "Realms · by Irma
+ * Every realm page's header: a house button back to every realm, the realm's icon and name, "Realms · by Irma
  * HS" under it, and the shared pills, nothing more. Under it, a quiet way
  * back to every realm, then the realm's pages as tabs, the open one lifted
  * in lime. On a phone the
@@ -126,6 +128,7 @@ export const RealmHeader = ({
         name={name}
         href={`/${entry.slug}`}
         app={APP_NAME}
+        home={t.home}
         lead={<RealmMenu realm={realm} here={here} />}
       />
       <nav className="realm-tabs" aria-label={t.pages(name)}>
